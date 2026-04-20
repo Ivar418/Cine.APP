@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="order_history">Order history</string>
+    <string name="account" translatable="false">Account</string>
+    <string name="app_name" translatable="false">CineApp</string>
+</resources>
