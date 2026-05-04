@@ -2,9 +2,17 @@ name: Build
 
 on:
   push:
-    branches: [ main, develop, '*Staging*', '*github-actions*', '*' ]
+    branches:
+      - main
+      - develop
+      - "*Staging*"
+      - "*github-actions*"
   pull_request:
-    branches: [ main, develop, '*Staging*', '*github-actions*', '*' ]
+    branches:
+      - main
+      - develop
+      - "*Staging*"
+      - "*github-actions*"
   workflow_dispatch:
 
 env:
