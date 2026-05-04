@@ -1,18 +1,18 @@
 name: Build
-#test
+#test1
 on:
   push:
     branches:
       - main
       - develop
-      - *Staging*
-      - *github-actions*
+      - '*Staging*'
+      - '*github-actions*'
   pull_request:
     branches:
       - main
       - develop
-      - "*Staging*"
-      - "*github-actions*"
+      - '*Staging*'
+      - '*github-actions*'
   workflow_dispatch:
 
 env:
@@ -23,7 +23,7 @@ jobs:
     name: Run tests
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
+      - name: Run unit tests
         uses: actions/checkout@v4
       - name: Gradle setup
         uses: ./.github/actions/gradle-setup
@@ -46,36 +46,36 @@ jobs:
         uses: ./.github/actions/gradle-setup
 
       - name: Build Android debug APK
-        run: ./gradlew :mobile:assembleDebug
+        run: ./gradlew :composeApp:assembleDebug
 
       - name: Upload Android debug APK
         uses: actions/upload-artifact@v4
         with:
           name: android-apk
-          path: mobile/build/outputs/apk/debug/*.apk
-  build-ios:
-    name: Build iOS simulator app
-    runs-on: macos-latest
-    needs: test
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+          path: composeApp/build/outputs/apk/debug/*.apk
+  # build-ios:
+  #   name: Build iOS simulator app
+  #   runs-on: macos-latest
+  #   needs: test
+  #   steps:
+  #     - name: Checkout
+  #       uses: actions/checkout@v4
 
-      - name: Gradle setup
-        uses: ./.github/actions/gradle-setup
+  #     - name: Gradle setup
+  #       uses: ./.github/actions/gradle-setup
 
-      - name: Build iOS simulator app
-        run: |
-          xcodebuild build \
-          -project JetcasterMigration/JetcasterMigration.xcodeproj \
-          -configuration Debug \
-          -scheme JetcasterMigration \
-          -sdk iphonesimulator \
-          -derivedDataPath ./build \
-          -verbose
+  #     - name: Build iOS simulator app
+  #       run: |
+  #         xcodebuild build \
+  #         -project JetcasterMigration/JetcasterMigration.xcodeproj \
+  #         -configuration Debug \
+  #         -scheme JetcasterMigration \
+  #         -sdk iphonesimulator \
+  #         -derivedDataPath ./build \
+  #         -verbose
 
-      - name: Upload app folder
-        uses: actions/upload-artifact@v4
-        with:
-          name: iphonesimulator-app
-          path: build/Build/Products/Debug-iphonesimulator/*
+  #     - name: Upload app folder
+  #       uses: actions/upload-artifact@v4
+  #       with:
+  #         name: iphonesimulator-app
+  #         path: build/Build/Products/Debug-iphonesimulator/*
