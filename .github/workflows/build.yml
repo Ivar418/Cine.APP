@@ -5,8 +5,8 @@ on:
     branches:
       - main
       - develop
-      - "*Staging*"
-      - "*github-actions*"
+      - *Staging*
+      - *github-actions*
   pull_request:
     branches:
       - main
