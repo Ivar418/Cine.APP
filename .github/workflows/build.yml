@@ -23,14 +23,12 @@ jobs:
     name: Run tests
     runs-on: ubuntu-latest
     steps:
-      - name: Make gradlew executable
-        run: chmod +x ./gradlew
       - name: Run unit tests
-        run: ./gradlew jvmTest
-      - name: Checkout
         uses: actions/checkout@v4
       - name: Gradle setup
         uses: ./.github/actions/gradle-setup
+      - name: Make gradlew executable
+        run: chmod +x ./gradlew
       - name: Run unit tests
         run: ./gradlew jvmTest
       - name: Upload test reports
