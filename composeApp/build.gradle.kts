@@ -65,7 +65,6 @@ kotlin {
             implementation(libs.navigation.compose)
             implementation(libs.kotlinx.datetime)
             implementation(libs.material.icons.extended)
-            implementation(libs.decompose)
 
             //Koin
             implementation(project.dependencies.platform(libs.koin.bom))
@@ -73,16 +72,16 @@ kotlin {
             implementation(libs.koin.compose)
             implementation(libs.koin.compose.viewmodel)
 
-
+            //Ktor
             implementation(libs.kotlinx.serialization.json)
             implementation(libs.ktor.client.core)
             implementation(libs.ktor.client.content.negotiation)
             implementation(libs.ktor.serialization.kotlinx.json)
 //            Decompose
-            implementation(compose.materialIconsExtended)
             implementation(libs.decompose)
+            implementation(compose.materialIconsExtended)
             implementation(libs.decompose.extensions.compose)
-
+            implementation(libs.essentyLifecycleCoroutines)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)

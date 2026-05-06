@@ -20,6 +20,7 @@ ktor = "3.4.3"
 koin-bom = "4.2.1"
 kotlinxSerializationJson = "1.11.0"
 decompose = "3.5.0"
+essenty = "2.5.0"
 materialIconsExtended = "1.7.3"
 navigationCompose = "2.9.2"
 
@@ -70,8 +71,7 @@ decompose = { module = "com.arkivanov.decompose:decompose", version.ref = "decom
 decompose-extensions-compose = { module = "com.arkivanov.decompose:extensions-compose", version.ref = "decompose" }
 material-icons-extended = { module = "org.jetbrains.compose.material:material-icons-extended", version.ref = "materialIconsExtended" }
 navigation-compose = { module = "org.jetbrains.androidx.navigation:navigation-compose", version.ref = "navigationCompose" }
-
-
+essentyLifecycleCoroutines = { group = "com.arkivanov.essenty", name = "lifecycle-coroutines", version.ref = "essenty" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
