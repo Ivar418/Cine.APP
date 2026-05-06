@@ -8,149 +8,41 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ElevatedCard
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Snackbar
-import androidx.compose.material3.SnackbarHost
-import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import androidx.navigation.compose.currentBackStackEntryAsState
-import androidx.navigation.compose.rememberNavController
 import cineapp.composeapp.generated.resources.Res
 import cineapp.composeapp.generated.resources.account
 import cineapp.composeapp.generated.resources.app_name
+import cineapp.composeapp.generated.resources.movies_overview
 import cineapp.composeapp.generated.resources.order_history
-import com.ivarvisser.cineapp.ui.feature.account.AccountScreen
-import kotlinx.coroutines.launch
+import com.arkivanov.decompose.extensions.compose.subscribeAsState
+import com.ivarvisser.cineapp.ui.startScreen.CineAppComponent
+import com.ivarvisser.cineapp.ui.startScreen.CineAppScreenEvent
 import org.jetbrains.compose.resources.StringResource
-import org.jetbrains.compose.resources.stringResource
 
 enum class CineScreen(val title: StringResource) {
     Start(title = Res.string.app_name),
     Account(title = Res.string.account),
-    History(title = Res.string.order_history)
+    History(title = Res.string.order_history),
+    Overview(title = Res.string.movies_overview)
 }
 
-/**
- * Composable that displays the topBar and displays back button if back navigation is possible.
- */
-@OptIn(ExperimentalMaterial3Api::class)
+
 @Composable
-fun CineAppBar(
-    currentScreen: CineScreen,
-    canNavigateBack: Boolean,
-    navigateUp: () -> Unit,
+fun CineappScreen(
+    component: CineAppComponent,
     modifier: Modifier = Modifier
 ) {
-    TopAppBar(
-        title = { Text(stringResource(currentScreen.title)) },
-        colors = TopAppBarDefaults.mediumTopAppBarColors(
-            containerColor = MaterialTheme.colorScheme.primaryContainer
-        ),
-        modifier = modifier,
-        navigationIcon = {
-            if (canNavigateBack) {
-                IconButton(onClick = navigateUp) {
-                    Icon(
-                        imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                        contentDescription = "Terug"
-                    )
-                }
-            }
-        })
-}
-
-
-@Composable
-fun CineApp(
-//    viewModel: OrderViewModel = viewModel { OrderViewModel() },
-    navController: NavHostController = rememberNavController()
-) {
-    val snackbarHostState = remember { SnackbarHostState() }
-    // Get current back stack entry
-    val backStackEntry by navController.currentBackStackEntryAsState()
-    // Get the name of the current screen
-    val currentScreen = CineScreen.valueOf(
-        backStackEntry?.destination?.route ?: CineScreen.Start.name
-    )
-
-    Scaffold(
-        snackbarHost = {
-            SnackbarHost(
-                hostState = snackbarHostState,
-                modifier = Modifier.padding(bottom = 32.dp),
-                snackbar = { data ->
-                    Box(
-                        modifier = Modifier.fillMaxWidth(),
-                        contentAlignment = Alignment.BottomCenter
-                    ) {
-                        Snackbar(
-                            shape = RoundedCornerShape(50),
-                            containerColor = MaterialTheme.colorScheme.inverseSurface,
-                            contentColor = MaterialTheme.colorScheme.inverseOnSurface,
-                            modifier = Modifier.padding(horizontal = 32.dp)
-                        ) {
-                            Text(
-                                text = data.visuals.message,
-                                modifier = Modifier.fillMaxWidth(),
-                                textAlign = TextAlign.Center
-                            )
-                        }
-                    }
-                })
-        }) { innerPadding ->
-//        val uiState by viewModel.uiState.collectAsState()
-
-        NavHost(
-            navController = navController,
-            startDestination = CineScreen.Start.name,
-            modifier = Modifier.fillMaxSize()
-                .padding(innerPadding)
-        ) {
-            composable(route = CineScreen.Start.name) {
-                StartScreen(
-                    snackbarHostState = snackbarHostState,
-                    onAccountClick = { navController.navigate(CineScreen.Account.name) },
-                    onHistoryClick = { TODO() })
-            }
-            composable(route = CineScreen.Account.name) { AccountScreen() }
-
-//            composable(route = CineScreen.history.name) { HistoryScreen() }
-        }
-    }
-}
-
-
-@Composable
-fun StartScreen(
-    snackbarHostState: SnackbarHostState,
-    onAccountClick: () -> Unit,
-    onHistoryClick: () -> Unit,
-    modifier: Modifier = Modifier
-) {
+    val state = component.startScreenModel.subscribeAsState()
     val scope = rememberCoroutineScope()
     Column(
         modifier = modifier.fillMaxSize().padding(16.dp),
@@ -177,9 +69,7 @@ fun StartScreen(
         // Featured Card
         ElevatedCard(
             onClick = {
-                scope.launch {
-                    snackbarHostState.showSnackbar("Card clicked!")
-                }
+                component.onEvent(CineAppScreenEvent.OnOverviewClick)
             },
             modifier = Modifier.fillMaxWidth().height(200.dp), colors = CardDefaults.cardColors(
                 containerColor = MaterialTheme.colorScheme.primaryContainer
@@ -229,13 +119,15 @@ fun StartScreen(
                 )
 
                 Button(
-                    onClick = onAccountClick, modifier = Modifier.fillMaxWidth()
+                    onClick = { component.onEvent(CineAppScreenEvent.OnAccountClick) },
+                    modifier = Modifier.fillMaxWidth()
                 ) {
                     Text("My Account")
                 }
 
                 Button(
-                    onClick = onHistoryClick, modifier = Modifier.fillMaxWidth()
+                    onClick = { component.onEvent(CineAppScreenEvent.OnHistoryClick) },
+                    modifier = Modifier.fillMaxWidth()
                 ) {
                     Text("Order History")
                 }
