@@ -23,6 +23,7 @@ decompose = "3.5.0"
 essenty = "2.5.0"
 materialIconsExtended = "1.7.3"
 navigationCompose = "2.9.2"
+slf4jSimple = "2.0.17"
 
 
 [libraries]
@@ -72,6 +73,7 @@ decompose-extensions-compose = { module = "com.arkivanov.decompose:extensions-co
 material-icons-extended = { module = "org.jetbrains.compose.material:material-icons-extended", version.ref = "materialIconsExtended" }
 navigation-compose = { module = "org.jetbrains.androidx.navigation:navigation-compose", version.ref = "navigationCompose" }
 essentyLifecycleCoroutines = { group = "com.arkivanov.essenty", name = "lifecycle-coroutines", version.ref = "essenty" }
+slf4j-simple = { module = "org.slf4j:slf4j-simple", version.ref = "slf4jSimple" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }

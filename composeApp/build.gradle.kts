@@ -82,6 +82,10 @@ kotlin {
             implementation(compose.materialIconsExtended)
             implementation(libs.decompose.extensions.compose)
             implementation(libs.essentyLifecycleCoroutines)
+
+            //Logger
+            implementation("io.github.kdroidfilter:kmplog:0.6.2")
+
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
@@ -91,6 +95,8 @@ kotlin {
             implementation(compose.desktop.currentOs)
             implementation(libs.kotlinx.coroutinesSwing)
             implementation(libs.ktor.client.cio)
+            // Logger
+
 
         }
         iosMain.dependencies {

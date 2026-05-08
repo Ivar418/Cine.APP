@@ -15,34 +15,21 @@ import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import cineapp.composeapp.generated.resources.Res
-import cineapp.composeapp.generated.resources.account
-import cineapp.composeapp.generated.resources.app_name
-import cineapp.composeapp.generated.resources.movies_overview
-import cineapp.composeapp.generated.resources.order_history
-import com.arkivanov.decompose.extensions.compose.subscribeAsState
-import com.ivarvisser.cineapp.ui.startScreen.CineAppComponent
 import com.ivarvisser.cineapp.ui.startScreen.CineAppScreenEvent
-import org.jetbrains.compose.resources.StringResource
-
-enum class CineScreen(val title: StringResource) {
-    Start(title = Res.string.app_name),
-    Account(title = Res.string.account),
-    History(title = Res.string.order_history),
-    Overview(title = Res.string.movies_overview)
-}
-
+import com.ivarvisser.cineapp.ui.startScreen.DefaultCineAppComponent
 
 @Composable
 fun CineappScreen(
-    component: CineAppComponent,
+    component: DefaultCineAppComponent,
     modifier: Modifier = Modifier
 ) {
-    val state = component.startScreenModel.subscribeAsState()
+    val state by component.state.collectAsState()
     val scope = rememberCoroutineScope()
     Column(
         modifier = modifier.fillMaxSize().padding(16.dp),

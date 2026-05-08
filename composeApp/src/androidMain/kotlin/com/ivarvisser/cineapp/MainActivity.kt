@@ -12,6 +12,7 @@ import org.koin.android.ext.koin.androidLogger
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         enableEdgeToEdge()
+
         super.onCreate(savedInstanceState)
         val root = retainedComponent { RootComponent(it) }
         initKoin {

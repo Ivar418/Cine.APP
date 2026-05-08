@@ -8,7 +8,10 @@ import androidx.compose.ui.Modifier
 import com.ivarvisser.cineapp.domain.Movie
 
 @Composable
-fun MovieList(movies: List<Movie>) {
+fun MovieList(
+    movies: List<Movie>,
+    modifier: Modifier = Modifier
+) {
     LazyColumn(
         modifier = Modifier.fillMaxSize(),
     ) {

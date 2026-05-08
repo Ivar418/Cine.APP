@@ -4,6 +4,7 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.window.ComposeViewport
 import com.arkivanov.decompose.DefaultComponentContext
 import com.arkivanov.essenty.lifecycle.LifecycleRegistry
+import com.arkivanov.essenty.lifecycle.create
 import com.arkivanov.essenty.lifecycle.resume
 import com.ivarvisser.cineapp.di.initKoin
 
@@ -14,7 +15,7 @@ fun main() {
         resume() // move lifecycle to RESUMED state
     }
     val root = RootComponent(DefaultComponentContext(lifecycle))
-
+    lifecycle.create()
     ComposeViewport {
         App(root = root)
     }

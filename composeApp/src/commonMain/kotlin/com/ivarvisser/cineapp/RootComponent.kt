@@ -3,6 +3,7 @@ package com.ivarvisser.cineapp
 import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.router.stack.StackNavigation
 import com.arkivanov.decompose.router.stack.childStack
+import com.arkivanov.decompose.router.stack.pop
 import com.arkivanov.decompose.router.stack.pushNew
 import com.ivarvisser.cineapp.RootComponent.Child.CineAppScreen
 import com.ivarvisser.cineapp.RootComponent.Child.MoviesOverviewScreen
@@ -37,7 +38,10 @@ class RootComponent(
 
             is Configuration.MoviesOverviewScreen ->
                 MoviesOverviewScreen(
-                    MoviesOverviewComponent(componentContext = context, repo = getKoin().get())
+                    MoviesOverviewComponent(
+                        componentContext = context,
+                        repo = getKoin().get(),
+                        onGoBack = { navigation.pop() }),
                 )
 
             Configuration.Account -> {

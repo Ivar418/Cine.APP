@@ -1,0 +1,15 @@
+package com.ivarvisser.cineapp.data.repository.implementations
+
+import com.ivarvisser.cineapp.data.remote.api.MoviesApi
+import com.ivarvisser.cineapp.data.repository.interfaces.MoviesRepository
+import com.ivarvisser.cineapp.domain.Movie
+import com.ivarvisser.cineapp.utils.ResultOf
+
+class MoviesRepositoryImpl(
+    private val api: MoviesApi
+) : MoviesRepository {
+
+    override suspend fun getMovies(): ResultOf<List<Movie>> {
+        return api.getMovies()
+    }
+}
