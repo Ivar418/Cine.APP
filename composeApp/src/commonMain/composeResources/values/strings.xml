@@ -3,4 +3,5 @@
     <string name="order_history">Order history</string>
     <string name="account" translatable="false">Account</string>
     <string name="app_name" translatable="false">CineApp</string>
+    <string name="movies_overview">Movies Overview</string>
 </resources>
