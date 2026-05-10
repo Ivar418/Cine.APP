@@ -26,6 +26,7 @@ navigationCompose = "2.9.2"
 slf4jSimple = "2.0.17"
 buildkonfig = "0.20.0"
 htl = "2.0.1"
+coil3 = "3.4.0"
 
 
 [libraries]
@@ -36,6 +37,7 @@ ktor-client-content-negotiation = { module = "io.ktor:ktor-client-content-negoti
 ktor-client-core = { module = "io.ktor:ktor-client-core", version.ref = "ktor" }
 ktor-client-darwin = { module = "io.ktor:ktor-client-darwin", version.ref = "ktor" }
 ktor-client-wasm = { module = "io.ktor:ktor-client-js-wasm-js", version.ref = "ktor" }
+ktor-client-okhttp = { module = "io.ktor:ktor-client-okhttp", version.ref = "ktor" }
 ktor-serialization-kotlinx-json = { module = "io.ktor:ktor-serialization-kotlinx-json", version.ref = "ktor" }
 
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
@@ -79,6 +81,10 @@ essentyLifecycleCoroutines = { group = "com.arkivanov.essenty", name = "lifecycl
 #
 slf4j-simple = { module = "org.slf4j:slf4j-simple", version.ref = "slf4jSimple" }
 
+#Coil
+coil-compose = { module = "io.coil-kt.coil3:coil-compose", version.ref = "coil3" }
+coil-compose-core = { module = "io.coil-kt.coil3:coil-compose-core", version.ref = "coil3" }
+coil-network-ktor3 = { module = "io.coil-kt.coil3:coil-network-ktor3", version.ref = "coil3" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
@@ -91,3 +97,10 @@ kotlinSerialization = { id = "org.jetbrains.kotlin.plugin.serialization", versio
 buildkonfig = { id = "com.codingfeline.buildkonfig", version.ref = "buildkonfig" }
 kotlinAndroid = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 hyperetherLocalization = { id = "com.hyperether.localization", version.ref = "htl" }
+
+[bundles]
+coil = [
+    "coil-compose",
+    "coil-compose-core",
+    "coil-network-ktor3"
+]

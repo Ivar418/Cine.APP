@@ -1,4 +1,3 @@
-// C:/Users/ivarv/dev/AndroidStudioProjects/CineApp/composeApp/src/commonMain/kotlin/com/ivarvisser/cineapp/ui/component/navigation/TopBar.kt
 
 package com.ivarvisser.cineapp.ui.component.navigation
 
@@ -39,7 +38,6 @@ fun TopBar(
     TopAppBar(
         modifier = modifier,
         title = {
-            // Use TabRow for a nice Material 3 desktop navigation feel
             SecondaryTabRow(
                 selectedTabIndex = items.indexOf(selectedItem).coerceAtLeast(0),
                 containerColor = Color.Transparent,

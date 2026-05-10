@@ -55,6 +55,7 @@ kotlin {
             implementation(libs.androidx.activity.compose)
             implementation(libs.ktor.client.android)
             implementation(libs.decompose)
+            implementation(libs.ktor.client.okhttp)
 
         }
         commonMain.dependencies {
@@ -90,7 +91,8 @@ kotlin {
 
             //Logger
             implementation("io.github.kdroidfilter:kmplog:0.6.2")
-
+            //Coil
+            implementation(libs.bundles.coil)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
