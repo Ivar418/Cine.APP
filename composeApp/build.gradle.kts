@@ -55,7 +55,7 @@ kotlin {
             implementation(libs.androidx.activity.compose)
             implementation(libs.ktor.client.android)
             implementation(libs.decompose)
-            implementation(libs.ktor.client.okhttp)
+//            implementation(libs.ktor.client.okhttp)
 
         }
         commonMain.dependencies {
