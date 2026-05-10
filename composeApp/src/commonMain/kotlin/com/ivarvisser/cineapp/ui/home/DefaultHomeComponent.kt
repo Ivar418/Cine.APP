@@ -1,30 +1,26 @@
-package com.ivarvisser.cineapp.ui.startScreen
+package com.ivarvisser.cineapp.ui.home
 
 import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.value.MutableValue
 import com.arkivanov.decompose.value.Value
 import com.arkivanov.essenty.lifecycle.coroutines.coroutineScope
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
 
-class DefaultCineAppComponent(
+class DefaultHomeComponent(
     componentContext: ComponentContext,
     private val onNavigateToAccount: () -> Unit,
     private val onNavigateToHistory: () -> Unit,
     private val onNavigateToOverview: () -> Unit
-) : CineAppComponent, ComponentContext by componentContext {
+) : HomeComponent, ComponentContext by componentContext {
 
     private val scope = coroutineScope()
 
-    private val _state = MutableStateFlow(CineAppState())
-    val state: StateFlow<CineAppState> = _state.asStateFlow()
-
+    private val _state = MutableValue(HomeState())
+    override val state: Value<HomeState> = _state
     init {
     }
 
-    private val _startScreenModel = MutableValue(CineAppComponent.StartScreenModel())
-    override val startScreenModel: Value<CineAppComponent.StartScreenModel> = _startScreenModel
+    private val _component = MutableValue(HomeComponent.StartScreenModel())
+    override val component: Value<HomeComponent.StartScreenModel> = _component
 
     override fun onEvent(event: CineAppScreenEvent) = when (event) {
         CineAppScreenEvent.OnAccountClick -> onNavigateToAccount()

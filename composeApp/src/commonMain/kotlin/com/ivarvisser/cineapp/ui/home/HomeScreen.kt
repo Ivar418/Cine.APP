@@ -1,4 +1,4 @@
-package com.ivarvisser.cineapp
+package com.ivarvisser.cineapp.ui.home
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -8,6 +8,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -15,26 +17,31 @@ import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.ivarvisser.cineapp.ui.startScreen.CineAppScreenEvent
-import com.ivarvisser.cineapp.ui.startScreen.DefaultCineAppComponent
+import com.arkivanov.decompose.extensions.compose.subscribeAsState
+import com.ivarvisser.cineapp.getPlatform
 
 @Composable
-fun CineappScreen(
-    component: DefaultCineAppComponent,
+fun HomeScreen(
+    component: DefaultHomeComponent,
     modifier: Modifier = Modifier
 ) {
-    val state by component.state.collectAsState()
-    val scope = rememberCoroutineScope()
+    val state by component.state.subscribeAsState()
+    val horizontalScrollState = rememberScrollState()
+    val verticalScrollState = rememberScrollState()
+
+    val isMobile = getPlatform().isMobile
     Column(
-        modifier = modifier.fillMaxSize().padding(16.dp),
+        modifier = modifier
+            .fillMaxSize()
+            .padding(16.dp)
+            .verticalScroll(verticalScrollState),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(24.dp)
+
     ) {
         Spacer(modifier = Modifier.height(32.dp))
 

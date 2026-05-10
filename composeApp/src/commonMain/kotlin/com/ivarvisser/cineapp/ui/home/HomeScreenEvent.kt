@@ -1,4 +1,4 @@
-package com.ivarvisser.cineapp.ui.startScreen
+package com.ivarvisser.cineapp.ui.home
 
 sealed interface CineAppScreenEvent {
     object OnAccountClick : CineAppScreenEvent

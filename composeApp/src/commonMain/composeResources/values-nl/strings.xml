@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="order_history">Bestel geschiedenis</string>
+    <string name="app_subtitle">Uw Ultieme Bioscoopervaring</string>
+    <string name="now_showing">Nu Draait</string>
+    <string name="now_showing_desc">Bekijk de nieuwste films</string>
+    <string name="quick_actions">Snelkoppelingen</string>
+    <string name="my_account">Mijn Account</string>
+    <string name="order_history">Bestelgeschiedenis</string>
     <string name="movies_overview">Film Overzicht</string>
-
+    <string name="welcome_footer">Welkom! Boek nu je tickets</string>
+    <string name="account">Account</string>
 </resources>

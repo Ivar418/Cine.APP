@@ -1,6 +1,11 @@
+@file:OptIn(ExperimentalWasmDsl::class)
+
+import com.android.build.api.dsl.ApplicationExtension
+import com.codingfeline.buildkonfig.compiler.FieldSpec.Type.STRING
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+
 
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
@@ -9,7 +14,8 @@ plugins {
     alias(libs.plugins.composeCompiler)
     alias(libs.plugins.composeHotReload)
     alias(libs.plugins.kotlinSerialization)
-
+    alias(libs.plugins.buildkonfig)
+    alias(libs.plugins.hyperetherLocalization)
 
 }
 
@@ -20,15 +26,15 @@ kotlin {
         }
     }
 
-//    listOf(
-//        iosArm64(),
-//        iosSimulatorArm64()
-//    ).forEach { iosTarget ->
-//        iosTarget.binaries.framework {
-//            baseName = "ComposeApp"
-//            isStatic = true
-//        }
-//    }
+    listOf(
+        iosArm64(),
+        iosSimulatorArm64()
+    ).forEach { iosTarget ->
+        iosTarget.binaries.framework {
+            baseName = "ComposeApp"
+            isStatic = true
+        }
+    }
 
     jvm()
 
@@ -37,7 +43,6 @@ kotlin {
         binaries.executable()
     }
 
-    @OptIn(ExperimentalWasmDsl::class)
     wasmJs {
         browser()
         binaries.executable()
@@ -105,11 +110,37 @@ kotlin {
         wasmJsMain.dependencies {
             implementation(libs.ktor.client.wasm)
         }
-
+//        sourceSets["commonMain"].kotlin.srcDirs(
+//            File(
+//                layout.buildDirectory.get().asFile.path,
+//                "generated/compose/resourceGenerator/kotlin/commonCustomResClass"
+//            )
+//        )
     }
 }
+buildkonfig {
+    packageName = "com.ivarvisser.cineapp"
 
-android {
+// Default values (usually for development)
+    defaultConfigs {
+        buildConfigField(STRING, "BASE_URL", "acc-cinenetapi.ivarvisser.nl")
+//        val apiKey = project.findProperty("API_KEY")?.toString() ?: "fallback_key"
+//        buildConfigField(STRING, "API_KEY", "\"$apiKey\"")
+    }
+
+// Release specific values
+    targetConfigs {
+        create("release") {
+            buildConfigField(STRING, "BASE_URL", "prod-cinenetapi.ivarvisser.nl")
+        }
+    }
+}
+extensions.configure<ApplicationExtension> {
+    sourceSets {
+        getByName("main") {
+            res.directories.add("src/commonMain/composeResources")
+        }
+    }
     namespace = "com.ivarvisser.cineapp"
     compileSdk = libs.versions.android.compileSdk.get().toInt()
 

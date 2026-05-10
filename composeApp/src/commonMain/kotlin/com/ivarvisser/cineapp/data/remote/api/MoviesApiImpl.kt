@@ -14,7 +14,7 @@ class MoviesApiImpl(
 ) : MoviesApi {
     override suspend fun getMovies(): ResultOf<List<Movie>> {
         return try {
-            val result = client.get(MOVIES)
+            val result = client.get("$MOVIES?language=nl")
                 .body<List<Movie>>()
             println("Fetched movies: $result")
             Log.d("MoviesAPIIMPL", "Debug: Fetched movies: $result")

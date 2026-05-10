@@ -1,11 +1,11 @@
-package com.ivarvisser.cineapp.ui.startScreen
+package com.ivarvisser.cineapp.ui.home
 
 import com.arkivanov.decompose.value.Value
 
-interface CineAppComponent {
-
+interface HomeComponent {
+    val state: Value<HomeState>
     fun onEvent(event: CineAppScreenEvent)
-    val startScreenModel: Value<StartScreenModel>
+    val component: Value<StartScreenModel>
 
     data class StartScreenModel(
         val title: String = "🎬 CineApp",
