@@ -2,7 +2,6 @@ package com.ivarvisser.cineapp.ui.component
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.HorizontalDivider
@@ -32,7 +31,11 @@ fun MovieItem(movie: Movie) {
                 style = MaterialTheme.typography.titleLarge,
                 modifier = Modifier.align(alignment = Alignment.CenterHorizontally)
             )
-            HorizontalDivider(modifier = Modifier.height(8.dp), color = BrandColors.DarkDivider)
+            HorizontalDivider(
+                thickness = 2.dp,
+                modifier = Modifier.padding(8.dp),
+                color = BrandColors.SoftDivider
+            )
             if (!movie.about.isNullOrBlank()) {
                 Text(
                     text = movie.about,
