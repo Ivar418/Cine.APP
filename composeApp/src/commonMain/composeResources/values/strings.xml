@@ -1,7 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="order_history">Order history</string>
-    <string name="account" translatable="false">Account</string>
     <string name="app_name" translatable="false">CineApp</string>
+    <string name="app_subtitle">Your Ultimate Cinema Experience</string>
+    <string name="now_showing">Now Showing</string>
+    <string name="now_showing_desc">Explore the latest movies</string>
+    <string name="quick_actions">Quick Actions</string>
+    <string name="my_account">My Account</string>
+    <string name="order_history">Order History</string>
     <string name="movies_overview">Movies Overview</string>
+    <string name="welcome_footer">Welcome! Book your tickets now</string>
+    <string name="account">Account</string>
 </resources>

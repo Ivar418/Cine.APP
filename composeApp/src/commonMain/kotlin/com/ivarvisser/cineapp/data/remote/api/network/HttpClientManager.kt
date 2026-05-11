@@ -1,5 +1,6 @@
 package com.ivarvisser.cineapp.data.remote.api.network
 
+import com.ivarvisser.cineapp.BuildKonfig
 import io.ktor.client.HttpClient
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.plugins.defaultRequest
@@ -19,8 +20,7 @@ fun createHttpClient() = HttpClient {
     defaultRequest {
         url {
             protocol = URLProtocol.HTTPS
-            host = "acc-cinenetapi.ivarvisser.nl"
-//            port = 8080
+            host = BuildKonfig.BASE_URL
         }
     }
 }

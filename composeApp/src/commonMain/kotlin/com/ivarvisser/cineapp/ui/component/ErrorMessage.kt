@@ -19,6 +19,7 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun ErrorMessage(
     message: String,
+    buttonText: String = "Try again",
     onRetry: (() -> Unit)? = null
 ) {
     Box(
@@ -49,7 +50,7 @@ fun ErrorMessage(
                 if (onRetry != null) {
                     Spacer(modifier = Modifier.height(16.dp))
                     Button(onClick = onRetry) {
-                        Text("Try again")
+                        Text(buttonText)
                     }
                 }
             }

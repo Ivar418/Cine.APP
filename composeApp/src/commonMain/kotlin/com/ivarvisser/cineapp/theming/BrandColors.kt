@@ -3,7 +3,7 @@ package com.ivarvisser.cineapp.theming
 import androidx.compose.ui.graphics.Color
 
 object BrandColors {
-
+    val TopBar = Color(0xff080a11)
     val Anthracite = Color(0xFF2B2B2B)
     val Gold = Color(0xFFD4AF37)
     val Purple = Color(0xFF5A4A7A)

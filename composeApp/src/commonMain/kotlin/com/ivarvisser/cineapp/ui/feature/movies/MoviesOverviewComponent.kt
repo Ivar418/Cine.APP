@@ -1,13 +1,12 @@
 package com.ivarvisser.cineapp.ui.feature.movies
 
 import com.arkivanov.decompose.ComponentContext
+import com.arkivanov.decompose.value.MutableValue
+import com.arkivanov.decompose.value.Value
 import com.arkivanov.essenty.lifecycle.coroutines.coroutineScope
 import com.arkivanov.essenty.lifecycle.doOnCreate
 import com.ivarvisser.cineapp.data.repository.interfaces.MoviesRepository
 import com.ivarvisser.cineapp.utils.ResultOf
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 class MoviesOverviewComponent(
@@ -18,8 +17,8 @@ class MoviesOverviewComponent(
     //Defaults needed for every component----------------------------------------------
     private val scope = coroutineScope()
 
-    private val _state = MutableStateFlow(MoviesState())
-    val state: StateFlow<MoviesState> = _state.asStateFlow()
+    private val _state = MutableValue(MoviesState())
+    val state: Value<MoviesState> = _state
 
     init {
         doOnCreate {
