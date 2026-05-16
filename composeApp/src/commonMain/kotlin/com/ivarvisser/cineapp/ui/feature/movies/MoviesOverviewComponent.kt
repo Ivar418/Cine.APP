@@ -49,7 +49,7 @@ class MoviesOverviewComponent(
         scope.launch {
             try {
                 setLoading(true)
-                when (val movies = repo.getMovies()) {
+                when (val movies = repo.getMoviesWithUpcomingShowings()) {
                     is ResultOf.Success -> {
                         println("Debug: Successfully fetched movies: ${movies.value.size}")
                         _state.value = _state.value.copy(

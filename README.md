@@ -66,6 +66,51 @@ in your IDE's toolbar or run it directly from the terminal:
 To build and run the development version of the iOS app, use the run configuration from the run widget
 in your IDE’s toolbar or open the [/iosApp](./iosApp) directory in Xcode and run it from there.
 
+### Environment Configuration
+
+The project uses [BuildKonfig](https://github.com/yshrsmz/BuildKonfig) to manage
+environment-specific configurations (Production, Staging, Development).
+
+#### Android
+
+For Android, the environment is determined by the selected **Build Variant**. You can switch
+variants in the "Build Variants" tool window in Android Studio:
+
+- `developmentDebug` / `developmentRelease`: Uses Development URL (HTTP).
+- `stagingDebug` / `stagingRelease`: Uses Staging URL (HTTPS).
+- `productionDebug` / `productionRelease`: Uses Production URL (HTTPS).
+
+#### Other Platforms (iOS, Desktop, Web)
+
+For other platforms, you can specify the target configuration by passing the `buildkonfig.flavor`
+property to Gradle:
+
+- **Development:**
+  ```shell
+  .\gradlew.bat :composeApp:run -Pbuildkonfig.flavor=development
+  ```
+- **Staging:**
+  ```shell
+  .\gradlew.bat :composeApp:run -Pbuildkonfig.flavor=staging
+  ```
+- **Production (Default):**
+  ```shell
+  .\gradlew.bat :composeApp:run -Pbuildkonfig.flavor=release
+  ```
+
+#### Configuration Details
+
+The environments are configured in `composeApp/build.gradle.kts`:
+
+| Environment     | Base URL                        | Protocol |
+|:----------------|:--------------------------------|:---------|
+| **Development** | `10.164.147.229:7172`           | `HTTP`   |
+| **Staging**     | `acc-cinenetapi.ivarvisser.nl`  | `HTTPS`  |
+| **Production**  | `prod-cinenetapi.ivarvisser.nl` | `HTTPS`  |
+
+**Note:** The `HttpClient` in `HttpClientManager.kt` automatically switches between `HTTP` and
+`HTTPS` based on the selected environment's `PROTOCOL` field.
+
 ---
 
 Learn more about [Kotlin Multiplatform](https://www.jetbrains.com/help/kotlin-multiplatform-dev/get-started.html),

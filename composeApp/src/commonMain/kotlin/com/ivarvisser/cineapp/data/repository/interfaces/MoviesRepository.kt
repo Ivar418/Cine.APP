@@ -5,4 +5,5 @@ import com.ivarvisser.cineapp.utils.ResultOf
 
 interface MoviesRepository {
     suspend fun getMovies(): ResultOf<List<Movie>>
+    suspend fun getMoviesWithUpcomingShowings(): ResultOf<List<Movie>>
 }

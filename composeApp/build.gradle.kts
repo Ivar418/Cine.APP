@@ -1,6 +1,7 @@
 @file:OptIn(ExperimentalWasmDsl::class)
 
 import com.android.build.api.dsl.ApplicationExtension
+import com.codingfeline.buildkonfig.compiler.FieldSpec
 import com.codingfeline.buildkonfig.compiler.FieldSpec.Type.STRING
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
@@ -90,7 +91,7 @@ kotlin {
             implementation(libs.essentyLifecycleCoroutines)
 
             //Logger
-            implementation("io.github.kdroidfilter:kmplog:0.6.2")
+            implementation(libs.klf)
             //Coil
             implementation(libs.bundles.coil)
         }
@@ -102,7 +103,6 @@ kotlin {
             implementation(compose.desktop.currentOs)
             implementation(libs.kotlinx.coroutinesSwing)
             implementation(libs.ktor.client.cio)
-            // Logger
 
 
         }
@@ -123,17 +123,22 @@ kotlin {
 buildkonfig {
     packageName = "com.ivarvisser.cineapp"
 
-// Default values (usually for development)
     defaultConfigs {
+        buildConfigField(FieldSpec.Type.BOOLEAN, "IS_DEBUG", "true")
         buildConfigField(STRING, "BASE_URL", "acc-cinenetapi.ivarvisser.nl")
-//        val apiKey = project.findProperty("API_KEY")?.toString() ?: "fallback_key"
-//        buildConfigField(STRING, "API_KEY", "\"$apiKey\"")
+        buildConfigField(STRING, "PROTOCOL", "HTTPS")
     }
 
-// Release specific values
     targetConfigs {
+        create("staging") {
+            buildConfigField(FieldSpec.Type.BOOLEAN, "IS_DEBUG", "true")
+            buildConfigField(STRING, "BASE_URL", "acc-cinenetapi.ivarvisser.nl")
+            buildConfigField(STRING, "PROTOCOL", "HTTPS")
+        }
         create("release") {
+            buildConfigField(FieldSpec.Type.BOOLEAN, "IS_DEBUG", "false")
             buildConfigField(STRING, "BASE_URL", "prod-cinenetapi.ivarvisser.nl")
+            buildConfigField(STRING, "PROTOCOL", "HTTPS")
         }
     }
 }
@@ -152,6 +157,20 @@ extensions.configure<ApplicationExtension> {
         targetSdk = libs.versions.android.targetSdk.get().toInt()
         versionCode = 1
         versionName = "1.0"
+    }
+    flavorDimensions.add("environment")
+    productFlavors {
+        create("development") {
+            dimension = "environment"
+            applicationIdSuffix = ".dev"
+        }
+        create("staging") {
+            dimension = "environment"
+            applicationIdSuffix = ".staging"
+        }
+        create("production") {
+            dimension = "environment"
+        }
     }
     packaging {
         resources {

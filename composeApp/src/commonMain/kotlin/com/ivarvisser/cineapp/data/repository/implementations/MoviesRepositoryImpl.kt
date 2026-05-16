@@ -12,4 +12,8 @@ class MoviesRepositoryImpl(
     override suspend fun getMovies(): ResultOf<List<Movie>> {
         return api.getMovies()
     }
+
+    override suspend fun getMoviesWithUpcomingShowings(): ResultOf<List<Movie>> {
+        return api.getMoviesWithUpcomingShowings()
+    }
 }
