@@ -10,13 +10,14 @@ import com.ivarvisser.cineapp.domain.Movie
 @Composable
 fun MovieList(
     movies: List<Movie>,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onMovieClick: (Movie) -> Unit
 ) {
     LazyColumn(
         modifier = Modifier.fillMaxSize(),
     ) {
         items(movies) { movie ->
-            MovieItem(movie = movie)
+            MovieListItem(movie = movie, onMovieClick = onMovieClick)
         }
     }
 }

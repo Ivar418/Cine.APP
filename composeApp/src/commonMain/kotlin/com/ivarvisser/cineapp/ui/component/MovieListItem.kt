@@ -1,5 +1,6 @@
 package com.ivarvisser.cineapp.ui.component
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -16,9 +17,13 @@ import com.ivarvisser.cineapp.domain.Movie
 import com.ivarvisser.cineapp.theming.BrandColors
 
 @Composable
-fun MovieItem(movie: Movie) {
+fun MovieListItem(
+    movie: Movie,
+    onMovieClick: (Movie) -> Unit
+) {
     ElevatedCard(
         modifier = Modifier.fillMaxWidth().padding(8.dp)
+            .clickable(onClick = { onMovieClick(movie) })
     ) {
         AsyncImage(
             model = "https://image.tmdb.org/t/p/w342/" + movie.posterPath,

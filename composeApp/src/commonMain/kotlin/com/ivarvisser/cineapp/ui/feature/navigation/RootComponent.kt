@@ -8,13 +8,16 @@ import com.arkivanov.decompose.router.stack.pop
 import com.arkivanov.decompose.value.Value
 import com.arkivanov.decompose.value.operator.map
 import com.ivarvisser.cineapp.NotImplementedComponent
+import com.ivarvisser.cineapp.domain.Movie
 import com.ivarvisser.cineapp.ui.component.navigation.TabBarItem
+import com.ivarvisser.cineapp.ui.feature.movies.MovieDetailsComponent
 import com.ivarvisser.cineapp.ui.feature.movies.MoviesOverviewComponent
 import com.ivarvisser.cineapp.ui.home.DefaultHomeComponent
 import kotlinx.serialization.Serializable
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.get
 import org.koin.core.parameter.parametersOf
+
 
 class RootComponent(
     componentContext: ComponentContext
@@ -28,10 +31,12 @@ class RootComponent(
         childFactory = ::createChild
     )
 
+    // Map the active configuration to the corresponding TabBarItem
+    //Data class needs a "is" and the objects do not.
     val activeTab: Value<TabBarItem> = childStack.map { stack ->
         when (stack.active.configuration) {
             Configuration.Home -> TabBarItem.Home
-            Configuration.MoviesOverviewScreen -> TabBarItem.MoviesOverviewScreen
+            Configuration.MoviesOverviewScreen, is Configuration.MovieDetailsScreen -> TabBarItem.MoviesOverviewScreen // Both map to the same tab
             Configuration.OrderHistory -> TabBarItem.OrderHistory
             Configuration.Account -> TabBarItem.Account
             Configuration.Settings -> TabBarItem.Settings
@@ -55,10 +60,26 @@ class RootComponent(
 
             is Configuration.MoviesOverviewScreen ->
                 Child.MoviesOverviewScreen(
-                    get { parametersOf(context, { navigation.pop() }) }
+                    get {
+                        parametersOf(
+                            context,
+                            { navigation.pop() },
+                            { movie: Movie ->
+                                navigation.bringToFront(
+                                    Configuration.MovieDetailsScreen(
+                                        movie
+                                    )
+                                )
+                            })
+                    }
                 )
 
-            Configuration.Account -> {
+            is Configuration.MovieDetailsScreen ->
+                Child.MovieDetailsScreen(
+                    get { parametersOf(context, config.movie, { navigation.pop() }) }
+                )
+
+            is Configuration.Account -> {
                 Child.Account(
                     get {
                         parametersOf(
@@ -70,7 +91,7 @@ class RootComponent(
                 )
             }
 
-            Configuration.OrderHistory -> {
+            is Configuration.OrderHistory -> {
                 Child.OrderHistory(
                     get {
                         parametersOf(
@@ -82,7 +103,7 @@ class RootComponent(
                 )
             }
 
-            Configuration.Settings -> {
+            is Configuration.Settings -> {
                 Child.Settings(
                     get {
                         parametersOf(
@@ -129,9 +150,9 @@ class RootComponent(
         data class Account(val componentContext: NotImplementedComponent) : Child()
         data class Settings(val componentContext: NotImplementedComponent) : Child()
         data class NotImplemented(val componentContext: NotImplementedComponent) : Child()
+        data class MovieDetailsScreen(val componentContext: MovieDetailsComponent) : Child()
 
     }
-
     @Serializable
     sealed class Configuration {
         @Serializable
@@ -151,5 +172,8 @@ class RootComponent(
 
         @Serializable
         data object NotImplemented : Configuration()
+
+        @Serializable
+        data class MovieDetailsScreen(val movie: Movie) : Configuration()
     }
 }

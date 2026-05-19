@@ -34,7 +34,9 @@ fun MoviesOverviewScreen(
             )
         }
         MovieList(
-            movies = state.movies, modifier = Modifier.fillMaxHeight()
+            movies = state.movies,
+            modifier = Modifier.fillMaxHeight(),
+            onMovieClick = { component.onMovieSelected(it) }
         )
     }
 }

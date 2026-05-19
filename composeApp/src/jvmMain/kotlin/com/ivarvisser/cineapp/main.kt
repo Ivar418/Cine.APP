@@ -8,8 +8,9 @@ import com.arkivanov.essenty.lifecycle.LifecycleRegistry
 import com.arkivanov.essenty.lifecycle.create
 import com.ivarvisser.cineapp.di.initKoin
 import com.ivarvisser.cineapp.ui.feature.navigation.RootComponent
-import com.kdroid.kmplog.Log
-import com.kdroid.kmplog.d
+import net.codinux.log.Log
+import net.codinux.log.LogLevel
+import net.codinux.log.LoggerFactory
 
 fun main() = application {
     initKoin {
@@ -17,9 +18,11 @@ fun main() = application {
     }
     val env = System.getenv("ENVIRONMENT")
     if (env == "dev") {
-        Log.setDevelopmentMode(true)
+        if (BuildKonfig.IS_DEBUG) {
+            LoggerFactory.config.rootLevel = LogLevel.Debug
+        }
     }
-    Log.d("MAIN", "Debug: Environment: $env")
+    Log.debug(loggerName = "MAIN") { "Debug: Environment: $env" }
 
     val lifecycle = remember { LifecycleRegistry() }
     val root = remember {
