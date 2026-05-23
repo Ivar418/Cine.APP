@@ -1,4 +1,4 @@
-package com.ivarvisser.cineapp.ui.feature.movies
+package com.ivarvisser.cineapp.ui.feature.movie
 
 import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.value.MutableValue
@@ -20,6 +20,7 @@ class MovieDetailsComponent(
     val movie: Movie,
     private val upcomingShowings: List<ShowingDisplayResponse> = emptyList(),
     private val onGoBack: () -> Unit,
+    private val onNavigateToOrder: (showingId: Int, movieId: Int) -> Unit,
     private val showingsRepository: ShowingsRepository,
     private val moviesRepository: MoviesRepository
 ) : ComponentContext by componentContext {
@@ -99,5 +100,9 @@ class MovieDetailsComponent(
         } catch (e: Exception) {
             setError(e.message, WhatIsLoading.Genres)
         }
+    }
+
+    fun onShowingSelected(showingId: Int, movieId: Int) {
+        onNavigateToOrder(showingId, movieId)
     }
 }

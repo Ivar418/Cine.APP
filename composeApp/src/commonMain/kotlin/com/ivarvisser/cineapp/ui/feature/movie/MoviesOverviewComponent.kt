@@ -1,4 +1,4 @@
-package com.ivarvisser.cineapp.ui.feature.movies
+package com.ivarvisser.cineapp.ui.feature.movie
 
 import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.value.MutableValue
@@ -30,10 +30,6 @@ class MoviesOverviewComponent(
         }
     }
 
-    fun onMovieSelected(movie: Movie) {
-        _onMovieSelected(movie)
-    }
-
     fun onRefresh() {
         loadMovies()
     }
@@ -50,6 +46,10 @@ class MoviesOverviewComponent(
     fun goBack() {
         onGoBack()
     }
+    fun onMovieSelected(movie: Movie) {
+        _onMovieSelected(movie)
+    }
+
     //--------------------------------------------------------------------------------
 
     fun loadMovies() {

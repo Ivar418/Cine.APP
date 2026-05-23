@@ -1,4 +1,4 @@
-package com.ivarvisser.cineapp.ui.feature.movies
+package com.ivarvisser.cineapp.ui.feature.movie
 
 import com.ivarvisser.cineapp.domain.Movie
 

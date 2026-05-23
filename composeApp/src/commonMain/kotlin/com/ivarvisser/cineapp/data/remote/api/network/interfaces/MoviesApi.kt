@@ -8,5 +8,6 @@ interface MoviesApi {
     suspend fun getMovies(): ResultOf<List<Movie>>
     suspend fun getMoviesWithUpcomingShowings(): ResultOf<List<Movie>>
     suspend fun getGenreDetails(genreId: Int): ResultOf<Genre>
+    suspend fun getMovieById(movieId: Int): ResultOf<Movie>
 
 }

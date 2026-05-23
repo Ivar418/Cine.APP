@@ -15,11 +15,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import cineapp.composeapp.generated.resources.Res
+import cineapp.composeapp.generated.resources.error_retry
+import cineapp.composeapp.generated.resources.error_title
+import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun ErrorMessage(
     message: String,
-    buttonText: String = "Try again",
+    buttonText: String = stringResource(Res.string.error_retry),
     onRetry: (() -> Unit)? = null
 ) {
     Box(
@@ -37,7 +41,7 @@ fun ErrorMessage(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(
-                    text = "Oops!",
+                    text = stringResource(Res.string.error_title),
                     style = MaterialTheme.typography.titleLarge,
                     color = MaterialTheme.colorScheme.onErrorContainer
                 )

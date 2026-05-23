@@ -15,9 +15,10 @@ import com.ivarvisser.cineapp.theming.CineAppTheme
 import com.ivarvisser.cineapp.ui.component.BottomTabBar
 import com.ivarvisser.cineapp.ui.component.navigation.TabBarItem
 import com.ivarvisser.cineapp.ui.component.navigation.TopBar
-import com.ivarvisser.cineapp.ui.feature.movies.MovieItemDetailsScreen
-import com.ivarvisser.cineapp.ui.feature.movies.MoviesOverviewScreen
+import com.ivarvisser.cineapp.ui.feature.movie.MovieItemDetailsScreen
+import com.ivarvisser.cineapp.ui.feature.movie.MoviesOverviewScreen
 import com.ivarvisser.cineapp.ui.feature.navigation.RootComponent
+import com.ivarvisser.cineapp.ui.feature.showing.ShowingDetailScreen
 import com.ivarvisser.cineapp.ui.home.HomeScreen
 
 
@@ -63,7 +64,6 @@ fun App(root: RootComponent) {
                                 )
 
                                 is RootComponent.Child.MovieDetailsScreen -> {
-                                    // You can create a MovieDetailsScreen composable or use MovieItemDetailsScreen directly
                                     MovieItemDetailsScreen(
                                         component = instance.componentContext,
                                     )
@@ -73,6 +73,9 @@ fun App(root: RootComponent) {
                                 is RootComponent.Child.Account -> NotImplemented(component = instance.componentContext)
                                 is RootComponent.Child.Settings -> NotImplemented(component = instance.componentContext)
                                 is RootComponent.Child.NotImplemented -> NotImplemented(component = instance.componentContext)
+                                is RootComponent.Child.ShowingDetailsScreen -> ShowingDetailScreen(
+                                    component = instance.componentContext,
+                                )
                             }
                         }
                     }

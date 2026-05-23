@@ -21,4 +21,8 @@ class MoviesRepositoryImpl(
     override suspend fun getGenreDetails(genreId: Int): ResultOf<Genre> {
         return api.getGenreDetails(genreId)
     }
+
+    override suspend fun getMovieById(movieId: Int): ResultOf<Movie> {
+        return api.getMovieById(movieId)
+    }
 }

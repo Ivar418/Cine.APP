@@ -27,21 +27,11 @@ kotlin {
         }
     }
 
-    listOf(
-        iosArm64(),
-        iosSimulatorArm64()
-    ).forEach { iosTarget ->
-        iosTarget.binaries.framework {
-            baseName = "ComposeApp"
-            isStatic = true
+
+    jvm("desktop") {
+        compilerOptions {
+            jvmTarget.set(JvmTarget.JVM_11)
         }
-    }
-
-    jvm()
-
-    js {
-        browser()
-        binaries.executable()
     }
 
     wasmJs {
@@ -50,17 +40,15 @@ kotlin {
     }
 
     sourceSets {
+
         androidMain.dependencies {
             implementation(libs.kotlinx.coroutines.android)
             implementation(libs.compose.uiToolingPreview)
             implementation(libs.androidx.activity.compose)
             implementation(libs.ktor.client.android)
-            implementation(libs.decompose)
-//            implementation(libs.ktor.client.okhttp)
 
         }
         commonMain.dependencies {
-            implementation(libs.ktor.client.core)
             implementation(libs.kotlinx.coroutines.core)
             implementation(libs.compose.runtime)
             implementation(libs.compose.foundation)
@@ -94,30 +82,25 @@ kotlin {
             implementation(libs.klf)
             //Coil
             implementation(libs.bundles.coil)
+            //Webvieuw MultiPlatofrm
+            api("io.github.kevinnzou:compose-webview-multiplatform:2.0.3")
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
             implementation(libs.koin.test)
         }
-        jvmMain.dependencies {
+        sourceSets["desktopMain"].dependencies {
+            implementation(libs.slf4j.simple)
             implementation(compose.desktop.currentOs)
             implementation(libs.kotlinx.coroutinesSwing)
             implementation(libs.ktor.client.cio)
-
-
         }
-        iosMain.dependencies {
-            implementation(libs.ktor.client.darwin)
-        }
+
         wasmJsMain.dependencies {
+            implementation(libs.slf4j.simple)
             implementation(libs.ktor.client.wasm)
         }
-//        sourceSets["commonMain"].kotlin.srcDirs(
-//            File(
-//                layout.buildDirectory.get().asFile.path,
-//                "generated/compose/resourceGenerator/kotlin/commonCustomResClass"
-//            )
-//        )
+
     }
 }
 buildkonfig {
@@ -200,6 +183,16 @@ compose.desktop {
             targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
             packageName = "com.ivarvisser.cineapp"
             packageVersion = "1.0.0"
+        }
+        jvmArgs("--add-opens", "java.desktop/sun.awt=ALL-UNNAMED")
+        jvmArgs(
+            "--add-opens",
+            "java.desktop/java.awt.peer=ALL-UNNAMED"
+        ) // recommended but not necessary
+
+        if (System.getProperty("os.name").contains("Mac")) {
+            jvmArgs("--add-opens", "java.desktop/sun.lwawt=ALL-UNNAMED")
+            jvmArgs("--add-opens", "java.desktop/sun.lwawt.macosx=ALL-UNNAMED")
         }
     }
 }

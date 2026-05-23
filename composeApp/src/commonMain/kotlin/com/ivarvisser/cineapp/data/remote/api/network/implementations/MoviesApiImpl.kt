@@ -35,4 +35,12 @@ class MoviesApiImpl(
         result
     }
 
+    override suspend fun getMovieById(movieId: Int): ResultOf<Movie> =
+        safeApiCall {
+            val result = client.get("${NetworkConstants.Endpoints.MOVIES}/$movieId?language=en")
+                .body<Movie>()
+            Log.debug(loggerName = "MoviesAPIIMPL") { "Debug: Fetched movie by ID: $result." }
+            result
+        }
+
 }

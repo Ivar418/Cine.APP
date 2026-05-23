@@ -12,9 +12,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import cineapp.composeapp.generated.resources.Res
+import cineapp.composeapp.generated.resources.movie_poster_desc
 import coil3.compose.AsyncImage
 import com.ivarvisser.cineapp.domain.Movie
 import com.ivarvisser.cineapp.theming.BrandColors
+import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun MovieListItem(
@@ -27,7 +30,7 @@ fun MovieListItem(
     ) {
         AsyncImage(
             model = "https://image.tmdb.org/t/p/w342/" + movie.posterPath,
-            contentDescription = "Movie Poster",
+            contentDescription = stringResource(Res.string.movie_poster_desc),
             modifier = Modifier.align(alignment = Alignment.CenterHorizontally),
         )
         Column(modifier = Modifier.padding(16.dp).align(alignment = Alignment.CenterHorizontally)) {
