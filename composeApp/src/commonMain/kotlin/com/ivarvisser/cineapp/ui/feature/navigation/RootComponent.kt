@@ -12,6 +12,7 @@ import com.ivarvisser.cineapp.domain.Movie
 import com.ivarvisser.cineapp.ui.component.navigation.TabBarItem
 import com.ivarvisser.cineapp.ui.feature.movie.MovieDetailsComponent
 import com.ivarvisser.cineapp.ui.feature.movie.MoviesOverviewComponent
+import com.ivarvisser.cineapp.ui.feature.ordering.OrderingComponent
 import com.ivarvisser.cineapp.ui.feature.showing.ShowingDetailComponent
 import com.ivarvisser.cineapp.ui.home.DefaultHomeComponent
 import kotlinx.serialization.Serializable
@@ -35,7 +36,7 @@ class RootComponent(
     val activeTab: Value<TabBarItem> = childStack.map { stack ->
         when (stack.active.configuration) {
             Configuration.Home -> TabBarItem.Home
-            Configuration.MoviesOverviewScreen, is Configuration.MovieDetailsScreen, Configuration.ShowingDetailsScreen -> TabBarItem.MoviesOverviewScreen // Both map to the same tab
+            Configuration.MoviesOverviewScreen, is Configuration.MovieDetailsScreen, is Configuration.ShowingDetailsScreen, is Configuration.OrderingScreen -> TabBarItem.MoviesOverviewScreen // Both map to the same tab
             Configuration.OrderHistory -> TabBarItem.OrderHistory
             Configuration.Account -> TabBarItem.Account
             Configuration.Settings -> TabBarItem.Settings
@@ -125,7 +126,27 @@ class RootComponent(
                         onGoBack = { navigation.pop() },
                         moviesRepository = getKoin().get(),
                         showingsRepository = getKoin().get(),
-                        onNavigateToOrder = {}
+                        onNavigateToOrder = {
+                            navigation.bringToFront(
+                                Configuration.OrderingScreen(
+                                    showingId = config.showingId,
+                                    movieId = config.movieId
+                                )
+                            )
+                        }
+                    )
+                )
+            }
+
+            is Configuration.OrderingScreen -> {
+                Child.OrderingScreen(
+                    OrderingComponent(
+                        componentContext = context,
+                        showingId = config.showingId,
+                        movieId = config.movieId,
+                        onGoBack = { navigation.pop() },
+                        moviesRepository = getKoin().get(),
+                        showingsRepository = getKoin().get()
                     )
                 )
             }
@@ -166,6 +187,7 @@ class RootComponent(
         data class NotImplemented(val componentContext: NotImplementedComponent) : Child()
         data class MovieDetailsScreen(val componentContext: MovieDetailsComponent) : Child()
         data class ShowingDetailsScreen(val componentContext: ShowingDetailComponent) : Child()
+        data class OrderingScreen(val componentContext: OrderingComponent) : Child()
 
     }
 
@@ -194,5 +216,8 @@ class RootComponent(
 
         @Serializable
         data class ShowingDetailsScreen(val showingId: Int, val movieId: Int) : Configuration()
+
+        @Serializable
+        data class OrderingScreen(val showingId: Int, val movieId: Int) : Configuration()
     }
 }

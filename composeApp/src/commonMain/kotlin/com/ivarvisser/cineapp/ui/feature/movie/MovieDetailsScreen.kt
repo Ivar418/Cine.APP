@@ -48,7 +48,6 @@ import cineapp.composeapp.generated.resources.movie_duration
 import cineapp.composeapp.generated.resources.movie_language
 import cineapp.composeapp.generated.resources.movie_poster_desc
 import cineapp.composeapp.generated.resources.not_available_abbreviation
-import cineapp.composeapp.generated.resources.trailer_placeholder
 import cineapp.composeapp.generated.resources.unknown_error
 import coil3.compose.AsyncImage
 import com.arkivanov.decompose.extensions.compose.subscribeAsState
@@ -56,6 +55,7 @@ import com.ivarvisser.cineapp.theming.BrandColors
 import com.ivarvisser.cineapp.ui.component.ErrorMessage
 import com.ivarvisser.cineapp.ui.component.ExpandablePanel
 import com.ivarvisser.cineapp.ui.component.InfoRow
+import com.ivarvisser.cineapp.ui.component.TrailerPlayer
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 import org.jetbrains.compose.resources.stringResource
@@ -178,8 +178,10 @@ fun MovieItemDetailsScreen(
                         .height(250.dp)
                         .padding(horizontal = 16.dp)
                 ) {
-                    Text(stringResource(Res.string.trailer_placeholder))
-//                    TrailerPlayer(trailerKey)
+                    TrailerPlayer(
+                        videoId = trailerKey,
+                        modifier = Modifier.fillMaxSize()
+                    )
                 }
                 if (dates.isNotEmpty()) {
                     var selectedTabIndex by remember { mutableStateOf(0) }

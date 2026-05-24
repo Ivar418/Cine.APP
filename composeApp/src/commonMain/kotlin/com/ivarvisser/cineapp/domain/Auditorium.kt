@@ -13,5 +13,9 @@ data class Auditorium(
     @SerialName("rowConfigJson")
     val rowConfigJson: String
 ) {
-    fun getRowsAsList() = Json.decodeFromString<List<RowConfig>>(rowConfigJson)
+    fun getRowsAsList() = json.decodeFromString<List<RowConfig>>(rowConfigJson)
+
+    companion object {
+        private val json = Json { ignoreUnknownKeys = true }
+    }
 }

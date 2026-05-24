@@ -94,6 +94,7 @@ kotlin {
             implementation(compose.desktop.currentOs)
             implementation(libs.kotlinx.coroutinesSwing)
             implementation(libs.ktor.client.cio)
+            implementation("io.github.kevinnzou:compose-webview-multiplatform-desktop:2.0.3")
         }
 
         wasmJsMain.dependencies {

@@ -18,6 +18,7 @@ import com.ivarvisser.cineapp.ui.component.navigation.TopBar
 import com.ivarvisser.cineapp.ui.feature.movie.MovieItemDetailsScreen
 import com.ivarvisser.cineapp.ui.feature.movie.MoviesOverviewScreen
 import com.ivarvisser.cineapp.ui.feature.navigation.RootComponent
+import com.ivarvisser.cineapp.ui.feature.ordering.OrderingScreen
 import com.ivarvisser.cineapp.ui.feature.showing.ShowingDetailScreen
 import com.ivarvisser.cineapp.ui.home.HomeScreen
 
@@ -76,6 +77,14 @@ fun App(root: RootComponent) {
                                 is RootComponent.Child.ShowingDetailsScreen -> ShowingDetailScreen(
                                     component = instance.componentContext,
                                 )
+
+                                is RootComponent.Child.OrderingScreen -> {
+                                    val state by instance.componentContext.state.subscribeAsState()
+                                    OrderingScreen(
+                                        state = state,
+                                        onAction = instance.componentContext::onAction
+                                    )
+                                }
                             }
                         }
                     }

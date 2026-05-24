@@ -11,6 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.ivarvisser.cineapp.domain.ENUM.SeatType
@@ -22,16 +23,17 @@ fun SeatButton(
     occupied: Boolean,
     suggested: Boolean,
     showZones: Boolean,
-    onClick: () -> Unit
+    onClick: () -> Unit,
+    seatSize: Dp = 32.dp
 ) {
     val isWC = seat.type == SeatType.Wheelchair
 
     val backgroundColor = when {
         suggested -> Color(0xFFFFC107)
-        occupied -> Color(0xFFB0B0B0)
+        occupied -> Color.DarkGray
         isWC -> Color(0xFF64B5F6)
         showZones -> zoneColor(seat.category)
-        else -> Color(0xFFE0E0E0)
+        else -> Color.LightGray
     }
 
     val label = when {
@@ -44,12 +46,13 @@ fun SeatButton(
 
     Box(
         modifier = Modifier
-            .size(32.dp)
+            .size(seatSize)
             .padding(2.dp)
             .background(backgroundColor, shape = RoundedCornerShape(6.dp))
             .clickable(enabled = !(occupied && !suggested)) {
                 onClick()
             },
+
         contentAlignment = Alignment.Center
     ) {
         Text(text = label, fontSize = 12.sp)
