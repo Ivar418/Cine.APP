@@ -19,6 +19,8 @@ captures
 node_modules/
 *.lock
 .env
+cache/
+logs/
 /composeApp/kcef-bundle/fonts/DroidSans.ttf
 /composeApp/kcef-bundle/fonts/DroidSans-Bold.ttf
 /composeApp/kcef-bundle/fonts/DroidSansMono.ttf
