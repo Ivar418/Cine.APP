@@ -9,17 +9,19 @@ import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
 
 fun createHttpClient() = HttpClient {
+    expectSuccess = true // 4xx and 5xx will throw ResponseException
     install(ContentNegotiation) {
         json(Json {
             encodeDefaults = true
             isLenient = true
             coerceInputValues = true
             ignoreUnknownKeys = true
+            decodeEnumsCaseInsensitive = true
         })
     }
     defaultRequest {
         url {
-            protocol = URLProtocol.HTTPS
+            protocol = if (BuildKonfig.PROTOCOL == "HTTPS") URLProtocol.HTTPS else URLProtocol.HTTP
             host = BuildKonfig.BASE_URL
         }
     }

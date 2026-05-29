@@ -31,7 +31,27 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import cineapp.composeapp.generated.resources.Res
+import cineapp.composeapp.generated.resources.about_app
+import cineapp.composeapp.generated.resources.account_settings_title
+import cineapp.composeapp.generated.resources.app_settings_title
+import cineapp.composeapp.generated.resources.app_version_placeholder
+import cineapp.composeapp.generated.resources.edit_profile
+import cineapp.composeapp.generated.resources.edit_profile_desc
+import cineapp.composeapp.generated.resources.email_preferences
+import cineapp.composeapp.generated.resources.email_preferences_desc
+import cineapp.composeapp.generated.resources.general_settings
+import cineapp.composeapp.generated.resources.general_settings_desc
+import cineapp.composeapp.generated.resources.logout_button
+import cineapp.composeapp.generated.resources.notifications_settings
+import cineapp.composeapp.generated.resources.notifications_settings_desc
+import cineapp.composeapp.generated.resources.privacy_security
+import cineapp.composeapp.generated.resources.privacy_security_desc
+import cineapp.composeapp.generated.resources.profile_email_placeholder
+import cineapp.composeapp.generated.resources.profile_name_placeholder
+import cineapp.composeapp.generated.resources.profile_picture_desc
 import com.ivarvisser.cineapp.ui.component.AccountSettingItem
+import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun AccountScreen(
@@ -58,18 +78,18 @@ fun AccountScreen(
             ) {
                 Icon(
                     imageVector = Icons.Default.AccountCircle,
-                    contentDescription = "Profile Picture",
+                    contentDescription = stringResource(Res.string.profile_picture_desc),
                     modifier = Modifier.size(80.dp),
                     tint = MaterialTheme.colorScheme.primary
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 Text(
-                    text = "John Doe",
+                    text = stringResource(Res.string.profile_name_placeholder),
                     style = MaterialTheme.typography.headlineSmall,
                     fontWeight = FontWeight.Bold
                 )
                 Text(
-                    text = "john.doe@example.com",
+                    text = stringResource(Res.string.profile_email_placeholder),
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -78,7 +98,7 @@ fun AccountScreen(
 
         // Account Settings Section
         Text(
-            text = "Account Settings",
+            text = stringResource(Res.string.account_settings_title),
             style = MaterialTheme.typography.titleMedium,
             fontWeight = FontWeight.Bold,
             modifier = Modifier.padding(vertical = 8.dp)
@@ -86,33 +106,33 @@ fun AccountScreen(
 
         AccountSettingItem(
             icon = Icons.Default.Person,
-            title = "Edit Profile",
-            subtitle = "Update your personal information"
+            title = stringResource(Res.string.edit_profile),
+            subtitle = stringResource(Res.string.edit_profile_desc)
         )
 
         AccountSettingItem(
             icon = Icons.Default.Email,
-            title = "Email Preferences",
-            subtitle = "Manage notification settings"
+            title = stringResource(Res.string.email_preferences),
+            subtitle = stringResource(Res.string.email_preferences_desc)
         )
 
         AccountSettingItem(
             icon = Icons.Default.Lock,
-            title = "Privacy & Security",
-            subtitle = "Password and security settings"
+            title = stringResource(Res.string.privacy_security),
+            subtitle = stringResource(Res.string.privacy_security_desc)
         )
 
         AccountSettingItem(
             icon = Icons.Default.Notifications,
-            title = "Notifications",
-            subtitle = "Configure app notifications"
+            title = stringResource(Res.string.notifications_settings),
+            subtitle = stringResource(Res.string.notifications_settings_desc)
         )
 
         Spacer(modifier = Modifier.height(16.dp))
 
         // App Settings Section
         Text(
-            text = "App Settings",
+            text = stringResource(Res.string.app_settings_title),
             style = MaterialTheme.typography.titleMedium,
             fontWeight = FontWeight.Bold,
             modifier = Modifier.padding(vertical = 8.dp)
@@ -120,14 +140,14 @@ fun AccountScreen(
 
         AccountSettingItem(
             icon = Icons.Default.Settings,
-            title = "General Settings",
-            subtitle = "App preferences and configurations"
+            title = stringResource(Res.string.general_settings),
+            subtitle = stringResource(Res.string.general_settings_desc)
         )
 
         AccountSettingItem(
             icon = Icons.Default.Info,
-            title = "About",
-            subtitle = "Version 1.0.0"
+            title = stringResource(Res.string.about_app),
+            subtitle = stringResource(Res.string.app_version_placeholder)
         )
 
         Spacer(modifier = Modifier.height(24.dp))
@@ -146,8 +166,7 @@ fun AccountScreen(
                 modifier = Modifier.size(20.dp)
             )
             Spacer(modifier = Modifier.width(8.dp))
-            Text("Logout")
+            Text(stringResource(Res.string.logout_button))
         }
     }
 }
-

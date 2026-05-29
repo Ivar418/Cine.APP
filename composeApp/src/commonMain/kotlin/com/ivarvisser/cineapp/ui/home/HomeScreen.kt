@@ -21,8 +21,17 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import cineapp.composeapp.generated.resources.Res
+import cineapp.composeapp.generated.resources.app_subtitle
+import cineapp.composeapp.generated.resources.my_account
+import cineapp.composeapp.generated.resources.now_showing
+import cineapp.composeapp.generated.resources.now_showing_desc
+import cineapp.composeapp.generated.resources.order_history
+import cineapp.composeapp.generated.resources.quick_actions
+import cineapp.composeapp.generated.resources.welcome_footer
 import com.arkivanov.decompose.extensions.compose.subscribeAsState
 import com.ivarvisser.cineapp.getPlatform
+import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun HomeScreen(
@@ -53,7 +62,7 @@ fun HomeScreen(
         )
 
         Text(
-            text = "Your Ultimate Cinema Experience",
+            text = stringResource(Res.string.app_subtitle),
             style = MaterialTheme.typography.titleMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
@@ -81,12 +90,12 @@ fun HomeScreen(
                     )
                     Spacer(modifier = Modifier.height(8.dp))
                     Text(
-                        text = "Now Showing",
+                        text = stringResource(Res.string.now_showing),
                         style = MaterialTheme.typography.headlineSmall,
                         color = MaterialTheme.colorScheme.onPrimaryContainer
                     )
                     Text(
-                        text = "Explore the latest movies",
+                        text = stringResource(Res.string.now_showing_desc),
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onPrimaryContainer
                     )
@@ -107,7 +116,7 @@ fun HomeScreen(
                 verticalArrangement = Arrangement.spacedBy(12.dp)
             ) {
                 Text(
-                    text = "Quick Actions",
+                    text = stringResource(Res.string.quick_actions),
                     style = MaterialTheme.typography.titleLarge,
                     color = MaterialTheme.colorScheme.onSecondaryContainer
                 )
@@ -116,14 +125,14 @@ fun HomeScreen(
                     onClick = { component.onEvent(CineAppScreenEvent.OnAccountClick) },
                     modifier = Modifier.fillMaxWidth()
                 ) {
-                    Text("My Account")
+                    Text(stringResource(Res.string.my_account))
                 }
 
                 Button(
                     onClick = { component.onEvent(CineAppScreenEvent.OnHistoryClick) },
                     modifier = Modifier.fillMaxWidth()
                 ) {
-                    Text("Order History")
+                    Text(stringResource(Res.string.order_history))
                 }
             }
         }
@@ -132,7 +141,7 @@ fun HomeScreen(
 
         // Footer
         Text(
-            text = "Welcome! Book your tickets now",
+            text = stringResource(Res.string.welcome_footer),
             style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
