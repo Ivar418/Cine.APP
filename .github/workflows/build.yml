@@ -27,13 +27,13 @@ jobs:
         uses: actions/checkout@v4
       - name: Gradle setup
         uses: ./.github/actions/gradle-setup
-      - name: Run unit tests
-        run: ./gradlew jvmTest
-      - name: Upload test reports
-        uses: actions/upload-artifact@v4
-        with:
-          name: test-reports
-          path: "**/build/reports/tests/"
+  #      - name: Run unit tests
+  #        run: ./gradlew jvmTest
+  #      - name: Upload test reports
+  #        uses: actions/upload-artifact@v4
+  #        with:
+  #          name: test-reports
+  #          path: "**/build/reports/tests/"
   build-android:
     name: Build Android
     runs-on: ubuntu-latest

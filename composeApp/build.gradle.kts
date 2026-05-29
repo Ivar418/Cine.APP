@@ -97,6 +97,7 @@ kotlin {
             implementation("io.github.kevinnzou:compose-webview-multiplatform-desktop:2.0.3")
         }
 
+
         wasmJsMain.dependencies {
             implementation(libs.slf4j.simple)
             implementation(libs.ktor.client.wasm)
