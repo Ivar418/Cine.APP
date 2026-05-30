@@ -10,6 +10,7 @@ import com.arkivanov.decompose.value.operator.map
 import com.ivarvisser.cineapp.NotImplementedComponent
 import com.ivarvisser.cineapp.domain.Movie
 import com.ivarvisser.cineapp.ui.component.navigation.TabBarItem
+import com.ivarvisser.cineapp.ui.feature.account.AccountComponent
 import com.ivarvisser.cineapp.ui.feature.movie.MovieDetailsComponent
 import com.ivarvisser.cineapp.ui.feature.movie.MoviesOverviewComponent
 import com.ivarvisser.cineapp.ui.feature.ordering.OrderingComponent
@@ -89,10 +90,8 @@ class RootComponent(
 
             is Configuration.Account -> {
                 Child.Account(
-                    NotImplementedComponent(
-                        componentContext = context,
-                        onRetry = { navigation.pop() },
-                        textContent = "Account is not implemented yet."
+                    AccountComponent(
+                        componentContext = context
                     )
                 )
             }
@@ -182,7 +181,7 @@ class RootComponent(
         data class Home(val componentContext: DefaultHomeComponent) : Child()
         data class MoviesOverviewScreen(val componentContext: MoviesOverviewComponent) : Child()
         data class OrderHistory(val componentContext: NotImplementedComponent) : Child()
-        data class Account(val componentContext: NotImplementedComponent) : Child()
+        data class Account(val componentContext: AccountComponent) : Child()
         data class Settings(val componentContext: NotImplementedComponent) : Child()
         data class NotImplemented(val componentContext: NotImplementedComponent) : Child()
         data class MovieDetailsScreen(val componentContext: MovieDetailsComponent) : Child()

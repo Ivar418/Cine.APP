@@ -72,7 +72,7 @@ kotlin {
             implementation(libs.ktor.client.core)
             implementation(libs.ktor.client.content.negotiation)
             implementation(libs.ktor.serialization.kotlinx.json)
-//            Decompose
+            //Decompose
             implementation(libs.decompose)
             implementation(compose.materialIconsExtended)
             implementation(libs.decompose.extensions.compose)
@@ -83,7 +83,7 @@ kotlin {
             //Coil
             implementation(libs.bundles.coil)
             //Webvieuw MultiPlatofrm
-            api("io.github.kevinnzou:compose-webview-multiplatform:2.0.3")
+            implementation("com.russhwolf:multiplatform-settings-no-arg:1.3.0")
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)

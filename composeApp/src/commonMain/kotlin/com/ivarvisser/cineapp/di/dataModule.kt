@@ -9,6 +9,7 @@ import com.ivarvisser.cineapp.data.repository.implementations.MoviesRepositoryIm
 import com.ivarvisser.cineapp.data.repository.implementations.ShowingsRepositoryImpl
 import com.ivarvisser.cineapp.data.repository.interfaces.MoviesRepository
 import com.ivarvisser.cineapp.data.repository.interfaces.ShowingsRepository
+import com.russhwolf.settings.Settings
 import io.ktor.client.HttpClient
 import org.koin.dsl.module
 
@@ -21,4 +22,5 @@ val dataModule = module {
     //Repository
     single<MoviesRepository> { MoviesRepositoryImpl(api = get()) }
     single<ShowingsRepository> { ShowingsRepositoryImpl(showingsApi = get()) }
+    single<Settings> { Settings() }
 }
