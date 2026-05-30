@@ -51,17 +51,13 @@ import cineapp.composeapp.generated.resources.profile_email_placeholder
 import cineapp.composeapp.generated.resources.profile_name_placeholder
 import cineapp.composeapp.generated.resources.profile_picture_desc
 import com.ivarvisser.cineapp.ui.component.AccountSettingItem
-import com.russhwolf.settings.Settings
 import org.jetbrains.compose.resources.stringResource
-import org.koin.mp.KoinPlatform.getKoin
 
 @Composable
 fun AccountScreen(
     modifier: Modifier = Modifier,
     component: AccountComponent
 ) {
-    val settings: Settings = getKoin().get()
-
 
     Column(
         modifier = modifier
@@ -69,20 +65,6 @@ fun AccountScreen(
             .verticalScroll(rememberScrollState())
             .padding(16.dp)
     ) {
-        settings.getStringOrNull("userId") ?: Text(
-            text = "User not logged in",
-            style = MaterialTheme.typography.headlineMedium,
-            color = MaterialTheme.colorScheme.error,
-            modifier = Modifier.padding(16.dp)
-        )
-        settings.putString("userIdd", "123456789")
-        val idd = settings.getStringOrNull("userIdd")
-        Text(
-            text = "User ID: ${idd ?: "Not available"}",
-            style = MaterialTheme.typography.headlineMedium,
-            color = MaterialTheme.colorScheme.error,
-            modifier = Modifier.padding(16.dp)
-        )
         // Profile Section
         Card(
             modifier = Modifier
