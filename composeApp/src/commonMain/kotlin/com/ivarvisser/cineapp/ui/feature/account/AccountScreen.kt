@@ -61,7 +61,6 @@ fun AccountScreen(
     component: AccountComponent
 ) {
     val settings: Settings = getKoin().get()
-    settings.
 
 
     Column(
