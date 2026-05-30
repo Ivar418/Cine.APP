@@ -1,5 +1,5 @@
 name: Build
-#test1
+
 on:
   push:
     branches:
@@ -11,9 +11,11 @@ on:
     branches:
       - main
       - develop
-      - '*Staging*'
-      - '*github-actions*'
   workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 env:
   GRADLE_OPTS: "-Dorg.gradle.jvmargs=-Xmx4096M -Dorg.gradle.daemon=false -Dorg.gradle.parallel=true -Dorg.gradle.caching=true"
@@ -23,17 +25,22 @@ jobs:
     name: Run tests
     runs-on: ubuntu-latest
     steps:
-      - name: Run unit tests
+      - name: Checkout
         uses: actions/checkout@v4
+
       - name: Gradle setup
         uses: ./.github/actions/gradle-setup
+
       - name: Run unit tests
-        run: ./gradlew jvmTest
+        run: ./gradlew check
+
       - name: Upload test reports
+        if: failure()
         uses: actions/upload-artifact@v4
         with:
           name: test-reports
           path: "**/build/reports/tests/"
+
   build-android:
     name: Build Android
     runs-on: ubuntu-latest
@@ -52,39 +59,12 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: android-apk
-          path: composeApp/build/outputs/apk/debug/*.apk
-  # build-ios:
-  #   name: Build iOS simulator app
-  #   runs-on: macos-latest
-  #   needs: test
-  #   steps:
-  #     - name: Checkout
-  #       uses: actions/checkout@v4
+          path: composeApp/build/outputs/apk/**/*.apk
 
-  #     - name: Gradle setup
-  #       uses: ./.github/actions/gradle-setup
-
-  #     - name: Build iOS simulator app
-  #       run: |
-  #         xcodebuild build \
-  #         -project JetcasterMigration/JetcasterMigration.xcodeproj \
-  #         -configuration Debug \
-  #         -scheme JetcasterMigration \
-  #         -sdk iphonesimulator \
-  #         -derivedDataPath ./build \
-  #         -verbose
-
-  #     - name: Upload app folder
-  #       uses: actions/upload-artifact@v4
-  #       with:
-  #         name: iphonesimulator-app
-  #         path: build/Build/Products/Debug-iphonesimulator/*
-
-  build-jvm:
-    name: Build JVM
+  build-desktop:
+    name: Build Desktop
     runs-on: ubuntu-latest
     needs: test
-
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -92,15 +72,51 @@ jobs:
       - name: Gradle setup
         uses: ./.github/actions/gradle-setup
 
-      - name: Build JVM app
-        run: ./gradlew jvmJar
-        # or:
-        # run: ./gradlew jvmJar
-        # depending on your project setup
+      - name: Build Desktop app
+        run: ./gradlew :composeApp:packageDistribution
 
-      - name: Upload JVM artifact
+      - name: Upload Desktop app
         uses: actions/upload-artifact@v4
         with:
-          name: jvm-artifact
-          path: |
-            **/build/libs/*.jar
+          name: desktop-app
+          path: composeApp/build/compose/binaries/main/
+
+  build-wasm:
+    name: Build Wasm
+    runs-on: ubuntu-latest
+    needs: test
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Gradle setup
+        uses: ./.github/actions/gradle-setup
+
+      - name: Build Wasm
+        run: ./gradlew :composeApp:wasmJsBrowserDistribution
+
+      - name: Upload Wasm
+        uses: actions/upload-artifact@v4
+        with:
+          name: wasm-app
+          path: composeApp/build/dist/wasmJs/productionExecutable/
+
+  # build-ios:
+  #   name: Build iOS
+  #   runs-on: macos-latest
+  #   needs: test
+  #   steps:
+  #     - name: Checkout
+  #       uses: actions/checkout@v4
+  #
+  #     - name: Gradle setup
+  #       uses: ./.github/actions/gradle-setup
+  #
+  #     - name: Build iOS simulator app
+  #       run: |
+  #         xcodebuild build \
+  #           -project iosApp/iosApp.xcodeproj \
+  #           -scheme iosApp \
+  #           -sdk iphonesimulator \
+  #           -configuration Debug \
+  #           -derivedDataPath ./build-ios
