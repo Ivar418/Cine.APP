@@ -91,7 +91,8 @@ class RootComponent(
             is Configuration.Account -> {
                 Child.Account(
                     AccountComponent(
-                        componentContext = context
+                        componentContext = context,
+                        usersRepository = getKoin().get()
                     )
                 )
             }

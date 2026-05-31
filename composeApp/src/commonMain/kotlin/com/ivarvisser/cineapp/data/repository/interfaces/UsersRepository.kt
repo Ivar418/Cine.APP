@@ -1,9 +1,22 @@
 package com.ivarvisser.cineapp.data.repository.interfaces
 
+import com.ivarvisser.cineapp.data.dto.AuthResponse
+import com.ivarvisser.cineapp.domain.User
+import com.ivarvisser.cineapp.utils.ResultOf
+
 interface UsersRepository {
-    suspend fun login(username: String, password: String): Boolean
-    suspend fun logout()
+    suspend fun login(username: String, password: String): ResultOf<AuthResponse>
+    suspend fun register(
+        username: String,
+        firstName: String,
+        lastName: String,
+        email: String,
+        password: String
+    ): ResultOf<AuthResponse>
+
+    suspend fun logout(userId: Int)
     suspend fun isLoggedIn(): Boolean
+    suspend fun getUser(): User?
     suspend fun getUserId(): Int?
     suspend fun getUsername(): String?
     suspend fun getEmail(): String?
@@ -12,8 +25,8 @@ interface UsersRepository {
     suspend fun setFirstName(firstName: String)
     suspend fun getLastName(): String?
     suspend fun setLastName(lastName: String)
-    suspend fun getPhotoId(): Int?
-    suspend fun setPhoto(photo: Photo)
+    suspend fun getPhoto(): String?
+    suspend fun setPhoto(photo: String)
     suspend fun getFavoriteMovies(): List<Int>
     suspend fun addFavoriteMovie(movieId: Int)
     suspend fun removeFavoriteMovie(movieId: Int)

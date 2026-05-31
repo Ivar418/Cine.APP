@@ -1,16 +1,15 @@
 package com.ivarvisser.cineapp.ui.feature.account
 
+import com.ivarvisser.cineapp.domain.User
+
 data class AccountState(
     val isLoading: Boolean = false,
     val error: String? = null,
-    val isLoggedIn: Boolean = false,
-    val userId: Int? = null,
-    val username: String? = null,
-    val email: String? = null,
-    val firstName: String? = null,
-    val lastName: String? = null,
-    val photoId: Int? = null,
+    val user: User? = null,
     val favoriteMovies: List<Int> = emptyList(),
+    val isRegistering: Boolean = false,
 ) {
     val hasError: Boolean get() = error != null
+    val isLoggedIn: Boolean get() = user != null
+
 }
