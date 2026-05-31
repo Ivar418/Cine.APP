@@ -36,7 +36,6 @@ fun BottomTabBar(
     NavigationBar(
         modifier = modifier,
         containerColor = BrandColors.TopBar,
-        // You can use containerColor = BrandColors.TopBar if you want to keep your brand color
     ) {
         items.forEach { item ->
             NavigationBarItem(
