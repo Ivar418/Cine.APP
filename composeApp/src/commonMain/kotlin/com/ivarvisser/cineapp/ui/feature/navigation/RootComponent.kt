@@ -92,7 +92,8 @@ class RootComponent(
                 Child.Account(
                     AccountComponent(
                         componentContext = context,
-                        usersRepository = getKoin().get()
+                        usersRepository = getKoin().get(),
+                        onGoBack = { navigation.pop() }
                     )
                 )
             }

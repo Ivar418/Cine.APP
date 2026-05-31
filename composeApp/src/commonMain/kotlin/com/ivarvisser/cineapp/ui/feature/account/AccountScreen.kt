@@ -14,8 +14,8 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ExitToApp
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Email
+import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Info
-import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Settings
@@ -41,25 +41,28 @@ import cineapp.composeapp.generated.resources.edit_profile
 import cineapp.composeapp.generated.resources.edit_profile_desc
 import cineapp.composeapp.generated.resources.email_preferences
 import cineapp.composeapp.generated.resources.email_preferences_desc
+import cineapp.composeapp.generated.resources.favorites_description
+import cineapp.composeapp.generated.resources.favorites_title
 import cineapp.composeapp.generated.resources.general_settings
 import cineapp.composeapp.generated.resources.general_settings_desc
 import cineapp.composeapp.generated.resources.logout_button
 import cineapp.composeapp.generated.resources.notifications_settings
 import cineapp.composeapp.generated.resources.notifications_settings_desc
-import cineapp.composeapp.generated.resources.privacy_security
-import cineapp.composeapp.generated.resources.privacy_security_desc
 import cineapp.composeapp.generated.resources.profile_email_placeholder
 import cineapp.composeapp.generated.resources.profile_name_placeholder
 import cineapp.composeapp.generated.resources.profile_picture_desc
+import cineapp.composeapp.generated.resources.unknown_error
 import coil3.compose.AsyncImage
 import com.arkivanov.decompose.extensions.compose.subscribeAsState
 import com.ivarvisser.cineapp.ui.component.AccountSettingItem
+import com.ivarvisser.cineapp.ui.component.ErrorMessage
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun AccountScreen(
     modifier: Modifier = Modifier, component: AccountComponent
 ) {
+
     val state by component.state.subscribeAsState()
     Column(
         modifier = modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(16.dp)
@@ -77,7 +80,15 @@ fun AccountScreen(
                     onLoginClick = { username, password -> component.login(username, password) },
                     onRegisterClick = { component.setRegistering(true) })
             }
+        } else if (state.hasError) {
+            ErrorMessage(
+                message = state.error ?: stringResource(Res.string.unknown_error),
+                onRetry = { component.clearError() },
+                buttonText = "Go back",
+                isOverlay = true
+            )
         } else {
+
             // Profile Section
             Card(
                 modifier = Modifier.fillMaxWidth().padding(bottom = 16.dp),
@@ -128,24 +139,29 @@ fun AccountScreen(
             AccountSettingItem(
                 icon = Icons.Default.Person,
                 title = stringResource(Res.string.edit_profile),
+                onclick = {
+                    component.setError("Edit profile functionality is not implemented yet.")
+                },
                 subtitle = stringResource(Res.string.edit_profile_desc)
+            )
+            AccountSettingItem(
+                icon = Icons.Default.Favorite,
+                title = stringResource(Res.string.favorites_title),
+                onclick = { component.setError("Favorites is not yet implemented.") },
+                subtitle = stringResource(Res.string.favorites_description)
             )
 
             AccountSettingItem(
                 icon = Icons.Default.Email,
                 title = stringResource(Res.string.email_preferences),
+                onclick = { component.setError("Email preferences functionality is not implemented yet.") },
                 subtitle = stringResource(Res.string.email_preferences_desc)
-            )
-
-            AccountSettingItem(
-                icon = Icons.Default.Lock,
-                title = stringResource(Res.string.privacy_security),
-                subtitle = stringResource(Res.string.privacy_security_desc)
             )
 
             AccountSettingItem(
                 icon = Icons.Default.Notifications,
                 title = stringResource(Res.string.notifications_settings),
+                onclick = { component.setError("Notifications settings functionality is not implemented yet.") },
                 subtitle = stringResource(Res.string.notifications_settings_desc)
             )
 
@@ -162,12 +178,14 @@ fun AccountScreen(
             AccountSettingItem(
                 icon = Icons.Default.Settings,
                 title = stringResource(Res.string.general_settings),
+                onclick = { component.setError("General settings functionality is not implemented yet.") },
                 subtitle = stringResource(Res.string.general_settings_desc)
             )
 
             AccountSettingItem(
                 icon = Icons.Default.Info,
                 title = stringResource(Res.string.about_app),
+                onclick = { component.setError("About app functionality is not implemented yet.") },
                 subtitle = stringResource(Res.string.app_version_placeholder)
             )
 

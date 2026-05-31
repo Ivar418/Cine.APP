@@ -11,7 +11,9 @@ import com.ivarvisser.cineapp.utils.ResultOf
 import kotlinx.coroutines.launch
 
 class AccountComponent(
-    componentContext: ComponentContext, private val usersRepository: UsersRepository
+    componentContext: ComponentContext,
+    private val usersRepository: UsersRepository,
+    private val onGoBack: () -> Unit
 ) : ComponentContext by componentContext {
     private val scope = coroutineScope()
     private val _state = MutableValue(AccountState())
@@ -59,18 +61,6 @@ class AccountComponent(
         }
     }
 
-    fun setLoading(isLoading: Boolean) {
-        _state.update { current -> current.copy(isLoading = isLoading) }
-    }
-
-    fun setError(error: String?) {
-        _state.update { current -> current.copy(error = error) }
-    }
-
-    fun setRegistering(isRegistering: Boolean) {
-        _state.update { current -> current.copy(isRegistering = isRegistering) }
-    }
-
     fun register(
         username: String,
         firstName: String,
@@ -104,6 +94,60 @@ class AccountComponent(
         scope.launch {
             usersRepository.logout(_state.value.user?.userId ?: return@launch)
             _state.value = AccountState()
+        }
+    }
+
+    fun setLoading(isLoading: Boolean) {
+        _state.update { current -> current.copy(isLoading = isLoading) }
+    }
+
+    fun setError(error: String?) {
+        _state.update { current -> current.copy(error = error) }
+    }
+
+    fun clearError() {
+        _state.update { current -> current.copy(error = null) }
+    }
+
+    fun setRegistering(isRegistering: Boolean) {
+        _state.update { current -> current.copy(isRegistering = isRegistering) }
+    }
+
+    fun onEvent(event: AccountAction) {
+        when (event) {
+            is AccountAction.OnBack -> {
+                onGoBack()
+
+            }
+
+            is AccountAction.OnLogin -> {
+            }
+
+            is AccountAction.OnLogout -> {
+            }
+
+            is AccountAction.OnRegister -> {
+            }
+
+            is AccountAction.OnForgotPassword -> {
+            }
+
+            is AccountAction.OnChangePassword -> {
+            }
+
+            is AccountAction.OnChangeEmail -> {
+            }
+
+            is AccountAction.OnChangeUsername -> {
+            }
+
+            is AccountAction.OnChangeName -> {
+            }
+
+            is AccountAction.OnChangePhoto -> {
+            }
+
+
         }
     }
 }
