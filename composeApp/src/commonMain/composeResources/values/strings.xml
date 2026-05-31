@@ -63,4 +63,6 @@
     <string name="not_implemented_settings">Settings is not implemented yet. Press to go back.</string>
     <string name="not_implemented_generic">Not implemented yet. Press to go back.</string>
     <string name="not_implemented_button">Go back.</string>
+    <string name="favorites_title">Favorites</string>
+    <string name="favorites_description">All your favorite movies</string>
 </resources>

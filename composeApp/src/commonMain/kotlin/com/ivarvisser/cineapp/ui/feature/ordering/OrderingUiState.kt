@@ -6,28 +6,18 @@ import com.ivarvisser.cineapp.domain.Seat
 
 data class OrderingUiState(
     val step: Int = 1,
-
     val isLoading: Boolean = false,
     val isBusy: Boolean = false,
     val orderBusy: Boolean = false,
-
     val errorMessage: String? = null,
-
     val showing: ShowingUi? = null,
-
     val summary: SummaryUi = SummaryUi(),
-
     val seatSelection: SeatSelectionUi = SeatSelectionUi(),
-
     val seats: List<SelectedSeatUi> = emptyList(),
-
     val paymentMethods: List<String> = emptyList(),
     val selectedPaymentMethod: String? = null,
-
     val legend: List<LegendItemUi> = emptyList(),
-
     val pendingId: String? = null,
-
     val showZones: Boolean = false
 )
 

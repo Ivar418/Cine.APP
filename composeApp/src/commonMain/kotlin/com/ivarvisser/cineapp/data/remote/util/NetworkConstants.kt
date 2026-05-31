@@ -11,6 +11,8 @@ object NetworkConstants {
     object Endpoints {
         const val MOVIES = "/api/movies"
         const val SHOWINGS = "/api/showings"
+        const val USERS = "/api/users"
+        const val AUTH = "/api/auth"
 
 
         const val BASE_URL = ""
