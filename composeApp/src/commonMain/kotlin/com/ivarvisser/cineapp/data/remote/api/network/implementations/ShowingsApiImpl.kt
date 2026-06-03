@@ -1,5 +1,6 @@
 package com.ivarvisser.cineapp.data.remote.api.network.implementations
 
+import com.ivarvisser.cineapp.data.dto.ShowingStateResponse
 import com.ivarvisser.cineapp.data.remote.api.network.interfaces.ShowingsApi
 import com.ivarvisser.cineapp.data.remote.util.NetworkConstants.Endpoints.SHOWINGS
 import com.ivarvisser.cineapp.data.remote.util.safeApiCall
@@ -49,4 +50,22 @@ class ShowingsApiImpl(
             Log.debug(loggerName = "SHOWINGSAPIIMPL") { "Debug: Fetched showings for movieId: $movieId: $result." }
             result
         }
+
+    /**
+     * Fetches the showing state for a specific showing by its unique identifier.
+     * The showing state includes information about the showing, all available seats,
+     * and a set of occupied seat keys.
+     *
+     * @param id The unique identifier of the showing whose state is to be fetched.
+     * @return A [ResultOf] containing the [ShowingStateResponse] if the operation is successful,
+     *         or an error if it fails.
+     */
+    override suspend fun getShowingStateById(id: Int): ResultOf<ShowingStateResponse> =
+        safeApiCall {
+            val result = client.get("$SHOWINGS/$id/state").body<ShowingStateResponse>()
+            Log.debug(loggerName = "SHOWINGSAPIIMPL") { "Debug: Fetched showing state by id: $id: $result." }
+            result
+        }
+
+
 }

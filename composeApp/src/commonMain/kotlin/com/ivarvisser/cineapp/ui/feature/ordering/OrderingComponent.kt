@@ -9,7 +9,8 @@ import com.arkivanov.essenty.lifecycle.coroutines.coroutineScope
 import com.ivarvisser.cineapp.data.repository.interfaces.MoviesRepository
 import com.ivarvisser.cineapp.data.repository.interfaces.ShowingsRepository
 import com.ivarvisser.cineapp.domain.ENUM.SeatType
-import com.ivarvisser.cineapp.domain.SeatFactory
+import com.ivarvisser.cineapp.domain.Seat
+import com.ivarvisser.cineapp.domain.SeatFactory.buildSeatGrid
 import com.ivarvisser.cineapp.utils.ResultOf
 import kotlinx.coroutines.launch
 import net.codinux.log.Log
@@ -38,10 +39,12 @@ class OrderingComponent(
 
             val showingResult = showingsRepository.getShowingById(showingId)
             val movieResult = moviesRepository.getMovieById(movieId)
+            val showingState = showingsRepository.getShowingStateById(showingId)
 
-            if (showingResult is ResultOf.Success && movieResult is ResultOf.Success) {
+            if (showingResult is ResultOf.Success && movieResult is ResultOf.Success && showingState is ResultOf.Success) {
                 val showing = showingResult.value
                 val movie = movieResult.value
+                val showingState = showingState.value
 
                 _state.update {
                     it.copy(
@@ -49,8 +52,7 @@ class OrderingComponent(
                         showing = ShowingUi(
                             movieTitle = movie.title ?: "Unknown",
                             startsAt = showing.startsAt.toString(), // Format this if needed
-                            auditoriumName = showing.auditorium?.name ?: "Unknown",
-                            freeSpots = 0 // Update this if available
+                            auditoriumName = showing.auditorium?.name ?: "Unknown"
                         ),
                         summary = SummaryUi(
                             movieTitle = movie.title ?: "Unknown",
@@ -63,9 +65,11 @@ class OrderingComponent(
                             LegendItemUi("Wheelchair", Color(0xFF64B5F6))
                         ),
                         seatSelection = it.seatSelection.copy(
+
                             auditorium = showing.auditorium,
-                            allSeats = showing.auditorium?.let { aud -> SeatFactory.createSeats(aud) }
-                                ?: emptyList()
+                            allSeats = showingState.allSeats,
+                            occupiedSeatKeys = showingState.occupiedKeys.toSet(),
+                            grid = buildSeatGrid(showingState.allSeats)
                         )
                     )
                 }
@@ -73,6 +77,16 @@ class OrderingComponent(
                 _state.update { it.copy(isLoading = false, errorMessage = "Failed to load data") }
             }
         }
+    }
+
+    fun loadOccupiedSeats(allSeats: List<Seat>) {
+        scope.launch {
+            _state.value.seatSelection.allSeats.forEach { seat ->
+
+
+            }
+        }
+
     }
 
     fun onAction(action: OrderingAction) {
@@ -149,8 +163,8 @@ class OrderingComponent(
                             id = "${seat.row}-${seat.col}",
                             row = seat.row + 1,
                             seatNumber = seat.col + 1,
-                            ticketType = "Adult",
-                            price = "12.50" // Hardcoded for now
+                            ticketType = null,
+                            price = "0.00"
                         )
                     }
                     current.copy(
@@ -181,7 +195,17 @@ class OrderingComponent(
             }
 
             is OrderingAction.GoToOverview -> {
-                _state.update { it.copy(step = 3) }
+                val totalPirce = _state.value.seats.sumOf { it.price?.toDoubleOrNull() ?: 0.0 }
+                _state.update {
+                    it.copy(
+                        step = 3,
+                        summary = it.summary.copy(
+                            totalPrice = totalPirce.toString(),
+                            movieTitle = _state.value.showing!!.movieTitle
+                        )
+                    )
+                }
+
             }
 
             is OrderingAction.GoToPaymentMethods -> {

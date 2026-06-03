@@ -1,5 +1,6 @@
 package com.ivarvisser.cineapp.data.repository.implementations
 
+import com.ivarvisser.cineapp.data.dto.ShowingStateResponse
 import com.ivarvisser.cineapp.data.remote.api.network.interfaces.ShowingsApi
 import com.ivarvisser.cineapp.data.repository.interfaces.ShowingsRepository
 import com.ivarvisser.cineapp.domain.Showing
@@ -38,5 +39,9 @@ class ShowingsRepositoryImpl(
      */
     override suspend fun getShowingsByMovieId(movieId: Int): ResultOf<List<Showing>> {
         return showingsApi.getShowingsByMovieId(movieId)
+    }
+
+    override suspend fun getShowingStateById(id: Int): ResultOf<ShowingStateResponse> {
+        return showingsApi.getShowingStateById(id)
     }
 }
