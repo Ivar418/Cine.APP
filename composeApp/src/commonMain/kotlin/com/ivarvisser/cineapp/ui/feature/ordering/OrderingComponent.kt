@@ -209,7 +209,17 @@ class OrderingComponent(
             }
 
             is OrderingAction.GoToPaymentMethods -> {
-                _state.update { it.copy(step = 4) }
+                _state.update {
+                    it.copy(
+                        step = 4,
+                        paymentMethods = listOf(
+                            "iDeal",
+                            "Credit Card Online",
+                            "Reserveren",
+                            "Cadeaubon"
+                        )
+                    )
+                }
             }
 
             is OrderingAction.PaymentMethodSelected -> {
