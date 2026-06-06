@@ -2,6 +2,8 @@ package com.ivarvisser.cineapp.ui.feature.ordering
 
 import androidx.compose.ui.graphics.Color
 import com.ivarvisser.cineapp.domain.Auditorium
+import com.ivarvisser.cineapp.domain.Order
+import com.ivarvisser.cineapp.domain.Reservation
 import com.ivarvisser.cineapp.domain.Seat
 import com.ivarvisser.cineapp.domain.SeatRow
 
@@ -19,7 +21,10 @@ data class OrderingUiState(
     val selectedPaymentMethod: String? = null,
     val legend: List<LegendItemUi> = emptyList(),
     val pendingId: String? = null,
-    val showZones: Boolean = true
+    val showZones: Boolean = true,
+    val confirmedReservation: Reservation? = null,
+    val prices: Map<String, Float> = emptyMap(),
+    val order: Order? = null
 )
 
 data class ShowingUi(
@@ -35,7 +40,7 @@ data class SummaryUi(
 )
 
 data class SeatSelectionUi(
-    val normalCount: Int = 0,
+    val normalCount: Int = 1,
     val wheelchairCount: Int = 0,
 
     val auditorium: Auditorium? = null,

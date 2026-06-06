@@ -18,6 +18,7 @@ import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.unit.dp
 import com.ivarvisser.cineapp.ui.feature.ordering.OrderingAction
 import com.ivarvisser.cineapp.ui.feature.ordering.OrderingUiState
@@ -59,8 +60,13 @@ fun PaymentConfirmationStep(
         }
         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
             OutlinedButton(onClick = { onAction(OrderingAction.BackToPaymentMethods) }) { Text("Back") }
+            val uriHandler = LocalUriHandler.current
             Button(
-                onClick = { onAction(OrderingAction.ProcessOrder) },
+                onClick = {
+                    onAction(
+                        OrderingAction.ProcessOrder(uriHandler)
+                    )
+                },
                 enabled = !state.orderBusy
             ) {
                 if (state.orderBusy) {

@@ -6,7 +6,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class ShowingStateResponse(
-    val showing: Showing,
+    val showing: Showing?,
     val allSeats: List<Seat>,
     val occupiedKeys: HashSet<String>
 )

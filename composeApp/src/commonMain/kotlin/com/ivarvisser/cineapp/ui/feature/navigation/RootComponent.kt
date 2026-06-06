@@ -21,7 +21,7 @@ import org.koin.core.component.KoinComponent
 
 
 class RootComponent(
-    componentContext: ComponentContext
+    componentContext: ComponentContext,
 ) : ComponentContext by componentContext, KoinComponent {
     private val navigation = StackNavigation<Configuration>()
     val childStack = childStack(
@@ -147,7 +147,9 @@ class RootComponent(
                         movieId = config.movieId,
                         onGoBack = { navigation.pop() },
                         moviesRepository = getKoin().get(),
-                        showingsRepository = getKoin().get()
+                        showingsRepository = getKoin().get(),
+                        ordersRepository = getKoin().get(),
+                        reservationsRepository = getKoin().get(),
                     )
                 )
             }
@@ -178,6 +180,7 @@ class RootComponent(
     fun goBack() {
         navigation.pop()
     }
+
 
     sealed class Child {
         data class Home(val componentContext: DefaultHomeComponent) : Child()

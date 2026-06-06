@@ -2,8 +2,6 @@ package com.ivarvisser.cineapp.ui.component.payment
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.IntrinsicSize
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -31,20 +29,21 @@ import org.jetbrains.compose.resources.painterResource
 fun PaymentMethodStep(
     state: OrderingUiState, onAction: (OrderingAction) -> Unit
 ) {
-    Column {
+    Column(
+        modifier = Modifier.fillMaxSize()
+    ) {
         Text(text = "Choose Payment Method", style = MaterialTheme.typography.titleLarge)
         Spacer(modifier = Modifier.height(16.dp))
-        Row(
-            horizontalArrangement = Arrangement.spacedBy(16.dp),
-            modifier = Modifier.fillMaxWidth().height(
-                IntrinsicSize.Min
-            ),
-            verticalAlignment = Alignment.CenterVertically
+        Column(
+            modifier = Modifier.fillMaxSize(),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.SpaceAround,
         ) {
             state.paymentMethods.forEach {
                 Card(
                     onClick = { onAction(OrderingAction.PaymentMethodSelected(it)) },
-                    modifier = Modifier.weight(1f).fillMaxSize()
+                    modifier = Modifier.fillMaxWidth()
+                        .weight(1f).padding(16.dp)
                 ) {
                     Column(
                         modifier = Modifier.padding(6.dp).fillMaxSize(),

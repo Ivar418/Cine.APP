@@ -1,6 +1,7 @@
 package com.ivarvisser.cineapp.data.remote.api.network.implementations
 
 import com.ivarvisser.cineapp.data.dto.ShowingStateResponse
+import com.ivarvisser.cineapp.data.dto.ShowingsWithPricesResponse
 import com.ivarvisser.cineapp.data.remote.api.network.interfaces.ShowingsApi
 import com.ivarvisser.cineapp.data.remote.util.NetworkConstants.Endpoints.SHOWINGS
 import com.ivarvisser.cineapp.data.remote.util.safeApiCall
@@ -64,6 +65,16 @@ class ShowingsApiImpl(
         safeApiCall {
             val result = client.get("$SHOWINGS/$id/state").body<ShowingStateResponse>()
             Log.debug(loggerName = "SHOWINGSAPIIMPL") { "Debug: Fetched showing state by id: $id: $result." }
+            result
+        }
+
+    override suspend fun getShowingPrices(id: Int): ResultOf<ShowingsWithPricesResponse> =
+        safeApiCall {
+            Log.debug(loggerName = "SHOWINGSAPIIMPL") { "Fetching showing prices for id: $id" }
+            // Endpoint: GET /api/showings/{id}/prices
+            val result = client.get("$SHOWINGS/$id/prices")
+                .body<ShowingsWithPricesResponse>()
+            Log.debug(loggerName = "SHOWINGSAPIIMPL") { "Fetched showing prices for id: $id: $result" }
             result
         }
 
