@@ -103,11 +103,11 @@ class OrderingComponent(
                 _state.update {
                     it.copy(
                         isLoading = false, showing = ShowingUi(
-                            movieTitle = movie.title ?: "Unknown",
+                            movieTitle = movie.title,
                             startsAt = showing.startsAt.toString(), // Format this if needed
                             auditoriumName = showing.auditorium?.name ?: "Unknown"
                         ), summary = SummaryUi(
-                            movieTitle = movie.title ?: "Unknown",
+                            movieTitle = movie.title,
                             startsAt = showing.startsAt.toString()
                         ), legend = listOf(
                             LegendItemUi("Available", Color.LightGray),

@@ -13,7 +13,8 @@ import androidx.compose.ui.unit.dp
 fun StepIndicator(
     currentStep: Int
 ) {
-    val labels = listOf("Seats", "Tickets", "Overview", "Payment")
+    val labels = listOf("Seats", "Tickets", "Overview", "Payment", "Confirmation")
+    if (currentStep != 6)
     Row(
         horizontalArrangement = Arrangement.spacedBy(8.dp),
         modifier = Modifier.fillMaxWidth()

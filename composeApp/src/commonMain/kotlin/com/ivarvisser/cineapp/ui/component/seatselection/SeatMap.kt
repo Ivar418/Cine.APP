@@ -73,7 +73,7 @@ fun SeatMap(
                                 showZones = true,
                                 onClick = {
                                     onAction(
-                                        OrderingAction.SeatClicked("${seatCell.seat?.row}-${seatCell.seat?.col}")
+                                        OrderingAction.SeatClicked("${seatCell.seat.row}-${seatCell.seat.col}")
                                     )
                                 },
                                 seatSize = seatSize
