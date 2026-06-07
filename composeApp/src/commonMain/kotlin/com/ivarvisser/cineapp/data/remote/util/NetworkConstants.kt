@@ -13,6 +13,8 @@ object NetworkConstants {
         const val SHOWINGS = "/api/showings"
         const val USERS = "/api/users"
         const val AUTH = "/api/auth"
+        const val ORDER = "/api/orders"
+        const val RESERVATION = "/api/reservations"
 
 
         const val BASE_URL = ""
@@ -23,6 +25,11 @@ object NetworkConstants {
             const val AUTHORIZATION = "Authorization"
             const val CONTENT_TYPE = "Content-Type"
             const val ACCEPT = "Accept"
+        }
+
+        object WasmVersions {
+            const val PAYMENT_MOCK = "https://acc-cinenetwa.ivarvisser.nl/payment-mock"
+            const val PAYMENT_RESULT = "https://acc-cinenetwa.ivarvisser.nl/checkout/payment-result"
         }
     }
 }

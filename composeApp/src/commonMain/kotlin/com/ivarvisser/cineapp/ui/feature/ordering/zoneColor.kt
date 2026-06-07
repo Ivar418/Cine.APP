@@ -4,9 +4,12 @@ import androidx.compose.ui.graphics.Color
 
 fun zoneColor(category: Int): Color {
     return when (category) {
-        1 -> Color(0xFF81C784)
-        2 -> Color(0xFF64B5F6)
-        3 -> Color(0xFFFFB74D)
-        else -> Color(0xFFE0E0E0)
+        1 -> Color(0xFFF59E0B)
+        2 -> Color(0xFFA3E635)
+        3 -> Color(0xFF34D399)
+        4 -> Color(0xFF60A5FA)
+        5 -> Color(0xFFC084FC)
+        6 -> Color(0xFFF87171)
+        else -> Color(0xFF475569)
     }
 }

@@ -1,9 +1,12 @@
 package com.ivarvisser.cineapp.data.repository.implementations
 
+import com.ivarvisser.cineapp.data.dto.ShowingStateResponse
+import com.ivarvisser.cineapp.data.dto.ShowingsWithPricesResponse
 import com.ivarvisser.cineapp.data.remote.api.network.interfaces.ShowingsApi
 import com.ivarvisser.cineapp.data.repository.interfaces.ShowingsRepository
 import com.ivarvisser.cineapp.domain.Showing
 import com.ivarvisser.cineapp.utils.ResultOf
+import net.codinux.log.Log
 
 /**
  * Implementation of the ShowingsRepository interface, providing methods to access showing-related
@@ -38,5 +41,14 @@ class ShowingsRepositoryImpl(
      */
     override suspend fun getShowingsByMovieId(movieId: Int): ResultOf<List<Showing>> {
         return showingsApi.getShowingsByMovieId(movieId)
+    }
+
+    override suspend fun getShowingStateById(id: Int): ResultOf<ShowingStateResponse> {
+        return showingsApi.getShowingStateById(id)
+    }
+
+    override suspend fun getShowingPrices(showingId: Int): ResultOf<ShowingsWithPricesResponse> {
+        Log.debug(loggerName = "ShowingsRepositoryImpl") { "Getting showing prices for $showingId" }
+        return showingsApi.getShowingPrices(showingId)
     }
 }

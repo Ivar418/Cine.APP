@@ -1,22 +1,36 @@
 package com.ivarvisser.cineapp.domain
 
 import com.ivarvisser.cineapp.domain.ENUM.SeatType
+import kotlinx.serialization.Serializable
 
 /**
- * Represents a single seat within an auditorium in the cinema system.
+ * Represents a seat within an auditorium's layout.
  *
- * This class provides information about the specific seat, including its
- * location in the auditorium (row and column), type (e.g., normal or wheelchair-accessible),
- * and category (for potential pricing or section differentiation).
+ * This class models the attributes of a seat, including its position within a row
+ * and column, its type, and its category. It optionally supports virtual column
+ * information, which can be used for flexible seat arrangements.
  *
- * @property row The row number where the seat is located.
- * @property col The column number where the seat is located.
- * @property type The type of the seat, indicating whether it is a normal seat or wheelchair-accessible.
- * @property category Identifies the category of the seat, which can be used for pricing or section purposes.
+ * @property row The row number of the seat within the auditorium.
+ * @property col The column number of the seat within the row.
+ * @property virtualCol Used for grouping seats into a virtual layout with color capabilities.
+ * @property type The type of the seat, defining its usage or accessibility (e.g., normal or wheelchair).
+ * @property category The category of the seat, representing its classification or pricing tier.
  */
+@Serializable
 data class Seat(
     val row: Int,
     val col: Int,
+    val virtualCol: Int,
     val type: SeatType,
     val category: Int
+)
+
+data class SeatCell(
+    val seat: Seat?,
+    val colorGroup: Int
+)
+
+data class SeatRow(
+    val rowIndex: Int,
+    val seats: List<SeatCell>
 )
