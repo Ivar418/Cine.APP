@@ -13,10 +13,17 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Block
+import androidx.compose.material.icons.filled.Cancel
+import androidx.compose.material.icons.filled.CheckCircle
+import androidx.compose.material.icons.filled.Refresh
+import androidx.compose.material.icons.filled.Schedule
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -26,7 +33,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.ivarvisser.cineapp.domain.Order
 import com.ivarvisser.cineapp.domain.PaymentResultData
 import com.ivarvisser.cineapp.domain.Reservation
@@ -44,7 +50,7 @@ fun PaymentStatusStep(reservation: Reservation?, order: Order?) {
     } else {
         val result = when (order.paymentStatus) {
             "Paid", "Success", "Succeeded" -> PaymentResultData(
-                icon = "✅",
+                icon = Icons.Default.CheckCircle,
                 title = "Betaling geslaagd!",
                 subtitle = "Uw betaling is succesvol ontvangen.",
                 badgeColor = Color(0xFF4CAF50),
@@ -52,7 +58,7 @@ fun PaymentStatusStep(reservation: Reservation?, order: Order?) {
             )
 
             "Failed" -> PaymentResultData(
-                icon = "❌",
+                icon = Icons.Default.Cancel,
                 title = "Betaling mislukt",
                 subtitle = "Er is een fout opgetreden bij de betaling.",
                 badgeColor = Color(0xFFF44336),
@@ -60,7 +66,7 @@ fun PaymentStatusStep(reservation: Reservation?, order: Order?) {
             )
 
             "Cancelled" -> PaymentResultData(
-                icon = "🚫",
+                icon = Icons.Default.Block,
                 title = "Betaling geannuleerd",
                 subtitle = "U heeft de betaling geannuleerd.",
                 badgeColor = Color(0xFF757575),
@@ -68,7 +74,7 @@ fun PaymentStatusStep(reservation: Reservation?, order: Order?) {
             )
 
             "Expired" -> PaymentResultData(
-                icon = "⏱️",
+                icon = Icons.Default.Schedule,
                 title = "Betaling verlopen",
                 subtitle = "De betaaltermijn is verlopen. Probeer opnieuw.",
                 badgeColor = Color(0xFFFF9800),
@@ -76,7 +82,7 @@ fun PaymentStatusStep(reservation: Reservation?, order: Order?) {
             )
 
             else -> PaymentResultData( // Pending / Open
-                icon = "🔄",
+                icon = Icons.Default.Refresh,
                 title = "In behandeling",
                 subtitle = "Uw betaling wordt nog verwerkt.",
                 badgeColor = Color(0xFF2196F3),
@@ -101,10 +107,13 @@ fun PaymentStatusStep(reservation: Reservation?, order: Order?) {
                     modifier = Modifier.padding(24.dp),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    Text(
-                        text = result.icon,
-                        fontSize = 48.sp,
-                        modifier = Modifier.padding(bottom = 16.dp)
+                    Icon(
+                        imageVector = result.icon,
+                        contentDescription = null,
+                        modifier = Modifier
+                            .size(64.dp)
+                            .padding(bottom = 16.dp),
+                        tint = result.badgeColor
                     )
                     Text(
                         text = result.title,

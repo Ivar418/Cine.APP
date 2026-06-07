@@ -3,17 +3,27 @@ package com.ivarvisser.cineapp.ui.home
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.Accessible
+import androidx.compose.material.icons.filled.Chair
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.LocalMovies
+import androidx.compose.material.icons.filled.Movie
+import androidx.compose.material.icons.filled.SentimentSatisfied
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ElevatedCard
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -54,11 +64,22 @@ fun HomeScreen(
     ) {
         Spacer(modifier = Modifier.height(32.dp))
         // App Title
-        Text(
-            text = "🎬 CineApp",
-            style = MaterialTheme.typography.displayLarge,
-            color = MaterialTheme.colorScheme.primary
-        )
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(12.dp)
+        ) {
+            Icon(
+                imageVector = Icons.Default.Movie,
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.primary,
+                modifier = Modifier.size(48.dp)
+            )
+            Text(
+                text = "CineApp",
+                style = MaterialTheme.typography.displayLarge,
+                color = MaterialTheme.colorScheme.primary
+            )
+        }
 
         Text(
             text = stringResource(Res.string.app_subtitle),
@@ -84,9 +105,37 @@ fun HomeScreen(
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.Center
                 ) {
-                    Text(
-                        text = "🍿", style = MaterialTheme.typography.displayLarge
+                    Icon(
+                        imageVector = Icons.Default.LocalMovies,
+                        contentDescription = null,
+                        modifier = Modifier.size(80.dp),
+                        tint = MaterialTheme.colorScheme.onPrimaryContainer
                     )
+                    Row(
+                        horizontalArrangement = Arrangement.spacedBy(8.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Icon(
+                            Icons.AutoMirrored.Filled.Accessible,
+                            contentDescription = null,
+                            modifier = Modifier.size(20.dp)
+                        )
+                        Icon(
+                            Icons.Default.Chair,
+                            contentDescription = null,
+                            modifier = Modifier.size(20.dp)
+                        )
+                        Icon(
+                            Icons.Default.SentimentSatisfied,
+                            contentDescription = null,
+                            modifier = Modifier.size(20.dp)
+                        )
+                        Icon(
+                            Icons.Default.Favorite,
+                            contentDescription = null,
+                            modifier = Modifier.size(20.dp)
+                        )
+                    }
                     Spacer(modifier = Modifier.height(8.dp))
                     Text(
                         text = stringResource(Res.string.now_showing),

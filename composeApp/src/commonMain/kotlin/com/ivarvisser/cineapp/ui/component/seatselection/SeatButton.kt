@@ -7,14 +7,17 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.Accessible
+import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.icons.filled.Star
+import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.ivarvisser.cineapp.domain.ENUM.SeatType
 import com.ivarvisser.cineapp.domain.Seat
 import com.ivarvisser.cineapp.ui.feature.ordering.zoneColor
@@ -66,12 +69,12 @@ fun SeatButton(
         )
     }
 
-    val label = when {
-        suggested && isWC -> "♿"
-        suggested -> "★"
-        occupied -> "✓"
-        isWC -> "♿"
-        else -> ""
+    val icon = when {
+        suggested && isWC -> Icons.AutoMirrored.Filled.Accessible
+        suggested -> Icons.Default.Star
+        occupied -> Icons.Default.Check
+        isWC -> Icons.AutoMirrored.Filled.Accessible
+        else -> null
     }
 
     Box(
@@ -94,10 +97,13 @@ fun SeatButton(
             },
         contentAlignment = Alignment.Center
     ) {
-        Text(
-            text = label,
-            color = textColor,
-            fontSize = if (isWC || suggested) 14.sp else 10.sp
-        )
+        if (icon != null) {
+            Icon(
+                imageVector = icon,
+                contentDescription = null,
+                tint = textColor,
+                modifier = Modifier.size(if (isWC || suggested) 20.dp else 16.dp)
+            )
+        }
     }
 }

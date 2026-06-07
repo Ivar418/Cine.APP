@@ -11,6 +11,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.Accessible
+import androidx.compose.material.icons.filled.Chair
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.AssistChip
 import androidx.compose.material3.AssistChipDefaults
@@ -44,13 +46,15 @@ fun SeatSelectionStep(
                 }
                 Row(horizontalArrangement = Arrangement.spacedBy(24.dp)) {
                     SeatCounter(
-                        title = "🪑 Normal",
+                        title = "Normal",
+                        icon = Icons.Default.Chair,
                         count = state.seatSelection.normalCount,
                         onIncrease = { onAction(OrderingAction.IncreaseNormalSeats) },
                         onDecrease = { onAction(OrderingAction.DecreaseNormalSeats) }
                     )
                     SeatCounter(
-                        title = "♿ Wheelchair",
+                        title = "Wheelchair",
+                        icon = Icons.AutoMirrored.Filled.Accessible,
                         count = state.seatSelection.wheelchairCount,
                         onIncrease = { onAction(OrderingAction.IncreaseWheelchairSeats) },
                         onDecrease = { onAction(OrderingAction.DecreaseWheelchairSeats) }
