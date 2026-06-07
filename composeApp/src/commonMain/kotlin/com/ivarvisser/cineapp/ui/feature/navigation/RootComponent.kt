@@ -10,6 +10,7 @@ import com.arkivanov.decompose.value.operator.map
 import com.ivarvisser.cineapp.NotImplementedComponent
 import com.ivarvisser.cineapp.domain.Movie
 import com.ivarvisser.cineapp.ui.component.navigation.TabBarItem
+import com.ivarvisser.cineapp.ui.feature.account.AccountComponent
 import com.ivarvisser.cineapp.ui.feature.movie.MovieDetailsComponent
 import com.ivarvisser.cineapp.ui.feature.movie.MoviesOverviewComponent
 import com.ivarvisser.cineapp.ui.feature.ordering.OrderingComponent
@@ -20,7 +21,7 @@ import org.koin.core.component.KoinComponent
 
 
 class RootComponent(
-    componentContext: ComponentContext
+    componentContext: ComponentContext,
 ) : ComponentContext by componentContext, KoinComponent {
     private val navigation = StackNavigation<Configuration>()
     val childStack = childStack(
@@ -89,10 +90,10 @@ class RootComponent(
 
             is Configuration.Account -> {
                 Child.Account(
-                    NotImplementedComponent(
+                    AccountComponent(
                         componentContext = context,
-                        onRetry = { navigation.pop() },
-                        textContent = "Account is not implemented yet."
+                        usersRepository = getKoin().get(),
+                        onGoBack = { navigation.pop() }
                     )
                 )
             }
@@ -146,7 +147,9 @@ class RootComponent(
                         movieId = config.movieId,
                         onGoBack = { navigation.pop() },
                         moviesRepository = getKoin().get(),
-                        showingsRepository = getKoin().get()
+                        showingsRepository = getKoin().get(),
+                        ordersRepository = getKoin().get(),
+                        reservationsRepository = getKoin().get(),
                     )
                 )
             }
@@ -178,11 +181,12 @@ class RootComponent(
         navigation.pop()
     }
 
+
     sealed class Child {
         data class Home(val componentContext: DefaultHomeComponent) : Child()
         data class MoviesOverviewScreen(val componentContext: MoviesOverviewComponent) : Child()
         data class OrderHistory(val componentContext: NotImplementedComponent) : Child()
-        data class Account(val componentContext: NotImplementedComponent) : Child()
+        data class Account(val componentContext: AccountComponent) : Child()
         data class Settings(val componentContext: NotImplementedComponent) : Child()
         data class NotImplemented(val componentContext: NotImplementedComponent) : Child()
         data class MovieDetailsScreen(val componentContext: MovieDetailsComponent) : Child()

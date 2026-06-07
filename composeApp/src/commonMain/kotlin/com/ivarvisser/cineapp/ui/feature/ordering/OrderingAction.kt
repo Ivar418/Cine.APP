@@ -1,5 +1,7 @@
 package com.ivarvisser.cineapp.ui.feature.ordering
 
+import androidx.compose.ui.platform.UriHandler
+
 sealed interface OrderingAction {
     data object OnBack : OrderingAction
     data object IncreaseNormalSeats : OrderingAction
@@ -10,6 +12,7 @@ sealed interface OrderingAction {
     data object CancelPending : OrderingAction
     data class SeatClicked(val seatId: String) : OrderingAction
     data object ConfirmSeats : OrderingAction
+    data class OnPaymentConfirmed(val uriHandler: UriHandler) : OrderingAction
     data class TicketTypeChanged(
         val seatId: String,
         val ticketType: String
@@ -22,6 +25,6 @@ sealed interface OrderingAction {
     ) : OrderingAction
 
     data object BackToPaymentMethods : OrderingAction
-    data object ProcessOrder : OrderingAction
+    data class ProcessOrder(val uriHandler: UriHandler) : OrderingAction
     data object CancelCheckout : OrderingAction
 }

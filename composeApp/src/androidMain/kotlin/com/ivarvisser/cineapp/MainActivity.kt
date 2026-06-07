@@ -8,11 +8,18 @@ import com.arkivanov.decompose.retainedComponent
 import com.ivarvisser.cineapp.ui.feature.navigation.RootComponent
 
 class MainActivity : ComponentActivity() {
+
+    private lateinit var root: RootComponent
+
     override fun onCreate(savedInstanceState: Bundle?) {
         enableEdgeToEdge()
         super.onCreate(savedInstanceState)
 
-        val root = retainedComponent { RootComponent(it) }
+        root = retainedComponent {
+            RootComponent(
+                componentContext = it,
+            )
+        }
 
         setContent {
             App(
