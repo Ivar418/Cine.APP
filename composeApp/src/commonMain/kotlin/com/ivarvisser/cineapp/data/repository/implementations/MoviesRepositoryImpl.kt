@@ -5,6 +5,7 @@ import com.ivarvisser.cineapp.data.repository.interfaces.MoviesRepository
 import com.ivarvisser.cineapp.domain.Genre
 import com.ivarvisser.cineapp.domain.Movie
 import com.ivarvisser.cineapp.utils.ResultOf
+import kotlin.time.Instant
 
 /**
  * Implementation of the MoviesRepository interface, providing methods to interact with movie-related data
@@ -33,8 +34,8 @@ class MoviesRepositoryImpl(
      * @return A [ResultOf] containing either a list of [Movie] objects with upcoming showings
      *         in case of success, or a failure result indicating an error.
      */
-    override suspend fun getMoviesWithUpcomingShowings(): ResultOf<List<Movie>> {
-        return api.getMoviesWithUpcomingShowings()
+    override suspend fun getMoviesWithUpcomingShowings(filter: Instant?): ResultOf<List<Movie>> {
+        return api.getMoviesWithUpcomingShowings(filter)
     }
 
     /**

@@ -9,7 +9,9 @@ import com.ivarvisser.cineapp.utils.ResultOf
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.get
+import io.ktor.client.statement.request
 import net.codinux.log.Log
+import kotlin.time.Instant
 
 /**
  *
@@ -34,6 +36,7 @@ class MoviesApiImpl(
         result
     }
 
+
     /**
      * Fetches a list of movies that have upcoming showings available.
      *
@@ -46,12 +49,29 @@ class MoviesApiImpl(
      * @return A [ResultOf] containing a list of [Movie] objects with upcoming showings
      *         or an error if the operation fails.
      */
-    override suspend fun getMoviesWithUpcomingShowings(): ResultOf<List<Movie>> = safeApiCall {
-        val result = client.get("${NetworkConstants.Endpoints.MOVIES}/future-showings?language=en")
-            .body<List<Movie>>()
-        Log.debug(loggerName = "MoviesAPIIMPL") { "First item was: ${result.first()}" }
-        result
-    }
+    override suspend fun getMoviesWithUpcomingShowings(filter: Instant?): ResultOf<List<Movie>> =
+        safeApiCall {
+            val response = client.get("${NetworkConstants.Endpoints.MOVIES}/future-showings") {
+                url {
+                    filter?.let {
+                        parameters.append("From", it.toString())
+                    }
+                    parameters.append("language", "en")
+                }
+            }
+
+            Log.debug(loggerName = "MoviesAPIIMPL") {
+                "URL used: ${response.request.url}"
+            }
+
+            val result = response.body<List<Movie>>()
+
+            Log.debug(loggerName = "MoviesAPIIMPL") {
+                "First item was: ${result.firstOrNull()}"
+            }
+
+            result
+        }
 
     /**
      * Retrieves the details of a specific genre by its id.
