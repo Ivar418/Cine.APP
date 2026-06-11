@@ -8,6 +8,7 @@ import com.arkivanov.essenty.lifecycle.coroutines.coroutineScope
 import com.arkivanov.essenty.lifecycle.doOnCreate
 import com.ivarvisser.cineapp.data.repository.interfaces.MoviesRepository
 import com.ivarvisser.cineapp.data.repository.interfaces.ShowingsRepository
+import com.ivarvisser.cineapp.data.repository.interfaces.UsersRepository
 import com.ivarvisser.cineapp.domain.Genre
 import com.ivarvisser.cineapp.domain.Movie
 import com.ivarvisser.cineapp.domain.ShowingDisplayResponse
@@ -22,7 +23,8 @@ class MovieDetailsComponent(
     private val onGoBack: () -> Unit,
     private val onNavigateToOrder: (showingId: Int, movieId: Int) -> Unit,
     private val showingsRepository: ShowingsRepository,
-    private val moviesRepository: MoviesRepository
+    private val moviesRepository: MoviesRepository,
+    private val usersRepository: UsersRepository
 ) : ComponentContext by componentContext {
     private val scope = coroutineScope()
 
@@ -35,6 +37,7 @@ class MovieDetailsComponent(
             getUpcomingShowingsForMovieByMovieId(movie.id)
             if (!movie.genresIds.isNullOrEmpty()) {
                 getGenreNames(movie.genresIds)
+                isFavorite()
             }
         }
     }
@@ -44,6 +47,7 @@ class MovieDetailsComponent(
         if (!movie.genresIds.isNullOrEmpty()) {
             getGenreNames(movie.genresIds)
         }
+        isFavorite()
     }
 
     fun setLoading(isLoading: Boolean, whatIsLoading: WhatIsLoading) {
@@ -99,6 +103,57 @@ class MovieDetailsComponent(
             }
         } catch (e: Exception) {
             setError(e.message, WhatIsLoading.Genres)
+        }
+    }
+
+    fun isFavorite() {
+        try {
+            scope.launch {
+                val isFavoriteResult = usersRepository.getFavoriteMovies()
+                var isFavoriteCheck = false
+                if (isFavoriteResult is ResultOf.Success) {
+                    isFavoriteCheck =
+                        isFavoriteResult.value.favoriteMovies.any { it.id == movie.id }
+                    _state.update { current -> current.copy(isFavorite = isFavoriteCheck) }
+                }
+                _state.update { current -> current.copy(isFavorite = isFavoriteCheck) }
+            }
+        } catch (e: Exception) {
+        }
+    }
+
+    fun onFavoriteMoviePress() {
+        if (state.value.isFavorite) {
+            removeFavorite()
+        } else {
+            addFavorite()
+        }
+
+    }
+
+    fun addFavorite() {
+        try {
+            scope.launch {
+                val result = usersRepository.addFavoriteMovie(movie.id)
+                if (result is ResultOf.Success) {
+                    isFavorite()
+                }
+            }
+        } catch (e: Exception) {
+            Log.error(loggerName = "MovieDetailsComponent") { "Error adding favorite: ${e.message}" }
+        }
+    }
+
+    fun removeFavorite() {
+        try {
+            scope.launch {
+                val result = usersRepository.removeFavoriteMovie(movie.id)
+                if (result is ResultOf.Success) {
+                    isFavorite()
+                }
+            }
+        } catch (e: Exception) {
+            Log.error(loggerName = "MovieDetailsComponent") { "Error removing favorite: ${e.message}" }
         }
     }
 

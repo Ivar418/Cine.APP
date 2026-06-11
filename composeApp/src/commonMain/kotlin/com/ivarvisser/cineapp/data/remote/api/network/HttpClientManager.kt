@@ -27,20 +27,75 @@ import kotlinx.serialization.json.Json
  *
  * @return A fully configured [HttpClient] instance.
  */
-fun createHttpClient() = HttpClient {
-    expectSuccess = true // 4xx and 5xx will throw ResponseException
+fun createHttpClient(
+    tokenStorage: TokenStorage
+): HttpClient = HttpClient {
+
+    expectSuccess = true
+
     install(ContentNegotiation) {
-        json(Json {
-            encodeDefaults = true
-            isLenient = true
-            coerceInputValues = true
-            ignoreUnknownKeys = true
-            decodeEnumsCaseInsensitive = true
-        })
+        json(
+            Json {
+                encodeDefaults = true
+                isLenient = true
+                coerceInputValues = true
+                ignoreUnknownKeys = true
+                decodeEnumsCaseInsensitive = true
+            }
+        )
     }
+
+    install(Auth) {
+        bearer {
+
+            loadTokens {
+                val accessToken = tokenStorage.accessToken
+                val refreshToken = tokenStorage.refreshToken
+
+                if (accessToken != null && refreshToken != null) {
+                    BearerTokens(accessToken, refreshToken)
+                } else {
+                    null
+                }
+            }
+
+            refreshTokens {
+                val refreshToken = oldTokens?.refreshToken
+                    ?: return@refreshTokens null
+
+                try {
+                    val response: TokenResponse =
+                        client.post("/auth/refresh") {
+                            setBody(
+                                RefreshRequest(
+                                    refreshToken = refreshToken
+                                )
+                            )
+                        }.body()
+
+                    tokenStorage.accessToken = response.accessToken
+                    tokenStorage.refreshToken = response.refreshToken
+
+                    BearerTokens(
+                        response.accessToken,
+                        response.refreshToken
+                    )
+                } catch (e: Exception) {
+                    tokenStorage.clear()
+                    null
+                }
+            }
+        }
+    }
+
     defaultRequest {
         url {
-            protocol = if (BuildKonfig.PROTOCOL == "HTTPS") URLProtocol.HTTPS else URLProtocol.HTTP
+            protocol =
+                if (BuildKonfig.PROTOCOL == "HTTPS")
+                    URLProtocol.HTTPS
+                else
+                    URLProtocol.HTTP
+
             host = BuildKonfig.BASE_URL
         }
     }

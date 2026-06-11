@@ -84,7 +84,8 @@ class RootComponent(
                             )
                         },
                         showingsRepository = getKoin().get(),
-                        moviesRepository = getKoin().get()
+                        moviesRepository = getKoin().get(),
+                        usersRepository = getKoin().get()
                     )
                 )
 

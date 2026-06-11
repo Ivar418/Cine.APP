@@ -1,6 +1,7 @@
 package com.ivarvisser.cineapp.data.repository.interfaces
 
 import com.ivarvisser.cineapp.data.dto.AuthResponse
+import com.ivarvisser.cineapp.data.dto.UserFavoriteMoviesListResponse
 import com.ivarvisser.cineapp.domain.User
 import com.ivarvisser.cineapp.utils.ResultOf
 
@@ -27,7 +28,7 @@ interface UsersRepository {
     suspend fun setLastName(lastName: String)
     suspend fun getPhoto(): String?
     suspend fun setPhoto(photo: String)
-    suspend fun getFavoriteMovies(): List<Int>
-    suspend fun addFavoriteMovie(movieId: Int)
-    suspend fun removeFavoriteMovie(movieId: Int)
+    suspend fun getFavoriteMovies(): ResultOf<UserFavoriteMoviesListResponse>
+    suspend fun addFavoriteMovie(movieId: Int): ResultOf<UserFavoriteMoviesListResponse>
+    suspend fun removeFavoriteMovie(movieId: Int): ResultOf<UserFavoriteMoviesListResponse>
 }

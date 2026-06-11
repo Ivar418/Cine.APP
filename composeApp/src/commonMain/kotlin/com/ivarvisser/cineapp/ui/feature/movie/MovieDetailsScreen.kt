@@ -15,9 +15,13 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material3.Card
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SecondaryScrollableTabRow
 import androidx.compose.material3.SuggestionChip
@@ -109,6 +113,16 @@ fun MovieItemDetailsScreen(
                         color = BrandColors.VividPurple,
                         modifier = Modifier.align(alignment = Alignment.CenterVertically)
                             .padding(start = 16.dp)
+                    )
+                    Icon(
+                        modifier = Modifier.clickable(onClick = { component.onFavoriteMoviePress() }),
+                        imageVector = if (state.isFavorite) {
+                            Icons.Default.Favorite
+                        } else {
+                            Icons.Default.FavoriteBorder
+                        },
+                        contentDescription = null,
+                        tint = if (state.isFavorite) Color.Red else Color.Gray
                     )
                 }
                 Column(

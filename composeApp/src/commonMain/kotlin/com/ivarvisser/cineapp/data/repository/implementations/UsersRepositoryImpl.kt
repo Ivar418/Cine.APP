@@ -1,6 +1,7 @@
 package com.ivarvisser.cineapp.data.repository.implementations
 
 import com.ivarvisser.cineapp.data.dto.AuthResponse
+import com.ivarvisser.cineapp.data.dto.UserFavoriteMoviesListResponse
 import com.ivarvisser.cineapp.data.local.interfaces.UserStorage
 import com.ivarvisser.cineapp.data.remote.api.network.interfaces.UsersApi
 import com.ivarvisser.cineapp.data.repository.interfaces.UsersRepository
@@ -103,16 +104,16 @@ class UsersRepositoryImpl(
         TODO("Not yet implemented")
     }
 
-    override suspend fun getFavoriteMovies(): List<Int> {
-        TODO("Not yet implemented")
+    override suspend fun getFavoriteMovies(): ResultOf<UserFavoriteMoviesListResponse> {
+        return usersApi.getFavoriteMovies()
     }
 
-    override suspend fun addFavoriteMovie(movieId: Int) {
-        TODO("Not yet implemented")
+    override suspend fun addFavoriteMovie(movieId: Int): ResultOf<UserFavoriteMoviesListResponse> {
+        return usersApi.addFavoriteMovie(movieId)
     }
 
-    override suspend fun removeFavoriteMovie(movieId: Int) {
-        TODO("Not yet implemented")
+    override suspend fun removeFavoriteMovie(movieId: Int): ResultOf<UserFavoriteMoviesListResponse> {
+        return usersApi.removeFavoriteMovie(movieId)
     }
 
 }
