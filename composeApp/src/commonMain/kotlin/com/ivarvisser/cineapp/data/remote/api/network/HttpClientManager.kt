@@ -1,12 +1,26 @@
 package com.ivarvisser.cineapp.data.remote.api.network
 
 import com.ivarvisser.cineapp.BuildKonfig
+import com.ivarvisser.cineapp.data.dto.auth.request.RefreshRequest
+import com.ivarvisser.cineapp.data.dto.auth.response.TokenResponse
+import com.ivarvisser.cineapp.data.local.interfaces.TokenStorage
+import com.ivarvisser.cineapp.data.remote.util.NetworkConstants.Endpoints.AUTH
 import io.ktor.client.HttpClient
+import io.ktor.client.call.body
+import io.ktor.client.plugins.auth.Auth
+import io.ktor.client.plugins.auth.providers.BearerTokens
+import io.ktor.client.plugins.auth.providers.bearer
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.plugins.defaultRequest
+import io.ktor.client.request.post
+import io.ktor.client.request.setBody
+import io.ktor.http.ContentType
 import io.ktor.http.URLProtocol
+import io.ktor.http.contentType
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
+import net.codinux.log.Log
+
 
 /**
  * Creates and configures an instance of [HttpClient] with pre-defined settings.
@@ -25,6 +39,7 @@ import kotlinx.serialization.json.Json
  * in [BuildKonfig]. The protocol is selected based on the `PROTOCOL` value ("HTTPS" or "HTTP"),
  * and the host is defined by `BASE_URL`.
  *
+ * @param tokenStorage The storage used to manage authentication tokens.
  * @return A fully configured [HttpClient] instance.
  */
 fun createHttpClient(
@@ -47,41 +62,49 @@ fun createHttpClient(
 
     install(Auth) {
         bearer {
-
             loadTokens {
-                val accessToken = tokenStorage.accessToken
-                val refreshToken = tokenStorage.refreshToken
+                Log.debug(loggerName = "HttpClientManager") { "Loading tokens for request" }
+                val accessToken = tokenStorage.getAccessToken()
+                val refreshToken = tokenStorage.getRefreshToken()
 
                 if (accessToken != null && refreshToken != null) {
                     BearerTokens(accessToken, refreshToken)
                 } else {
+                    Log.debug(loggerName = "HttpClientManager") { "No tokens found in storage" }
                     null
                 }
             }
 
             refreshTokens {
+                Log.debug(loggerName = "HttpClientManager") { "Refreshing tokens..." }
                 val refreshToken = oldTokens?.refreshToken
-                    ?: return@refreshTokens null
-
+                    ?: return@refreshTokens run {
+                        Log.debug(loggerName = "HttpClientManager") { "No old refresh token available, cannot refresh" }
+                        null
+                    }
+                val refreshClient = HttpClient {
+                    install(ContentNegotiation) {
+                        json(Json { ignoreUnknownKeys = true })
+                    }
+                }
                 try {
-                    val response: TokenResponse =
-                        client.post("/auth/refresh") {
-                            setBody(
-                                RefreshRequest(
-                                    refreshToken = refreshToken
-                                )
-                            )
-                        }.body()
-
-                    tokenStorage.accessToken = response.accessToken
-                    tokenStorage.refreshToken = response.refreshToken
+                    val request = refreshClient.post("$AUTH/refresh") {
+                        val refreshRequest = RefreshRequest(refreshToken)
+                        contentType(ContentType.Application.Json)
+                        setBody(refreshRequest)
+                    }
+                    Log.debug(loggerName = "HttpClientManager") { "Refresh response: $request" }
+                    val response = request.body<TokenResponse>()
+                    Log.debug(loggerName = "HttpClientManager") { "Tokens refreshed successfully" }
+                    tokenStorage.saveTokens(response.accessToken, response.refreshToken)
 
                     BearerTokens(
                         response.accessToken,
                         response.refreshToken
                     )
                 } catch (e: Exception) {
-                    tokenStorage.clear()
+                    Log.debug(loggerName = "HttpClientManager") { "Failed to refresh tokens: ${e.message}" }
+//                    tokenStorage.clearTokens()
                     null
                 }
             }

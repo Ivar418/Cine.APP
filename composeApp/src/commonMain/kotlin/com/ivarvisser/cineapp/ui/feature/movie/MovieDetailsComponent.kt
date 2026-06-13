@@ -33,11 +33,13 @@ class MovieDetailsComponent(
 
 
     init {
+
         doOnCreate {
             getUpcomingShowingsForMovieByMovieId(movie.id)
             if (!movie.genresIds.isNullOrEmpty()) {
                 getGenreNames(movie.genresIds)
                 isFavorite()
+                isLoggedIn()
             }
         }
     }
@@ -97,7 +99,6 @@ class MovieDetailsComponent(
                 }
                 _state.update { current -> current.copy(genres = result.toList()) }
                 Log.debug(loggerName = "MovieDetailsComponent") { "Debug: GenresResult: $result" }
-                Log.debug(loggerName = "MovieDetailsComponent") { "Debug2: GenresState: ${state.value.genres}" }
                 setLoading(false, WhatIsLoading.Genres)
 
             }
@@ -106,23 +107,39 @@ class MovieDetailsComponent(
         }
     }
 
+    fun isLoggedIn() {
+        try {
+            scope.launch {
+                val isLoggedIn = usersRepository.isLoggedIn()
+                _state.update { current -> current.copy(isLoggedIn = isLoggedIn) }
+                Log.debug(loggerName = "MovieDetailsComponent") { "Debug: User is logged in: $isLoggedIn" }
+            }
+        } catch (e: Exception) {
+            Log.error(loggerName = "MovieDetailsComponent") { "Error checking if user is logged in: ${e.message}" }
+        }
+    }
+
     fun isFavorite() {
         try {
             scope.launch {
+                Log.debug(loggerName = "MovieDetailsComponent") { "Debug: Checking if movie is favorite" }
                 val isFavoriteResult = usersRepository.getFavoriteMovies()
-                var isFavoriteCheck = false
+                var isFavoriteCheck: Boolean
                 if (isFavoriteResult is ResultOf.Success) {
                     isFavoriteCheck =
-                        isFavoriteResult.value.favoriteMovies.any { it.id == movie.id }
+                        isFavoriteResult.value.favoriteMovies.any { it.movieId == movie.id }
                     _state.update { current -> current.copy(isFavorite = isFavoriteCheck) }
-                }
+                } else isFavoriteCheck = false
                 _state.update { current -> current.copy(isFavorite = isFavoriteCheck) }
             }
+            Log.debug(loggerName = "MovieDetailsComponent") { "Debug: Movie is favorite: ${state.value.isFavorite}" }
         } catch (e: Exception) {
+            Log.error(loggerName = "MovieDetailsComponent") { "Error checking if movie is favorite: ${e.message}" }
         }
     }
 
     fun onFavoriteMoviePress() {
+        Log.debug(loggerName = "MovieDetailsComponent") { "Debug: Favorite button pressed" }
         if (state.value.isFavorite) {
             removeFavorite()
         } else {

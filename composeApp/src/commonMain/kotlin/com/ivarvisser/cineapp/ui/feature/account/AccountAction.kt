@@ -11,4 +11,5 @@ sealed interface AccountAction {
     data object OnChangeUsername : AccountAction
     data object OnChangeName : AccountAction
     data object OnChangePhoto : AccountAction
+    data object OnFavorites : AccountAction
 }

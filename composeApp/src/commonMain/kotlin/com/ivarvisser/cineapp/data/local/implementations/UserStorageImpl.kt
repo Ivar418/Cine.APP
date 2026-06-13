@@ -1,14 +1,23 @@
 package com.ivarvisser.cineapp.data.local.implementations
 
+import com.ivarvisser.cineapp.data.local.interfaces.TokenStorage
 import com.ivarvisser.cineapp.data.local.interfaces.UserStorage
 import com.ivarvisser.cineapp.domain.User
 import com.russhwolf.settings.Settings
 import kotlinx.serialization.json.Json
+import net.codinux.log.Log
 
 class UserStorageImpl(
-    private val settings: Settings
+    private val settings: Settings,
+    private val tokenStorage: TokenStorage
 ) : UserStorage {
+
+    companion object {
+        private const val TAG = "UserStorageImpl"
+    }
+
     override fun saveUser(user: User) {
+        Log.debug(loggerName = TAG) { "Saving user: ${user.userName}" }
         settings.putString(
             "user",
             Json.Default.encodeToString(user)
@@ -21,24 +30,26 @@ class UserStorageImpl(
     }
 
     override fun clear() {
+        Log.debug(loggerName = TAG) { "Clearing user and tokens" }
         settings.remove("user")
-        settings.remove("accessToken")
-        settings.remove("refreshToken")
+        tokenStorage.clearTokens()
     }
 
     override fun saveAccessToken(accessToken: String) {
-        settings.putString("accessToken", accessToken)
+        Log.debug(loggerName = TAG) { "Saving access token (delegating to TokenStorage)" }
+        tokenStorage.saveTokens(accessToken, tokenStorage.getRefreshToken() ?: "")
     }
 
     override fun getAccessToken(): String? {
-        return settings.getStringOrNull("accessToken")
+        return tokenStorage.getAccessToken()
     }
 
     override fun saveRefreshToken(refreshToken: String) {
-        settings.putString("refreshToken", refreshToken)
+        Log.debug(loggerName = TAG) { "Saving refresh token (delegating to TokenStorage)" }
+        tokenStorage.saveTokens(tokenStorage.getAccessToken() ?: "", refreshToken)
     }
 
     override fun getRefreshToken(): String? {
-        return settings.getStringOrNull("refreshToken")
+        return tokenStorage.getRefreshToken()
     }
 }

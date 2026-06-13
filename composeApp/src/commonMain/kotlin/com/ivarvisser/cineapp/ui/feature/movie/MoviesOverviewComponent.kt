@@ -6,6 +6,7 @@ import com.arkivanov.decompose.value.Value
 import com.arkivanov.decompose.value.update
 import com.arkivanov.essenty.lifecycle.coroutines.coroutineScope
 import com.arkivanov.essenty.lifecycle.doOnCreate
+import com.arkivanov.essenty.lifecycle.doOnResume
 import com.ivarvisser.cineapp.data.repository.interfaces.MoviesRepository
 import com.ivarvisser.cineapp.domain.Movie
 import com.ivarvisser.cineapp.utils.ResultOf
@@ -27,12 +28,10 @@ class MoviesOverviewComponent(
     init {
         doOnCreate {
             loadMovies()
-
         }
-    }
-
-    fun onRefresh() {
-        loadMovies()
+        doOnResume {
+            loadMovies()
+        }
     }
 
     fun setLoading(isLoading: Boolean) {
