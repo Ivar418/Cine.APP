@@ -1,7 +1,7 @@
 package com.ivarvisser.cineapp.data.remote.api.network.interfaces
 
-import com.ivarvisser.cineapp.data.dto.AuthResponse
-import com.ivarvisser.cineapp.data.dto.UserFavoriteMoviesListResponse
+import com.ivarvisser.cineapp.data.dto.auth.response.AuthResponse
+import com.ivarvisser.cineapp.data.dto.users.response.UserFavoriteMoviesListResponse
 import com.ivarvisser.cineapp.utils.ResultOf
 
 interface UsersApi {

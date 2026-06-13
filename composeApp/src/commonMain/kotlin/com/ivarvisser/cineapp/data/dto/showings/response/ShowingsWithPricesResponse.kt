@@ -1,4 +1,4 @@
-package com.ivarvisser.cineapp.data.dto
+package com.ivarvisser.cineapp.data.dto.showings.response
 
 import kotlinx.serialization.Serializable
 import kotlin.time.Instant

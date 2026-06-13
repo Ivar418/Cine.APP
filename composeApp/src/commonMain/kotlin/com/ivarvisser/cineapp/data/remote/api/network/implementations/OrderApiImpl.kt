@@ -1,7 +1,7 @@
 package com.ivarvisser.cineapp.data.remote.api.network.implementations
 
-import com.ivarvisser.cineapp.data.dto.CreateOrderRequest
-import com.ivarvisser.cineapp.data.dto.CreateOrderResponse
+import com.ivarvisser.cineapp.data.dto.orders.request.CreateOrderRequest
+import com.ivarvisser.cineapp.data.dto.orders.response.CreateOrderResponse
 import com.ivarvisser.cineapp.data.remote.api.network.interfaces.OrdersApi
 import com.ivarvisser.cineapp.data.remote.util.NetworkConstants
 import com.ivarvisser.cineapp.data.remote.util.safeApiCall

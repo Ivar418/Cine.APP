@@ -1,7 +1,7 @@
 package com.ivarvisser.cineapp.data.remote.api.network.interfaces
 
-import com.ivarvisser.cineapp.data.dto.CreateOrderRequest
-import com.ivarvisser.cineapp.data.dto.CreateOrderResponse
+import com.ivarvisser.cineapp.data.dto.orders.request.CreateOrderRequest
+import com.ivarvisser.cineapp.data.dto.orders.response.CreateOrderResponse
 import com.ivarvisser.cineapp.utils.ResultOf
 
 interface OrdersApi {

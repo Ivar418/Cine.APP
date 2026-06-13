@@ -1,5 +1,6 @@
-package com.ivarvisser.cineapp.data.dto
+package com.ivarvisser.cineapp.data.dto.auth.response
 
+import com.ivarvisser.cineapp.data.dto.users.response.UserResponse
 import kotlinx.serialization.Serializable
 
 @Serializable

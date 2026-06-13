@@ -1,7 +1,7 @@
 package com.ivarvisser.cineapp.data.repository.interfaces
 
-import com.ivarvisser.cineapp.data.dto.CreateOrderRequest
-import com.ivarvisser.cineapp.data.dto.CreateOrderResponse
+import com.ivarvisser.cineapp.data.dto.orders.request.CreateOrderRequest
+import com.ivarvisser.cineapp.data.dto.orders.response.CreateOrderResponse
 import com.ivarvisser.cineapp.domain.Order
 import com.ivarvisser.cineapp.utils.ResultOf
 import kotlinx.coroutines.flow.Flow

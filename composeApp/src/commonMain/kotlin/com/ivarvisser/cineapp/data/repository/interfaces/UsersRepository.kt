@@ -1,7 +1,7 @@
 package com.ivarvisser.cineapp.data.repository.interfaces
 
-import com.ivarvisser.cineapp.data.dto.AuthResponse
-import com.ivarvisser.cineapp.data.dto.UserFavoriteMoviesListResponse
+import com.ivarvisser.cineapp.data.dto.auth.response.AuthResponse
+import com.ivarvisser.cineapp.data.dto.users.response.UserFavoriteMoviesListResponse
 import com.ivarvisser.cineapp.domain.User
 import com.ivarvisser.cineapp.utils.ResultOf
 

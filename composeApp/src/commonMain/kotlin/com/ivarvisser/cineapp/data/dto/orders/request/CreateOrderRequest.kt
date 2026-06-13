@@ -1,4 +1,4 @@
-package com.ivarvisser.cineapp.data.dto
+package com.ivarvisser.cineapp.data.dto.orders.request
 
 import kotlinx.serialization.Serializable
 
@@ -6,5 +6,6 @@ import kotlinx.serialization.Serializable
 data class CreateOrderRequest(
     val orderType: String,
     val paymentMethod: String,
-    val tickets: List<TicketRequest>
+    val tickets: List<TicketRequest>,
+    val userId: Int
 )

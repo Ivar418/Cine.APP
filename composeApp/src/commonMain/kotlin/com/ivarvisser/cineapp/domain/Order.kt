@@ -1,6 +1,6 @@
 package com.ivarvisser.cineapp.domain
 
-import com.ivarvisser.cineapp.data.dto.CreatedOrderTicketResponse
+import com.ivarvisser.cineapp.data.dto.orders.response.CreatedOrderTicketResponse
 
 class Order(
     val orderId: Int,

@@ -1,8 +1,8 @@
 package com.ivarvisser.cineapp.data.repository.interfaces
 
-import com.ivarvisser.cineapp.data.dto.SuggestRequest
-import com.ivarvisser.cineapp.data.dto.SuggestResponse
-import com.ivarvisser.cineapp.data.dto.UpdateReservationSeatsRequest
+import com.ivarvisser.cineapp.data.dto.reservations.request.SuggestRequest
+import com.ivarvisser.cineapp.data.dto.reservations.request.UpdateReservationSeatsRequest
+import com.ivarvisser.cineapp.data.dto.reservations.response.SuggestResponse
 import com.ivarvisser.cineapp.domain.Reservation
 import com.ivarvisser.cineapp.utils.ResultOf
 

@@ -1,4 +1,4 @@
-package com.ivarvisser.cineapp.data.dto
+package com.ivarvisser.cineapp.data.dto.showings.request
 
 import kotlin.time.Instant
 

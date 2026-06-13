@@ -1,7 +1,7 @@
 package com.ivarvisser.cineapp.data.remote.api.network.implementations
 
-import com.ivarvisser.cineapp.data.dto.ShowingStateResponse
-import com.ivarvisser.cineapp.data.dto.ShowingsWithPricesResponse
+import com.ivarvisser.cineapp.data.dto.showings.response.ShowingStateResponse
+import com.ivarvisser.cineapp.data.dto.showings.response.ShowingsWithPricesResponse
 import com.ivarvisser.cineapp.data.remote.api.network.interfaces.ShowingsApi
 import com.ivarvisser.cineapp.data.remote.util.NetworkConstants.Endpoints.SHOWINGS
 import com.ivarvisser.cineapp.data.remote.util.safeApiCall

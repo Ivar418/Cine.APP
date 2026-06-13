@@ -368,7 +368,10 @@ class OrderingComponent(
             val orderType =
                 if (_state.value.selectedPaymentMethod == "Reserveren") "Reserveren" else "Payment"
             val request = CreateOrderRequest(
-                orderType = orderType, paymentMethod = apiPaymentMethod, tickets = ticketRequest
+                orderType = orderType,
+                paymentMethod = apiPaymentMethod,
+                tickets = ticketRequest,
+                userId = usersRepository.getUserId()
             )
             Log.debug(loggerName = "OrderingComponent") { "Order request: $request" }
             val order = ordersRepository.createOrder(request)

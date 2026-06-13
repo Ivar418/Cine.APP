@@ -1,4 +1,4 @@
-package com.ivarvisser.cineapp.data.dto
+package com.ivarvisser.cineapp.data.dto.showings.response
 
 import com.ivarvisser.cineapp.domain.Seat
 import com.ivarvisser.cineapp.domain.Showing

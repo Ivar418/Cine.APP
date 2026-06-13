@@ -1,4 +1,4 @@
-package com.ivarvisser.cineapp.data.dto
+package com.ivarvisser.cineapp.data.dto.auth.request
 
 import kotlinx.serialization.Serializable
 

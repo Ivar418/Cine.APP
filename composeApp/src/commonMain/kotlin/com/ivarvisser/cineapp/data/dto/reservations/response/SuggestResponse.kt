@@ -1,4 +1,4 @@
-package com.ivarvisser.cineapp.data.dto
+package com.ivarvisser.cineapp.data.dto.reservations.response
 
 import com.ivarvisser.cineapp.domain.Seat
 import kotlinx.serialization.Serializable

@@ -1,10 +1,10 @@
 package com.ivarvisser.cineapp.data.remote.api.network.implementations
 
-import com.ivarvisser.cineapp.data.dto.CancelRequest
-import com.ivarvisser.cineapp.data.dto.ConfirmRequest
-import com.ivarvisser.cineapp.data.dto.SuggestRequest
-import com.ivarvisser.cineapp.data.dto.SuggestResponse
-import com.ivarvisser.cineapp.data.dto.UpdateReservationSeatsRequest
+import com.ivarvisser.cineapp.data.dto.reservations.request.CancelRequest
+import com.ivarvisser.cineapp.data.dto.reservations.request.ConfirmRequest
+import com.ivarvisser.cineapp.data.dto.reservations.request.SuggestRequest
+import com.ivarvisser.cineapp.data.dto.reservations.request.UpdateReservationSeatsRequest
+import com.ivarvisser.cineapp.data.dto.reservations.response.SuggestResponse
 import com.ivarvisser.cineapp.data.remote.api.network.interfaces.ReservationsApi
 import com.ivarvisser.cineapp.data.remote.util.safeApiCall
 import com.ivarvisser.cineapp.domain.Reservation
