@@ -10,6 +10,7 @@ fun CineAppTheme(
 ) {
     MaterialTheme(
         colorScheme = if (darkTheme) DarkColorScheme else LightColorScheme,
-        content = content
+        content = content,
+        typography = robotoypography()
     )
 }

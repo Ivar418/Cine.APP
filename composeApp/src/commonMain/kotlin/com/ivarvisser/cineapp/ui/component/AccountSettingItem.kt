@@ -24,13 +24,14 @@ fun AccountSettingItem(
     icon: androidx.compose.ui.graphics.vector.ImageVector,
     title: String,
     subtitle: String,
+    onclick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Card(
         modifier = modifier
             .fillMaxWidth()
             .padding(vertical = 4.dp),
-        onClick = { /* Handle click */ }
+        onClick = { onclick() }
     ) {
         Row(
             modifier = Modifier

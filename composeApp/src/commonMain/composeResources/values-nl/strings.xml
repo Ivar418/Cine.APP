@@ -62,4 +62,6 @@
     <string name="not_implemented_settings">Instellingen is nog niet geïmplementeerd. Druk om terug te gaan.</string>
     <string name="not_implemented_generic">Nog niet geïmplementeerd. Druk om terug te gaan.</string>
     <string name="not_implemented_button">Teruggaan.</string>
+    <string name="favorites_title">Favorieten</string>
+    <string name="favorites_description">Al jouw favorieten films</string>
 </resources>

@@ -1,0 +1,22 @@
+package com.ivarvisser.cineapp.data.remote.api.network.interfaces
+
+import com.ivarvisser.cineapp.data.dto.AuthResponse
+import com.ivarvisser.cineapp.data.dto.UserFavoriteMoviesListResponse
+import com.ivarvisser.cineapp.utils.ResultOf
+
+interface UsersApi {
+    suspend fun login(username: String, password: String): ResultOf<AuthResponse>
+    suspend fun register(
+        username: String,
+        firstName: String,
+        lastName: String,
+        email: String,
+        password: String
+    ): ResultOf<AuthResponse>
+
+    suspend fun logout(refreshToken: String): ResultOf<Unit>
+    suspend fun refreshToken(refreshToken: String): ResultOf<AuthResponse>
+    suspend fun getFavoriteMovies(): ResultOf<UserFavoriteMoviesListResponse>
+    suspend fun addFavoriteMovie(movieId: Int): ResultOf<UserFavoriteMoviesListResponse>
+    suspend fun removeFavoriteMovie(movieId: Int): ResultOf<UserFavoriteMoviesListResponse>
+}

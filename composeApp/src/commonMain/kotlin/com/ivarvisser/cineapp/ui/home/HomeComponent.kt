@@ -8,7 +8,7 @@ interface HomeComponent {
     val component: Value<StartScreenModel>
 
     data class StartScreenModel(
-        val title: String = "🎬 CineApp",
+        val title: String = "CineApp",
         val subtitle: String = "Your Ultimate Cinema Experience"
     )
 }

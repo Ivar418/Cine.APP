@@ -1,0 +1,5 @@
+package com.ivarvisser.cineapp.ui.component
+
+import androidx.compose.ui.platform.UriHandler
+
+expect fun openPaymentUrl(uriHandler: UriHandler, url: String)
