@@ -5,6 +5,7 @@ import com.ivarvisser.cineapp.data.dto.auth.request.LogoutRequest
 import com.ivarvisser.cineapp.data.dto.auth.request.RegisterRequest
 import com.ivarvisser.cineapp.data.dto.auth.response.AuthResponse
 import com.ivarvisser.cineapp.data.dto.users.response.UserFavoriteMoviesListResponse
+import com.ivarvisser.cineapp.data.dto.users.response.UserResponse
 import com.ivarvisser.cineapp.data.remote.api.network.interfaces.UsersApi
 import com.ivarvisser.cineapp.data.remote.util.NetworkConstants
 import com.ivarvisser.cineapp.data.remote.util.safeApiCall
@@ -63,9 +64,6 @@ class UsersApiImpl(
         result
     }
 
-    override suspend fun refreshToken(refreshToken: String): ResultOf<AuthResponse> {
-        TODO("Not yet implemented")
-    }
 
     override suspend fun getFavoriteMovies(): ResultOf<UserFavoriteMoviesListResponse> =
         safeApiCall {
@@ -90,4 +88,11 @@ class UsersApiImpl(
             Log.debug(loggerName = "UsersApiImpl") { "Debug: Remove favorite movie result: $result" }
             result
         }
+
+    override suspend fun getProfile(): ResultOf<UserResponse> = safeApiCall {
+        val result = client.get("${NetworkConstants.Endpoints.USERS}/me/profile")
+            .body<UserResponse>()
+        Log.debug(loggerName = "UsersApiImpl") { "Debug: Get profile result: $result" }
+        result
+    }
 }

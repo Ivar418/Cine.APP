@@ -1,7 +1,7 @@
 package com.ivarvisser.cineapp.data.repository.implementations
 
-import com.ivarvisser.cineapp.data.dto.CreateOrderRequest
-import com.ivarvisser.cineapp.data.dto.CreateOrderResponse
+import com.ivarvisser.cineapp.data.dto.orders.request.CreateOrderRequest
+import com.ivarvisser.cineapp.data.dto.orders.response.CreateOrderResponse
 import com.ivarvisser.cineapp.data.remote.api.network.interfaces.OrdersApi
 import com.ivarvisser.cineapp.data.repository.interfaces.OrdersRepository
 import com.ivarvisser.cineapp.domain.Order
@@ -17,6 +17,7 @@ import kotlinx.coroutines.isActive
 class OrdersRepositoryImpl(
     private val ordersApi: OrdersApi
 ) : OrdersRepository {
+
     override suspend fun createOrder(order: CreateOrderRequest): ResultOf<CreateOrderResponse> {
         return ordersApi.createOrderAsync(order)
     }
@@ -25,8 +26,16 @@ class OrdersRepositoryImpl(
         return ordersApi.getReservationPdfAsync(orderId)
     }
 
+    override suspend fun getTicketsPdfAsync(orderId: Int): ResultOf<ByteArray> {
+        return ordersApi.getTicketsPdfAsync(orderId)
+    }
+
     override suspend fun getOrderById(orderId: Int): ResultOf<CreateOrderResponse> {
         return ordersApi.getOrderById(orderId)
+    }
+
+    override suspend fun getMyOrders(): ResultOf<List<CreateOrderResponse>> {
+        return ordersApi.getMyOrdersAsync()
     }
 
     override suspend fun observeStatus(
@@ -57,4 +66,8 @@ class OrdersRepositoryImpl(
             delay(intervalMs)
         }
     }.distinctUntilChanged()
+
+    override suspend fun downloadOrderPdfAsync(orderId: Int): ResultOf<ByteArray> {
+        return ordersApi.downloadOrderTicketPdfAsync(orderId)
+    }
 }

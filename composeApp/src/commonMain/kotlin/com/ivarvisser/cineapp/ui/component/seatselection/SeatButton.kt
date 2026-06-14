@@ -18,8 +18,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.ivarvisser.cineapp.domain.ENUM.SeatType
 import com.ivarvisser.cineapp.domain.Seat
+import com.ivarvisser.cineapp.domain.enums.SeatType
 import com.ivarvisser.cineapp.ui.feature.ordering.zoneColor
 
 @Composable

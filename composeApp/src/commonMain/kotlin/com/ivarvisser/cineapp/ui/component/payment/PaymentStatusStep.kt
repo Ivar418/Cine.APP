@@ -36,6 +36,7 @@ import androidx.compose.ui.unit.dp
 import com.ivarvisser.cineapp.domain.Order
 import com.ivarvisser.cineapp.domain.PaymentResultData
 import com.ivarvisser.cineapp.domain.Reservation
+import com.ivarvisser.cineapp.domain.enums.PaymentStatuses
 
 @Composable
 fun PaymentStatusStep(reservation: Reservation?, order: Order?) {
@@ -49,7 +50,7 @@ fun PaymentStatusStep(reservation: Reservation?, order: Order?) {
         }
     } else {
         val result = when (order.paymentStatus) {
-            "Paid", "Success", "Succeeded" -> PaymentResultData(
+            PaymentStatuses.Paid -> PaymentResultData(
                 icon = Icons.Default.CheckCircle,
                 title = "Betaling geslaagd!",
                 subtitle = "Uw betaling is succesvol ontvangen.",
@@ -57,7 +58,7 @@ fun PaymentStatusStep(reservation: Reservation?, order: Order?) {
                 status = "Geslaagd"
             )
 
-            "Failed" -> PaymentResultData(
+            PaymentStatuses.Failed -> PaymentResultData(
                 icon = Icons.Default.Cancel,
                 title = "Betaling mislukt",
                 subtitle = "Er is een fout opgetreden bij de betaling.",
@@ -65,7 +66,7 @@ fun PaymentStatusStep(reservation: Reservation?, order: Order?) {
                 status = "Mislukt"
             )
 
-            "Cancelled" -> PaymentResultData(
+            PaymentStatuses.Cancelled -> PaymentResultData(
                 icon = Icons.Default.Block,
                 title = "Betaling geannuleerd",
                 subtitle = "U heeft de betaling geannuleerd.",
@@ -73,7 +74,7 @@ fun PaymentStatusStep(reservation: Reservation?, order: Order?) {
                 status = "Geannuleerd"
             )
 
-            "Expired" -> PaymentResultData(
+            PaymentStatuses.Expired -> PaymentResultData(
                 icon = Icons.Default.Schedule,
                 title = "Betaling verlopen",
                 subtitle = "De betaaltermijn is verlopen. Probeer opnieuw.",
@@ -147,10 +148,10 @@ fun PaymentStatusStep(reservation: Reservation?, order: Order?) {
 
                     DetailRow("Referentie", order.orderCode)
                     DetailRow("Bedrag", "€ ${order.totalAmount.toString().replace(".", ",")}")
-                    DetailRow("Betaalmethode", order.paymentMethod)
+                    DetailRow("Betaalmethode", order.paymentMethod.displayName)
                     DetailRow("Bestel ID", "#${order.orderId}")
 
-                    if (order.paymentStatus == "Pending") {
+                    if (order.paymentStatus == PaymentStatuses.Pending) {
                         Spacer(modifier = Modifier.height(24.dp))
                         CircularProgressIndicator(
                             modifier = Modifier.size(24.dp),

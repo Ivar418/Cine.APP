@@ -10,6 +10,7 @@ import com.arkivanov.decompose.value.operator.map
 import com.ivarvisser.cineapp.NotImplementedComponent
 import com.ivarvisser.cineapp.domain.Movie
 import com.ivarvisser.cineapp.ui.component.navigation.TabBarItem
+import com.ivarvisser.cineapp.ui.feature.OrderHistory.OrderHistoryComponent
 import com.ivarvisser.cineapp.ui.feature.account.AccountComponent
 import com.ivarvisser.cineapp.ui.feature.favorite.FavoritesComponent
 import com.ivarvisser.cineapp.ui.feature.movie.MovieDetailsComponent
@@ -117,10 +118,13 @@ class RootComponent(
 
             is Configuration.OrderHistory -> {
                 Child.OrderHistory(
-                    NotImplementedComponent(
+                    OrderHistoryComponent(
                         componentContext = context,
-                        onRetry = { navigation.pop() },
-                        textContent = "Order History is not implemented yet."
+                        ordersRepository = getKoin().get(),
+                        moviesRepository = getKoin().get(),
+                        showingsRepository = getKoin().get(),
+                        onGoBack = { navigation.pop() },
+                        ticketsRepository = getKoin().get()
                     )
                 )
             }
@@ -168,6 +172,9 @@ class RootComponent(
                         ordersRepository = getKoin().get(),
                         reservationsRepository = getKoin().get(),
                         usersRepository = getKoin().get(),
+                        onLogin = {
+                            navigation.bringToFront(Configuration.Account)
+                        }
                     )
                 )
             }
@@ -203,7 +210,7 @@ class RootComponent(
     sealed class Child {
         data class Home(val componentContext: DefaultHomeComponent) : Child()
         data class MoviesOverviewScreen(val componentContext: MoviesOverviewComponent) : Child()
-        data class OrderHistory(val componentContext: NotImplementedComponent) : Child()
+        data class OrderHistory(val componentContext: OrderHistoryComponent) : Child()
         data class Account(val componentContext: AccountComponent) : Child()
         data class Favorites(val componentContext: FavoritesComponent) : Child()
         data class Settings(val componentContext: NotImplementedComponent) : Child()

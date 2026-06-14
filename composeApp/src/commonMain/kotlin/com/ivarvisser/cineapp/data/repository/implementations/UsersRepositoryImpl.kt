@@ -8,7 +8,6 @@ import com.ivarvisser.cineapp.data.repository.interfaces.UsersRepository
 import com.ivarvisser.cineapp.domain.User
 import com.ivarvisser.cineapp.mapper.toUser
 import com.ivarvisser.cineapp.utils.ResultOf
-import net.codinux.log.Log
 
 class UsersRepositoryImpl(
     private val usersApi: UsersApi,
@@ -48,64 +47,12 @@ class UsersRepositoryImpl(
     }
 
     override suspend fun isLoggedIn(): Boolean {
-        storage.getRefreshToken()?.let {
-            if (storage.getUser() != null) return true
-            Log.debug(loggerName = "UsersRepositoryImpl") { "Debug: Refreshing token" }
-            val user = usersApi.refreshToken(it)
-            if (user is ResultOf.Success) {
-                Log.debug(loggerName = "UsersRepositoryImpl") { "Debug: Token refreshed" }
-                storage.saveUser(user.value.user.toUser())
-                storage.saveAccessToken(user.value.accessToken)
-                storage.saveRefreshToken(user.value.refreshToken)
-                return true
-            }
-        }
-        Log.debug(loggerName = "UsersRepositoryImpl") { "Debug: Not logged in" }
-        return false
+        storage.getRefreshToken() ?: return false
+        return usersApi.getProfile() !is ResultOf.Failure
     }
 
     override suspend fun getUser(): User? {
         return storage.getUser()
-    }
-
-    override suspend fun getUserId(): Int? {
-        TODO("Not yet implemented")
-    }
-
-    override suspend fun getUsername(): String? {
-        TODO("Not yet implemented")
-    }
-
-    override suspend fun getEmail(): String? {
-        TODO("Not yet implemented")
-    }
-
-    override suspend fun setEmail(email: String) {
-        TODO("Not yet implemented")
-    }
-
-    override suspend fun getFirstName(): String? {
-        TODO("Not yet implemented")
-    }
-
-    override suspend fun setFirstName(firstName: String) {
-        TODO("Not yet implemented")
-    }
-
-    override suspend fun getLastName(): String? {
-        TODO("Not yet implemented")
-    }
-
-    override suspend fun setLastName(lastName: String) {
-        TODO("Not yet implemented")
-    }
-
-    override suspend fun getPhoto(): String? {
-        TODO("Not yet implemented")
-    }
-
-    override suspend fun setPhoto(photo: String) {
-        TODO("Not yet implemented")
     }
 
     override suspend fun getFavoriteMovies(): ResultOf<UserFavoriteMoviesListResponse> {

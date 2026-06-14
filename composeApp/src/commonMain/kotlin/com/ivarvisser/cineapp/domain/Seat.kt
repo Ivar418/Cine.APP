@@ -1,6 +1,6 @@
 package com.ivarvisser.cineapp.domain
 
-import com.ivarvisser.cineapp.domain.ENUM.SeatType
+import com.ivarvisser.cineapp.domain.enums.SeatType
 import kotlinx.serialization.Serializable
 
 /**

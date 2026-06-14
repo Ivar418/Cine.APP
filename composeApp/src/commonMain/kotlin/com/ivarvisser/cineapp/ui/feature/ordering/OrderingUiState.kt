@@ -6,6 +6,7 @@ import com.ivarvisser.cineapp.domain.Order
 import com.ivarvisser.cineapp.domain.Reservation
 import com.ivarvisser.cineapp.domain.Seat
 import com.ivarvisser.cineapp.domain.SeatRow
+import com.ivarvisser.cineapp.domain.enums.PaymentMethods
 
 data class OrderingUiState(
     val step: Int = 1,
@@ -18,7 +19,7 @@ data class OrderingUiState(
     val seatSelection: SeatSelectionUi = SeatSelectionUi(),
     val seats: List<SelectedSeatUi> = emptyList(),
     val paymentMethods: List<String> = emptyList(),
-    val selectedPaymentMethod: String? = null,
+    val selectedPaymentMethod: PaymentMethods = PaymentMethods.Unknown,
     val legend: List<LegendItemUi> = emptyList(),
     val pendingId: String? = null,
     val showZones: Boolean = true,

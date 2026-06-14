@@ -86,6 +86,14 @@ fun createHttpClient(
                     install(ContentNegotiation) {
                         json(Json { ignoreUnknownKeys = true })
                     }
+                    // Configure the base URL for the refresh client
+                    defaultRequest {
+                        url {
+                            protocol =
+                                if (BuildKonfig.PROTOCOL == "HTTPS") URLProtocol.HTTPS else URLProtocol.HTTP
+                            host = BuildKonfig.BASE_URL
+                        }
+                    }
                 }
                 try {
                     val request = refreshClient.post("$AUTH/refresh") {
@@ -104,7 +112,7 @@ fun createHttpClient(
                     )
                 } catch (e: Exception) {
                     Log.debug(loggerName = "HttpClientManager") { "Failed to refresh tokens: ${e.message}" }
-//                    tokenStorage.clearTokens()
+                    tokenStorage.clearTokens()
                     null
                 }
             }

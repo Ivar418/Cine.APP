@@ -13,7 +13,8 @@ object NetworkConstants {
         const val SHOWINGS = "/api/showings"
         const val USERS = "/api/users"
         const val AUTH = "/api/auth"
-        const val ORDER = "/api/orders"
+        const val ORDERS = "/api/orders"
+        const val TICKETS = "/api/tickets"
         const val RESERVATION = "/api/reservations"
 
 

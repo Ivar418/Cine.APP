@@ -20,6 +20,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.unit.dp
+import com.ivarvisser.cineapp.domain.enums.PaymentMethods
 import com.ivarvisser.cineapp.ui.feature.ordering.OrderingAction
 import com.ivarvisser.cineapp.ui.feature.ordering.OrderingUiState
 
@@ -73,7 +74,7 @@ fun PaymentConfirmationStep(
                     CircularProgressIndicator(modifier = Modifier.size(18.dp), strokeWidth = 2.dp)
                     Spacer(modifier = Modifier.width(8.dp))
                 }
-                Text(if (state.selectedPaymentMethod == "Reserveren") "Confirm Reservation" else "Proceed To Payment")
+                Text(if (state.selectedPaymentMethod == PaymentMethods.Reservation) "Confirm Reservation" else "Proceed To Payment")
             }
         }
     }
