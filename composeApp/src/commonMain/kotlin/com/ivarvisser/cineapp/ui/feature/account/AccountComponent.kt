@@ -13,7 +13,8 @@ import kotlinx.coroutines.launch
 class AccountComponent(
     componentContext: ComponentContext,
     private val usersRepository: UsersRepository,
-    private val onGoBack: () -> Unit
+    private val onGoBack: () -> Unit,
+    private val onNavigateToFavorites: () -> Unit
 ) : ComponentContext by componentContext {
     private val scope = coroutineScope()
     private val _state = MutableValue(AccountState())
@@ -24,6 +25,7 @@ class AccountComponent(
     }
 
     fun loadData() {
+        isLoggedIn()?.let { if (!it) return }
         getUser()
         scope.launch {
             _state.update { current -> current.copy(isLoading = false) }
@@ -36,6 +38,20 @@ class AccountComponent(
                 _state.update { current -> current.copy(user = it) }
             }
         }
+    }
+
+    fun isLoggedIn(): Boolean? {
+        var result: Boolean? = null
+        scope.launch {
+            val loggedIn = usersRepository.isLoggedIn()
+            if (!loggedIn) {
+                _state.update { current -> current.copy(user = null) }
+                usersRepository.logout(userId = _state.value.user?.userId ?: return@launch)
+                result = false
+            }
+            result = true
+        }
+        return result
     }
 
     fun login(userName: String, password: String) {
@@ -145,6 +161,10 @@ class AccountComponent(
             }
 
             is AccountAction.OnChangePhoto -> {
+            }
+
+            is AccountAction.OnFavorites -> {
+                onNavigateToFavorites()
             }
 
 

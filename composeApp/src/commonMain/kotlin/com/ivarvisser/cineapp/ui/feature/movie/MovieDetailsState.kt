@@ -10,7 +10,9 @@ data class MovieDetailsState(
     val upcomingShowings: List<Showing> = emptyList(),
     val isLoadingShowings: Boolean = false,
     val isLoadingGenres: Boolean = false,
-    val error: String? = null
+    val error: String? = null,
+    val isFavorite: Boolean = false,
+    val isLoggedIn: Boolean = false
 ) {
     val hasError: Boolean get() = error != null
     val isLoading = isLoadingShowings || isLoadingGenres

@@ -24,7 +24,8 @@ data class OrderingUiState(
     val showZones: Boolean = true,
     val confirmedReservation: Reservation? = null,
     val prices: Map<String, Float> = emptyMap(),
-    val order: Order? = null
+    val order: Order? = null,
+    val isLoggedIn: Boolean = false
 )
 
 data class ShowingUi(

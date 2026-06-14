@@ -6,10 +6,12 @@ import com.arkivanov.decompose.value.Value
 import com.arkivanov.decompose.value.update
 import com.arkivanov.essenty.lifecycle.coroutines.coroutineScope
 import com.arkivanov.essenty.lifecycle.doOnCreate
+import com.arkivanov.essenty.lifecycle.doOnResume
 import com.ivarvisser.cineapp.data.repository.interfaces.MoviesRepository
 import com.ivarvisser.cineapp.domain.Movie
 import com.ivarvisser.cineapp.utils.ResultOf
 import kotlinx.coroutines.launch
+import kotlin.time.Instant
 
 class MoviesOverviewComponent(
     componentContext: ComponentContext,
@@ -26,12 +28,10 @@ class MoviesOverviewComponent(
     init {
         doOnCreate {
             loadMovies()
-
         }
-    }
-
-    fun onRefresh() {
-        loadMovies()
+        doOnResume {
+            loadMovies()
+        }
     }
 
     fun setLoading(isLoading: Boolean) {
@@ -46,8 +46,14 @@ class MoviesOverviewComponent(
     fun goBack() {
         onGoBack()
     }
+
     fun onMovieSelected(movie: Movie) {
         _onMovieSelected(movie)
+    }
+
+    fun onInstantSelected(instant: Instant?) {
+        _state.update { it.copy(selectedInstant = instant) }
+        loadMovies()
     }
 
     //--------------------------------------------------------------------------------
@@ -56,9 +62,13 @@ class MoviesOverviewComponent(
         scope.launch {
             try {
                 setLoading(true)
-                when (val movies = repo.getMoviesWithUpcomingShowings()) {
+                val filter = _state.value.selectedInstant
+                println("Debug: Loading movies with filter - Instant: $filter")
+
+                when (val movies = repo.getMoviesWithUpcomingShowings(filter)) {
                     is ResultOf.Success -> {
                         println("Debug: Successfully fetched movies: ${movies.value.size}")
+
                         _state.update {
                             _state.value.copy(
                                 movies = movies.value,

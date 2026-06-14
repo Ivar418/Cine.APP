@@ -1,12 +1,14 @@
 package com.ivarvisser.cineapp.data.repository.implementations
 
-import com.ivarvisser.cineapp.data.dto.AuthResponse
+import com.ivarvisser.cineapp.data.dto.auth.response.AuthResponse
+import com.ivarvisser.cineapp.data.dto.users.response.UserFavoriteMoviesListResponse
 import com.ivarvisser.cineapp.data.local.interfaces.UserStorage
 import com.ivarvisser.cineapp.data.remote.api.network.interfaces.UsersApi
 import com.ivarvisser.cineapp.data.repository.interfaces.UsersRepository
 import com.ivarvisser.cineapp.domain.User
 import com.ivarvisser.cineapp.mapper.toUser
 import com.ivarvisser.cineapp.utils.ResultOf
+import net.codinux.log.Log
 
 class UsersRepositoryImpl(
     private val usersApi: UsersApi,
@@ -48,14 +50,17 @@ class UsersRepositoryImpl(
     override suspend fun isLoggedIn(): Boolean {
         storage.getRefreshToken()?.let {
             if (storage.getUser() != null) return true
+            Log.debug(loggerName = "UsersRepositoryImpl") { "Debug: Refreshing token" }
             val user = usersApi.refreshToken(it)
             if (user is ResultOf.Success) {
+                Log.debug(loggerName = "UsersRepositoryImpl") { "Debug: Token refreshed" }
                 storage.saveUser(user.value.user.toUser())
                 storage.saveAccessToken(user.value.accessToken)
                 storage.saveRefreshToken(user.value.refreshToken)
                 return true
             }
         }
+        Log.debug(loggerName = "UsersRepositoryImpl") { "Debug: Not logged in" }
         return false
     }
 
@@ -103,16 +108,16 @@ class UsersRepositoryImpl(
         TODO("Not yet implemented")
     }
 
-    override suspend fun getFavoriteMovies(): List<Int> {
-        TODO("Not yet implemented")
+    override suspend fun getFavoriteMovies(): ResultOf<UserFavoriteMoviesListResponse> {
+        return usersApi.getFavoriteMovies()
     }
 
-    override suspend fun addFavoriteMovie(movieId: Int) {
-        TODO("Not yet implemented")
+    override suspend fun addFavoriteMovie(movieId: Int): ResultOf<UserFavoriteMoviesListResponse> {
+        return usersApi.addFavoriteMovie(movieId)
     }
 
-    override suspend fun removeFavoriteMovie(movieId: Int) {
-        TODO("Not yet implemented")
+    override suspend fun removeFavoriteMovie(movieId: Int): ResultOf<UserFavoriteMoviesListResponse> {
+        return usersApi.removeFavoriteMovie(movieId)
     }
 
 }

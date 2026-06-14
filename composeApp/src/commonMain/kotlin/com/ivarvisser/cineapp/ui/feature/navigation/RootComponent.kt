@@ -11,6 +11,7 @@ import com.ivarvisser.cineapp.NotImplementedComponent
 import com.ivarvisser.cineapp.domain.Movie
 import com.ivarvisser.cineapp.ui.component.navigation.TabBarItem
 import com.ivarvisser.cineapp.ui.feature.account.AccountComponent
+import com.ivarvisser.cineapp.ui.feature.favorite.FavoritesComponent
 import com.ivarvisser.cineapp.ui.feature.movie.MovieDetailsComponent
 import com.ivarvisser.cineapp.ui.feature.movie.MoviesOverviewComponent
 import com.ivarvisser.cineapp.ui.feature.ordering.OrderingComponent
@@ -39,7 +40,7 @@ class RootComponent(
             Configuration.Home -> TabBarItem.Home
             Configuration.MoviesOverviewScreen, is Configuration.MovieDetailsScreen, is Configuration.ShowingDetailsScreen, is Configuration.OrderingScreen -> TabBarItem.MoviesOverviewScreen // Both map to the same tab
             Configuration.OrderHistory -> TabBarItem.OrderHistory
-            Configuration.Account -> TabBarItem.Account
+            Configuration.Account, Configuration.Favorites -> TabBarItem.Account
             Configuration.Settings -> TabBarItem.Settings
             else -> TabBarItem.Home
         }
@@ -84,7 +85,8 @@ class RootComponent(
                             )
                         },
                         showingsRepository = getKoin().get(),
-                        moviesRepository = getKoin().get()
+                        moviesRepository = getKoin().get(),
+                        usersRepository = getKoin().get()
                     )
                 )
 
@@ -93,7 +95,22 @@ class RootComponent(
                     AccountComponent(
                         componentContext = context,
                         usersRepository = getKoin().get(),
-                        onGoBack = { navigation.pop() }
+                        onGoBack = { navigation.pop() },
+                        onNavigateToFavorites = { navigation.bringToFront(Configuration.Favorites) }
+                    )
+                )
+            }
+
+            is Configuration.Favorites -> {
+                Child.Favorites(
+                    FavoritesComponent(
+                        componentContext = context,
+                        usersRepository = getKoin().get(),
+                        moviesRepository = getKoin().get(),
+                        onGoBack = { navigation.pop() },
+                        onMovieSelected = { movie ->
+                            navigation.bringToFront(Configuration.MovieDetailsScreen(movie))
+                        }
                     )
                 )
             }
@@ -150,6 +167,7 @@ class RootComponent(
                         showingsRepository = getKoin().get(),
                         ordersRepository = getKoin().get(),
                         reservationsRepository = getKoin().get(),
+                        usersRepository = getKoin().get(),
                     )
                 )
             }
@@ -187,6 +205,7 @@ class RootComponent(
         data class MoviesOverviewScreen(val componentContext: MoviesOverviewComponent) : Child()
         data class OrderHistory(val componentContext: NotImplementedComponent) : Child()
         data class Account(val componentContext: AccountComponent) : Child()
+        data class Favorites(val componentContext: FavoritesComponent) : Child()
         data class Settings(val componentContext: NotImplementedComponent) : Child()
         data class NotImplemented(val componentContext: NotImplementedComponent) : Child()
         data class MovieDetailsScreen(val componentContext: MovieDetailsComponent) : Child()
@@ -208,6 +227,9 @@ class RootComponent(
 
         @Serializable
         data object Account : Configuration()
+
+        @Serializable
+        data object Favorites : Configuration()
 
         @Serializable
         data object OrderHistory : Configuration()

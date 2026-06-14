@@ -147,7 +147,7 @@ fun AccountScreen(
             AccountSettingItem(
                 icon = Icons.Default.Favorite,
                 title = stringResource(Res.string.favorites_title),
-                onclick = { component.setError("Favorites is not yet implemented.") },
+                onclick = { component.onEvent(AccountAction.OnFavorites) },
                 subtitle = stringResource(Res.string.favorites_description)
             )
 
