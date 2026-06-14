@@ -9,9 +9,11 @@ import kotlinx.coroutines.flow.Flow
 interface OrdersRepository {
     suspend fun createOrder(order: CreateOrderRequest): ResultOf<CreateOrderResponse>
     suspend fun getReservationPdfAsync(orderId: Int): ResultOf<ByteArray>
+    suspend fun getTicketsPdfAsync(orderId: Int): ResultOf<ByteArray>
     suspend fun getOrderById(orderId: Int): ResultOf<CreateOrderResponse>
+    suspend fun getMyOrders(): ResultOf<List<CreateOrderResponse>>
     suspend fun observeStatus(
         orderId: Int,
     ): Flow<Order?>
-
+    suspend fun downloadOrderPdfAsync(orderId: Int): ResultOf<ByteArray>
 }

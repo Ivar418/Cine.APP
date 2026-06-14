@@ -1,6 +1,7 @@
 package com.ivarvisser.cineapp.ui.feature.ordering
 
 import androidx.compose.ui.platform.UriHandler
+import com.ivarvisser.cineapp.domain.enums.PaymentMethods
 
 sealed interface OrderingAction {
     data object OnBack : OrderingAction
@@ -21,10 +22,12 @@ sealed interface OrderingAction {
     data object GoToOverview : OrderingAction
     data object GoToPaymentMethods : OrderingAction
     data class PaymentMethodSelected(
-        val paymentMethod: String
+        val paymentMethod: PaymentMethods
     ) : OrderingAction
 
     data object BackToPaymentMethods : OrderingAction
     data class ProcessOrder(val uriHandler: UriHandler) : OrderingAction
     data object CancelCheckout : OrderingAction
+    data object Login : OrderingAction
+    data class PerformLogin(val username: String, val password: String) : OrderingAction
 }

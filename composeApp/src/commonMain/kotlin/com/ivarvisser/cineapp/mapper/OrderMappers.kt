@@ -10,6 +10,7 @@ fun CreateOrderResponse.toOrder(): Order = Order(
     paymentStatus = paymentStatus,
     paymentMethod = paymentMethod,
     totalAmount = totalAmount,
-    tickets = tickets
+    tickets = tickets,
+    userId = userId
 )
 

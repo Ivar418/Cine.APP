@@ -10,5 +10,5 @@ data class CreatedOrderTicketResponse(
     val ticketType: String,
     val price: Float,
     val paymentStatus: String,
-    val ticketCode: String?
+    val ticketCode: String?,
 )

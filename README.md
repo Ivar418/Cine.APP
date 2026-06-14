@@ -1,106 +1,86 @@
-This is a Kotlin Multiplatform project targeting Android, iOS, Web, Desktop (JVM).
+# CineApp
 
-* [/composeApp](./composeApp/src) is for code that will be shared across your Compose Multiplatform applications.
-  It contains several subfolders:
-  - [commonMain](./composeApp/src/commonMain/kotlin) is for code that’s common for all targets.
-  - Other folders are for Kotlin code that will be compiled for only the platform indicated in the folder name.
-    For example, if you want to use Apple’s CoreCrypto for the iOS part of your Kotlin app,
-    the [iosMain](./composeApp/src/iosMain/kotlin) folder would be the right place for such calls.
-    Similarly, if you want to edit the Desktop (JVM) specific part, the [jvmMain](./composeApp/src/jvmMain/kotlin)
-    folder is the appropriate location.
+CineApp is a comprehensive cinema booking application built with **Kotlin Multiplatform** and *
+*Compose Multiplatform**. It allows users to browse movies, view showing schedules, reserve seats in
+real-time, and manage their cinema experience across Android, Web (WASM/JS), and Desktop (JVM)
+platforms.
 
-* [/iosApp](./iosApp/iosApp) contains iOS applications. Even if you’re sharing your UI with Compose Multiplatform,
-  you need this entry point for your iOS app. This is also where you should add SwiftUI code for your project.
+## Features
 
-### Build and Run Android Application
+- **Movie Discovery**: Browse current and upcoming movies with detailed information, genres, and
+  ratings.
+- **Showings & Schedules**: View available showtimes for movies with real-time seat availability and
+  pricing.
+- **Reservation System**: Real-time seat selection and reservation flow.
+- **Order Management**: Complete booking process with order history and support for ticket
+  generation.
+- **User Accounts**: Manage favorites, personal details, and booking history.
+- **Cross-Platform**: Consistent experience across Android, Web, and Desktop.
 
-To build and run the development version of the Android app, use the run configuration from the run widget
-in your IDE’s toolbar or build it directly from the terminal:
-- on macOS/Linux
-  ```shell
-  ./gradlew :composeApp:assembleDebug
-  ```
-- on Windows
-  ```shell
-  .\gradlew.bat :composeApp:assembleDebug
-  ```
+## Architecture & Technologies
 
-### Build and Run Desktop (JVM) Application
+The project leverages modern Kotlin ecosystem tools for code sharing and UI:
 
-To build and run the development version of the desktop app, use the run configuration from the run widget
-in your IDE’s toolbar or run it directly from the terminal:
-- on macOS/Linux
-  ```shell
-  ./gradlew :composeApp:run
-  ```
-- on Windows
-  ```shell
-  .\gradlew.bat :composeApp:run
-  ```
+- **Kotlin Multiplatform (KMP)**: Shared business logic, data models, and networking.
+- **Compose Multiplatform**: Shared UI implementation across all targets.
+- **Decompose**: Used for lifecycle-aware navigation and component-based architecture.
+- **Koin**: Dependency injection across all platforms.
+- **Ktor**: Asynchronous HTTP client for API communication.
+- **BuildKonfig**: Environment-specific configurations (Dev, Staging, Production).
 
-### Build and Run Web Application
+---
 
-To build and run the development version of the web app, use the run configuration from the run widget
-in your IDE's toolbar or run it directly from the terminal:
-- for the Wasm target (faster, modern browsers):
-  - on macOS/Linux
-    ```shell
-    ./gradlew :composeApp:wasmJsBrowserDevelopmentRun
-    ```
-  - on Windows
-    ```shell
-    .\gradlew.bat :composeApp:wasmJsBrowserDevelopmentRun
-    ```
-- for the JS target (slower, supports older browsers):
-  - on macOS/Linux
-    ```shell
-    ./gradlew :composeApp:jsBrowserDevelopmentRun
-    ```
-  - on Windows
-    ```shell
-    .\gradlew.bat :composeApp:jsBrowserDevelopmentRun
-    ```
+## Project Structure
 
-### Build and Run iOS Application
+* [/composeApp](./composeApp/src) - Shared Compose Multiplatform code.
+  - [commonMain](./composeApp/src/commonMain/kotlin) - Shared logic and UI for all targets.
+  - [androidMain](./composeApp/src/androidMain/kotlin), [jvmMain](./composeApp/src/jvmMain/kotlin),
+    etc. - Platform-specific implementations.
 
-To build and run the development version of the iOS app, use the run configuration from the run widget
-in your IDE’s toolbar or open the [/iosApp](./iosApp) directory in Xcode and run it from there.
+---
 
-### Environment Configuration
+## Getting Started
 
-The project uses [BuildKonfig](https://github.com/yshrsmz/BuildKonfig) to manage
-environment-specific configurations (Production, Staging, Development).
+### Build and Run
 
 #### Android
 
-For Android, the environment is determined by the selected **Build Variant**. You can switch
-variants in the "Build Variants" tool window in Android Studio:
+- Windows: `.\gradlew.bat :composeApp:assembleDebug`
+- macOS/Linux: `./gradlew :composeApp:assembleDebug`
 
-- `developmentDebug` / `developmentRelease`: Uses Development URL (HTTP).
-- `stagingDebug` / `stagingRelease`: Uses Staging URL (HTTPS).
-- `productionDebug` / `productionRelease`: Uses Production URL (HTTPS).
+#### Desktop (JVM)
 
-#### Other Platforms (iOS, Desktop, Web)
+- Windows: `.\gradlew.bat :composeApp:run`
+- macOS/Linux: `./gradlew :composeApp:run`
 
-For other platforms, you can specify the target configuration by passing the `buildkonfig.flavor`
-property to Gradle:
+#### Web (Wasm/JS)
 
-- **Development:**
-  ```shell
-  .\gradlew.bat :composeApp:run -Pbuildkonfig.flavor=development
-  ```
-- **Staging:**
-  ```shell
-  .\gradlew.bat :composeApp:run -Pbuildkonfig.flavor=staging
-  ```
-- **Production (Default):**
-  ```shell
-  .\gradlew.bat :composeApp:run -Pbuildkonfig.flavor=release
-  ```
+- **Wasm**: `.\gradlew.bat :composeApp:wasmJsBrowserDevelopmentRun`
+- **JS**: `.\gradlew.bat :composeApp:jsBrowserDevelopmentRun`
 
-#### Configuration Details
+---
 
-The environments are configured in `composeApp/build.gradle.kts`:
+## Environment Configuration
+
+Environment-specific settings are managed via `BuildKonfig` in `composeApp/build.gradle.kts`.
+
+### Android Build Variants
+
+Switch variants in the "Build Variants" tool window in Android Studio:
+
+- `developmentDebug/Release`: Development (HTTP)
+- `stagingDebug/Release`: Staging (HTTPS)
+- `productionDebug/Release`: Production (HTTPS)
+
+### Other Platforms
+
+Pass the `buildkonfig.flavor` property to Gradle:
+
+- **Development**: `-Pbuildkonfig.flavor=development`
+- **Staging**: `-Pbuildkonfig.flavor=staging`
+- **Production**: `-Pbuildkonfig.flavor=release` (Default)
+
+### Configuration Details
 
 | Environment     | Base URL                        | Protocol |
 |:----------------|:--------------------------------|:---------|
@@ -108,14 +88,8 @@ The environments are configured in `composeApp/build.gradle.kts`:
 | **Staging**     | `acc-cinenetapi.ivarvisser.nl`  | `HTTPS`  |
 | **Production**  | `prod-cinenetapi.ivarvisser.nl` | `HTTPS`  |
 
-**Note:** The `HttpClient` in `HttpClientManager.kt` automatically switches between `HTTP` and
-`HTTPS` based on the selected environment's `PROTOCOL` field.
-
 ---
 
-Learn more about [Kotlin Multiplatform](https://www.jetbrains.com/help/kotlin-multiplatform-dev/get-started.html),
-[Compose Multiplatform](https://github.com/JetBrains/compose-multiplatform/#compose-multiplatform),
-[Kotlin/Wasm](https://kotl.in/wasm/)…
-
-We would appreciate your feedback on Compose/Web and Kotlin/Wasm in the public Slack channel [#compose-web](https://slack-chats.kotlinlang.org/c/compose-web).
-If you face any issues, please report them on [YouTrack](https://youtrack.jetbrains.com/newIssue?project=CMP).
+Learn more
+about [Kotlin Multiplatform](https://www.jetbrains.com/help/kotlin-multiplatform-dev/get-started.html)
+and [Compose Multiplatform](https://github.com/JetBrains/compose-multiplatform/#compose-multiplatform).

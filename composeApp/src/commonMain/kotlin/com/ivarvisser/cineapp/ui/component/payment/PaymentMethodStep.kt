@@ -21,6 +21,7 @@ import cineapp.composeapp.generated.resources.account_balance
 import cineapp.composeapp.generated.resources.card_giftcard
 import cineapp.composeapp.generated.resources.language
 import cineapp.composeapp.generated.resources.schedule
+import com.ivarvisser.cineapp.domain.enums.PaymentMethods
 import com.ivarvisser.cineapp.ui.feature.ordering.OrderingAction
 import com.ivarvisser.cineapp.ui.feature.ordering.OrderingUiState
 import org.jetbrains.compose.resources.painterResource
@@ -41,7 +42,11 @@ fun PaymentMethodStep(
         ) {
             state.paymentMethods.forEach {
                 Card(
-                    onClick = { onAction(OrderingAction.PaymentMethodSelected(it)) },
+                    onClick = {
+                        onAction(
+                            OrderingAction.PaymentMethodSelected(PaymentMethods.valueOf(it))
+                        )
+                    },
                     modifier = Modifier.fillMaxWidth()
                         .weight(1f).padding(16.dp)
                 ) {

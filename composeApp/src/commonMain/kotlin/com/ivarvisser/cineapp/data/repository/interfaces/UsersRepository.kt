@@ -18,16 +18,6 @@ interface UsersRepository {
     suspend fun logout(userId: Int)
     suspend fun isLoggedIn(): Boolean
     suspend fun getUser(): User?
-    suspend fun getUserId(): Int?
-    suspend fun getUsername(): String?
-    suspend fun getEmail(): String?
-    suspend fun setEmail(email: String)
-    suspend fun getFirstName(): String?
-    suspend fun setFirstName(firstName: String)
-    suspend fun getLastName(): String?
-    suspend fun setLastName(lastName: String)
-    suspend fun getPhoto(): String?
-    suspend fun setPhoto(photo: String)
     suspend fun getFavoriteMovies(): ResultOf<UserFavoriteMoviesListResponse>
     suspend fun addFavoriteMovie(movieId: Int): ResultOf<UserFavoriteMoviesListResponse>
     suspend fun removeFavoriteMovie(movieId: Int): ResultOf<UserFavoriteMoviesListResponse>

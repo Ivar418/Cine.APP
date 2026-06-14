@@ -1,4 +1,4 @@
-package com.ivarvisser.cineapp.domain.ENUM
+package com.ivarvisser.cineapp.domain.enums
 
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.Serializable
