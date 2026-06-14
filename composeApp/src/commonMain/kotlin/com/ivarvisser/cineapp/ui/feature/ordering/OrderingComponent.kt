@@ -8,15 +8,16 @@ import com.arkivanov.decompose.value.Value
 import com.arkivanov.decompose.value.update
 import com.arkivanov.essenty.lifecycle.coroutines.coroutineScope
 import com.arkivanov.essenty.lifecycle.doOnDestroy
-import com.ivarvisser.cineapp.data.dto.CreateOrderRequest
-import com.ivarvisser.cineapp.data.dto.SuggestRequest
-import com.ivarvisser.cineapp.data.dto.TicketRequest
-import com.ivarvisser.cineapp.data.dto.UpdateReservationSeatsRequest
+import com.ivarvisser.cineapp.data.dto.orders.request.CreateOrderRequest
+import com.ivarvisser.cineapp.data.dto.orders.request.TicketRequest
+import com.ivarvisser.cineapp.data.dto.reservations.request.SuggestRequest
+import com.ivarvisser.cineapp.data.dto.reservations.request.UpdateReservationSeatsRequest
 import com.ivarvisser.cineapp.data.remote.util.NetworkConstants
 import com.ivarvisser.cineapp.data.repository.interfaces.MoviesRepository
 import com.ivarvisser.cineapp.data.repository.interfaces.OrdersRepository
 import com.ivarvisser.cineapp.data.repository.interfaces.ReservationsRepository
 import com.ivarvisser.cineapp.data.repository.interfaces.ShowingsRepository
+import com.ivarvisser.cineapp.data.repository.interfaces.UsersRepository
 import com.ivarvisser.cineapp.domain.ENUM.SeatType
 import com.ivarvisser.cineapp.domain.Order
 import com.ivarvisser.cineapp.domain.Seat
@@ -42,6 +43,7 @@ class OrderingComponent(
     private val showingsRepository: ShowingsRepository,
     private val ordersRepository: OrdersRepository,
     private val reservationsRepository: ReservationsRepository,
+    private val usersRepository: UsersRepository,
     private val onGoBack: () -> Unit,
 ) : ComponentContext by componentContext {
 
@@ -89,7 +91,8 @@ class OrderingComponent(
     private fun loadData() {
         Log.debug(loggerName = "OrderingComponent") { "Loading data for showing $showingId and movie $movieId" }
         scope.launch {
-            _state.update { it.copy(isLoading = true) }
+            val isLoggedIn = usersRepository.isLoggedIn()
+            _state.update { it.copy(isLoading = true, isLoggedIn = isLoggedIn) }
 
             val showingResult = showingsRepository.getShowingById(showingId)
             val movieResult = moviesRepository.getMovieById(movieId)

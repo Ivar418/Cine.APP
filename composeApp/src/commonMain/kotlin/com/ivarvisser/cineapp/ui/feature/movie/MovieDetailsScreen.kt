@@ -15,9 +15,6 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Favorite
-import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material3.Card
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.HorizontalDivider
@@ -40,6 +37,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import cineapp.composeapp.generated.resources.Res
+import cineapp.composeapp.generated.resources.bookmark
+import cineapp.composeapp.generated.resources.bookmark_check
 import cineapp.composeapp.generated.resources.item_auditorium_fallback
 import cineapp.composeapp.generated.resources.item_genre
 import cineapp.composeapp.generated.resources.item_trailer
@@ -62,6 +61,7 @@ import com.ivarvisser.cineapp.ui.component.InfoRow
 import com.ivarvisser.cineapp.ui.component.TrailerPlayer
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
+import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import kotlin.time.Duration.Companion.minutes
 
@@ -96,34 +96,43 @@ fun MovieItemDetailsScreen(
             Card(
                 modifier = Modifier.fillMaxWidth().padding(8.dp)
             ) {
-                Row {
-                    AsyncImage(
-                        model = "https://image.tmdb.org/t/p/w154/" + state.movie.posterPath,
-                        contentDescription = stringResource(Res.string.movie_poster_desc),
-                        modifier = Modifier.align(alignment = Alignment.Top)
-                            .padding(top = 16.dp, bottom = 5.dp, start = 16.dp, end = 16.dp)
-                            .clip(
-                                RoundedCornerShape(12.dp)
+                Box(modifier = Modifier.fillMaxWidth()) {
+                    Row(modifier = Modifier.fillMaxWidth()) {
+                        AsyncImage(
+                            model = "https://image.tmdb.org/t/p/w154/" + state.movie.posterPath,
+                            contentDescription = stringResource(Res.string.movie_poster_desc),
+                            modifier = Modifier
+                                .padding(top = 16.dp, bottom = 5.dp, start = 16.dp, end = 16.dp)
+                                .clip(RoundedCornerShape(12.dp)),
+                        )
+                        Text(
+                            text = state.movie.title,
+                            style = MaterialTheme.typography.titleLarge,
+                            fontWeight = FontWeight.Bold,
+                            color = BrandColors.VividPurple,
+                            modifier = Modifier
+                                .align(alignment = Alignment.CenterVertically)
+                                .padding(start = 16.dp, end = 48.dp)
+                        )
+                    }
+                    if (state.isLoggedIn) {
+                        Icon(
+                            modifier = Modifier
+                                .align(Alignment.TopEnd)
+                                .padding(16.dp)
+                                .clickable {
+                                    component.onFavoriteMoviePress()
+                                },
+                            painter = painterResource(
+                                if (state.isFavorite) {
+                                    Res.drawable.bookmark_check
+                                } else {
+                                    Res.drawable.bookmark
+                                }
                             ),
-                    )
-                    Text(
-                        text = state.movie.title,
-                        style = MaterialTheme.typography.titleLarge,
-                        fontWeight = FontWeight.Bold,
-                        color = BrandColors.VividPurple,
-                        modifier = Modifier.align(alignment = Alignment.CenterVertically)
-                            .padding(start = 16.dp)
-                    )
-                    Icon(
-                        modifier = Modifier.clickable(onClick = { component.onFavoriteMoviePress() }),
-                        imageVector = if (state.isFavorite) {
-                            Icons.Default.Favorite
-                        } else {
-                            Icons.Default.FavoriteBorder
-                        },
-                        contentDescription = null,
-                        tint = if (state.isFavorite) Color.Red else Color.Gray
-                    )
+                            contentDescription = null
+                        )
+                    }
                 }
                 Column(
                     modifier = Modifier.padding(16.dp)

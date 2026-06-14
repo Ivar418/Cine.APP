@@ -148,7 +148,9 @@ fun MoviesOverviewScreen(
         if (state.error != null) {
             ErrorMessage(
                 message = state.error ?: stringResource(Res.string.error_generic),
-                onRetry = { component.onRefresh() }
+                onRetry = {
+                    component.loadMovies()
+                }
             )
         }
         MovieList(

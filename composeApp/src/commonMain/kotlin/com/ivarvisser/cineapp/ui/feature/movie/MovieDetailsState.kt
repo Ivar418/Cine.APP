@@ -11,7 +11,8 @@ data class MovieDetailsState(
     val isLoadingShowings: Boolean = false,
     val isLoadingGenres: Boolean = false,
     val error: String? = null,
-    val isFavorite: Boolean = false
+    val isFavorite: Boolean = false,
+    val isLoggedIn: Boolean = false
 ) {
     val hasError: Boolean get() = error != null
     val isLoading = isLoadingShowings || isLoadingGenres

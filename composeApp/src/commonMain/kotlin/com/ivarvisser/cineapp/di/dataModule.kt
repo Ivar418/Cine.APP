@@ -1,6 +1,8 @@
 package com.ivarvisser.cineapp.di
 
+import com.ivarvisser.cineapp.data.local.implementations.TokenStorageImpl
 import com.ivarvisser.cineapp.data.local.implementations.UserStorageImpl
+import com.ivarvisser.cineapp.data.local.interfaces.TokenStorage
 import com.ivarvisser.cineapp.data.local.interfaces.UserStorage
 import com.ivarvisser.cineapp.data.remote.api.network.createHttpClient
 import com.ivarvisser.cineapp.data.remote.api.network.implementations.MoviesApiImpl
@@ -28,10 +30,12 @@ import io.ktor.client.HttpClient
 import org.koin.dsl.module
 
 val dataModule = module {
-    single<HttpClient> { createHttpClient() }
     //Storage
     single<Settings> { Settings() }
-    single<UserStorage> { UserStorageImpl(settings = get()) }
+    single<TokenStorage> { TokenStorageImpl(settings = get()) }
+    single<UserStorage> { UserStorageImpl(settings = get(), tokenStorage = get()) }
+
+    single<HttpClient> { createHttpClient(tokenStorage = get()) }
 
     //Api
     single<MoviesApi> { MoviesApiImpl(client = get()) }
