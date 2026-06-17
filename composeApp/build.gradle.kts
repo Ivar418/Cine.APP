@@ -86,6 +86,10 @@ kotlin {
             implementation(libs.bundles.coil)
             //Webvieuw MultiPlatofrm
             implementation("com.russhwolf:multiplatform-settings-no-arg:1.3.0")
+
+            //Notifications
+            api("io.github.mirzemehdi:kmpnotifier-local:2.0.0")
+
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)

@@ -1,5 +1,3 @@
-@file:OptIn(ExperimentalMaterial3Api::class)
-
 package com.ivarvisser.cineapp.ui.feature.ordering
 
 import androidx.compose.foundation.layout.Box
@@ -10,7 +8,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
@@ -21,6 +18,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
+import cineapp.composeapp.generated.resources.Res
+import cineapp.composeapp.generated.resources.back_button
+import cineapp.composeapp.generated.resources.confirm_seats
+import cineapp.composeapp.generated.resources.login_to_continue
 import com.ivarvisser.cineapp.ui.component.payment.OverviewStep
 import com.ivarvisser.cineapp.ui.component.payment.PaymentConfirmationStep
 import com.ivarvisser.cineapp.ui.component.payment.PaymentMethodStep
@@ -29,6 +30,7 @@ import com.ivarvisser.cineapp.ui.component.seatselection.SeatSelectionStep
 import com.ivarvisser.cineapp.ui.component.seatselection.StepIndicator
 import com.ivarvisser.cineapp.ui.component.ticketselection.TicketSelectionStep
 import com.ivarvisser.cineapp.ui.feature.account.LoginScreen
+import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun OrderingScreen(
@@ -56,7 +58,7 @@ fun OrderingScreen(
                             modifier = Modifier
                                 .padding(16.dp).fillMaxWidth()
                         ) {
-                            Text("Confirm Seats")
+                            Text(stringResource(Res.string.confirm_seats))
                         }
                     }
 
@@ -116,7 +118,7 @@ fun OrderingScreen(
                     }
                 } else {
                     Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                        Text("Log in om verder te gaan met je bestelling.")
+                        Text(stringResource(Res.string.login_to_continue))
                     }
                 }
                 Spacer(modifier = Modifier.height(16.dp))
@@ -143,7 +145,7 @@ fun OrderingScreen(
                             onClick = { onAction(OrderingAction.OnBack) },
                             modifier = Modifier.padding(16.dp).align(Alignment.CenterHorizontally)
                         ) {
-                            Text("Terug")
+                            Text(stringResource(Res.string.back_button))
                         }
                     }
                 }

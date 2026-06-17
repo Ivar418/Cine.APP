@@ -1,5 +1,9 @@
 package com.ivarvisser.cineapp.ui.feature.navigation
 
+import cineapp.composeapp.generated.resources.Res
+import cineapp.composeapp.generated.resources.not_implemented_button
+import cineapp.composeapp.generated.resources.not_implemented_generic
+import cineapp.composeapp.generated.resources.not_implemented_settings
 import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.router.stack.StackNavigation
 import com.arkivanov.decompose.router.stack.bringToFront
@@ -9,12 +13,14 @@ import com.arkivanov.decompose.value.Value
 import com.arkivanov.decompose.value.operator.map
 import com.ivarvisser.cineapp.NotImplementedComponent
 import com.ivarvisser.cineapp.domain.Movie
+import com.ivarvisser.cineapp.getPlatform
+import com.ivarvisser.cineapp.notification.NotificationService
 import com.ivarvisser.cineapp.ui.component.navigation.TabBarItem
-import com.ivarvisser.cineapp.ui.feature.OrderHistory.OrderHistoryComponent
 import com.ivarvisser.cineapp.ui.feature.account.AccountComponent
 import com.ivarvisser.cineapp.ui.feature.favorite.FavoritesComponent
 import com.ivarvisser.cineapp.ui.feature.movie.MovieDetailsComponent
 import com.ivarvisser.cineapp.ui.feature.movie.MoviesOverviewComponent
+import com.ivarvisser.cineapp.ui.feature.orderHistory.OrderHistoryComponent
 import com.ivarvisser.cineapp.ui.feature.ordering.OrderingComponent
 import com.ivarvisser.cineapp.ui.feature.showing.ShowingDetailComponent
 import com.ivarvisser.cineapp.ui.home.DefaultHomeComponent
@@ -24,8 +30,10 @@ import org.koin.core.component.KoinComponent
 
 class RootComponent(
     componentContext: ComponentContext,
-) : ComponentContext by componentContext, KoinComponent {
+
+    ) : ComponentContext by componentContext, KoinComponent {
     private val navigation = StackNavigation<Configuration>()
+    private val notificationService: NotificationService = getKoin().get()
     val childStack = childStack(
         source = navigation,
         serializer = Configuration.serializer(),
@@ -33,6 +41,12 @@ class RootComponent(
         handleBackButton = true,
         childFactory = ::createChild
     )
+
+    init {
+        if (!getPlatform().isAndroid) {
+            notificationService.startMonitoring()
+        }
+    }
 
     // Map the active configuration to the corresponding TabBarItem
     //Data class needs a "is" and the objects do not.
@@ -134,7 +148,8 @@ class RootComponent(
                     NotImplementedComponent(
                         componentContext = context,
                         onRetry = { navigation.pop() },
-                        textContent = "Settings is not implemented yet. Press to go back."
+                        textRes = Res.string.not_implemented_settings,
+                        buttonTextRes = Res.string.not_implemented_button
                     )
                 )
             }
@@ -184,7 +199,8 @@ class RootComponent(
                     NotImplementedComponent(
                         componentContext = context,
                         onRetry = { navigation.pop() },
-                        textContent = "Not implemented yet. Press to go back."
+                        textRes = Res.string.not_implemented_generic,
+                        buttonTextRes = Res.string.not_implemented_button
                     )
                 )
             }

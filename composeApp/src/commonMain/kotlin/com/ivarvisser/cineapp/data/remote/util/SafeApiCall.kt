@@ -1,5 +1,15 @@
 package com.ivarvisser.cineapp.data.remote.util
 
+import cineapp.composeapp.generated.resources.Res
+import cineapp.composeapp.generated.resources.error_bad_request
+import cineapp.composeapp.generated.resources.error_forbidden
+import cineapp.composeapp.generated.resources.error_io
+import cineapp.composeapp.generated.resources.error_not_found
+import cineapp.composeapp.generated.resources.error_retry_failure
+import cineapp.composeapp.generated.resources.error_server
+import cineapp.composeapp.generated.resources.error_timeout
+import cineapp.composeapp.generated.resources.error_too_many_requests
+import cineapp.composeapp.generated.resources.error_unauthorized
 import com.ivarvisser.cineapp.utils.ResultOf
 import io.ktor.client.network.sockets.ConnectTimeoutException
 import io.ktor.client.plugins.ResponseException
@@ -7,6 +17,7 @@ import io.ktor.http.HttpStatusCode
 import kotlinx.coroutines.delay
 import kotlinx.io.IOException
 import net.codinux.log.Log
+import org.jetbrains.compose.resources.getString
 
 /**
  * Executes a suspending API call safely, capturing any exceptions and returning a [ResultOf] instance
@@ -27,7 +38,7 @@ suspend fun <T> safeApiCall(apiCall: suspend () -> T): ResultOf<T> {
         } catch (e: ConnectTimeoutException) {
             if (attempt == maxRetries - 1) {
                 return ResultOf.Failure(
-                    "The connection timed out. The server might be down.",
+                    getString(Res.string.error_timeout),
                     e
                 )
             }
@@ -42,22 +53,22 @@ suspend fun <T> safeApiCall(apiCall: suspend () -> T): ResultOf<T> {
                 is ResponseException -> {
                     when (e.response.status) {
                         HttpStatusCode.Unauthorized ->
-                            "Session expired. Please log in again."
+                            getString(Res.string.error_unauthorized)
 
                         HttpStatusCode.Forbidden ->
-                            "You don't have permission to view this."
+                            getString(Res.string.error_forbidden)
 
                         HttpStatusCode.NotFound ->
-                            "The requested resource was not found."
+                            getString(Res.string.error_not_found)
 
                         HttpStatusCode.TooManyRequests ->
-                            "Too many requests. Please slow down."
+                            getString(Res.string.error_too_many_requests)
 
                         in HttpStatusCode.BadRequest..HttpStatusCode.UnprocessableEntity ->
-                            "Something went wrong with the request (${e.response.status.value})."
+                            getString(Res.string.error_bad_request, e.response.status.value)
 
                         in HttpStatusCode.InternalServerError..HttpStatusCode.GatewayTimeout ->
-                            "Server is currently having issues. Please try again later."
+                            getString(Res.string.error_server)
 
                         else ->
                             "Network error: ${e.response.status.value}"
@@ -65,7 +76,7 @@ suspend fun <T> safeApiCall(apiCall: suspend () -> T): ResultOf<T> {
                 }
 
                 is IOException ->
-                    "Network error. Please check your internet connection."
+                    getString(Res.string.error_io)
 
                 else ->
                     e.message ?: "An unexpected error occurred"
@@ -79,5 +90,5 @@ suspend fun <T> safeApiCall(apiCall: suspend () -> T): ResultOf<T> {
         }
     }
 
-    return ResultOf.Failure("Unexpected retry failure", null)
+    return ResultOf.Failure(getString(Res.string.error_retry_failure), null)
 }

@@ -33,10 +33,33 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import cineapp.composeapp.generated.resources.Res
+import cineapp.composeapp.generated.resources.amount_label
+import cineapp.composeapp.generated.resources.checking_status
+import cineapp.composeapp.generated.resources.loading_order
+import cineapp.composeapp.generated.resources.order_id_label
+import cineapp.composeapp.generated.resources.payment_cancelled_subtitle
+import cineapp.composeapp.generated.resources.payment_cancelled_title
+import cineapp.composeapp.generated.resources.payment_expired_subtitle
+import cineapp.composeapp.generated.resources.payment_expired_title
+import cineapp.composeapp.generated.resources.payment_failed_subtitle
+import cineapp.composeapp.generated.resources.payment_failed_title
+import cineapp.composeapp.generated.resources.payment_method_label
+import cineapp.composeapp.generated.resources.payment_pending_subtitle
+import cineapp.composeapp.generated.resources.payment_pending_title
+import cineapp.composeapp.generated.resources.payment_success_subtitle
+import cineapp.composeapp.generated.resources.payment_success_title
+import cineapp.composeapp.generated.resources.reference_label
+import cineapp.composeapp.generated.resources.status_cancelled
+import cineapp.composeapp.generated.resources.status_expired
+import cineapp.composeapp.generated.resources.status_failed
+import cineapp.composeapp.generated.resources.status_pending
+import cineapp.composeapp.generated.resources.status_success
 import com.ivarvisser.cineapp.domain.Order
 import com.ivarvisser.cineapp.domain.PaymentResultData
 import com.ivarvisser.cineapp.domain.Reservation
 import com.ivarvisser.cineapp.domain.enums.PaymentStatuses
+import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun PaymentStatusStep(reservation: Reservation?, order: Order?) {
@@ -45,49 +68,52 @@ fun PaymentStatusStep(reservation: Reservation?, order: Order?) {
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
                 CircularProgressIndicator()
                 Spacer(modifier = Modifier.height(16.dp))
-                Text("Bestelling wordt geladen...", style = MaterialTheme.typography.bodyLarge)
+                Text(
+                    stringResource(Res.string.loading_order),
+                    style = MaterialTheme.typography.bodyLarge
+                )
             }
         }
     } else {
         val result = when (order.paymentStatus) {
             PaymentStatuses.Paid -> PaymentResultData(
                 icon = Icons.Default.CheckCircle,
-                title = "Betaling geslaagd!",
-                subtitle = "Uw betaling is succesvol ontvangen.",
+                title = stringResource(Res.string.payment_success_title),
+                subtitle = stringResource(Res.string.payment_success_subtitle),
                 badgeColor = Color(0xFF4CAF50),
-                status = "Geslaagd"
+                status = stringResource(Res.string.status_success)
             )
 
             PaymentStatuses.Failed -> PaymentResultData(
                 icon = Icons.Default.Cancel,
-                title = "Betaling mislukt",
-                subtitle = "Er is een fout opgetreden bij de betaling.",
+                title = stringResource(Res.string.payment_failed_title),
+                subtitle = stringResource(Res.string.payment_failed_subtitle),
                 badgeColor = Color(0xFFF44336),
-                status = "Mislukt"
+                status = stringResource(Res.string.status_failed)
             )
 
             PaymentStatuses.Cancelled -> PaymentResultData(
                 icon = Icons.Default.Block,
-                title = "Betaling geannuleerd",
-                subtitle = "U heeft de betaling geannuleerd.",
+                title = stringResource(Res.string.payment_cancelled_title),
+                subtitle = stringResource(Res.string.payment_cancelled_subtitle),
                 badgeColor = Color(0xFF757575),
-                status = "Geannuleerd"
+                status = stringResource(Res.string.status_cancelled)
             )
 
             PaymentStatuses.Expired -> PaymentResultData(
                 icon = Icons.Default.Schedule,
-                title = "Betaling verlopen",
-                subtitle = "De betaaltermijn is verlopen. Probeer opnieuw.",
+                title = stringResource(Res.string.payment_expired_title),
+                subtitle = stringResource(Res.string.payment_expired_subtitle),
                 badgeColor = Color(0xFFFF9800),
-                status = "Verlopen"
+                status = stringResource(Res.string.status_expired)
             )
 
             else -> PaymentResultData( // Pending / Open
                 icon = Icons.Default.Refresh,
-                title = "In behandeling",
-                subtitle = "Uw betaling wordt nog verwerkt.",
+                title = stringResource(Res.string.payment_pending_title),
+                subtitle = stringResource(Res.string.payment_pending_subtitle),
                 badgeColor = Color(0xFF2196F3),
-                status = "In behandeling"
+                status = stringResource(Res.string.status_pending)
             )
         }
 
@@ -146,10 +172,16 @@ fun PaymentStatusStep(reservation: Reservation?, order: Order?) {
 
                     HorizontalDivider(modifier = Modifier.padding(vertical = 16.dp))
 
-                    DetailRow("Referentie", order.orderCode)
-                    DetailRow("Bedrag", "€ ${order.totalAmount.toString().replace(".", ",")}")
-                    DetailRow("Betaalmethode", order.paymentMethod.displayName)
-                    DetailRow("Bestel ID", "#${order.orderId}")
+                    DetailRow(stringResource(Res.string.reference_label), order.orderCode)
+                    DetailRow(
+                        stringResource(Res.string.amount_label),
+                        "€ ${order.totalAmount.toString().replace(".", ",")}"
+                    )
+                    DetailRow(
+                        stringResource(Res.string.payment_method_label, ""),
+                        order.paymentMethod.displayName
+                    )
+                    DetailRow(stringResource(Res.string.order_id_label), "#${order.orderId}")
 
                     if (order.paymentStatus == PaymentStatuses.Pending) {
                         Spacer(modifier = Modifier.height(24.dp))
@@ -159,7 +191,7 @@ fun PaymentStatusStep(reservation: Reservation?, order: Order?) {
                         )
                         Spacer(modifier = Modifier.height(8.dp))
                         Text(
-                            "Status aan het controleren...",
+                            stringResource(Res.string.checking_status),
                             style = MaterialTheme.typography.labelMedium,
                             color = MaterialTheme.colorScheme.onSurfaceVariant
                         )

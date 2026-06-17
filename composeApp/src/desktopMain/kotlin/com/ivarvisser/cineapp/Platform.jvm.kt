@@ -1,8 +1,9 @@
 package com.ivarvisser.cineapp
 
-class JVMPlatform: Platform {
+class JVMPlatform() : Platform {
     override val name: String = "Java ${System.getProperty("java.version")}"
     override val isMobile: Boolean = false
+    override val isAndroid: Boolean = false
     override fun openFile(bytes: ByteArray, fileName: String) {
         val tempDir = System.getProperty("java.io.tmpdir")
         val file = java.io.File(tempDir, fileName)

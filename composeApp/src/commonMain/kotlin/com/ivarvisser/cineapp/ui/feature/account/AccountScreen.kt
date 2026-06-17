@@ -34,18 +34,24 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import cineapp.composeapp.generated.resources.Res
 import cineapp.composeapp.generated.resources.about_app
+import cineapp.composeapp.generated.resources.about_app_not_implemented
 import cineapp.composeapp.generated.resources.account_settings_title
 import cineapp.composeapp.generated.resources.app_settings_title
 import cineapp.composeapp.generated.resources.app_version_placeholder
+import cineapp.composeapp.generated.resources.back_button
 import cineapp.composeapp.generated.resources.edit_profile
 import cineapp.composeapp.generated.resources.edit_profile_desc
+import cineapp.composeapp.generated.resources.edit_profile_not_implemented
 import cineapp.composeapp.generated.resources.email_preferences
 import cineapp.composeapp.generated.resources.email_preferences_desc
+import cineapp.composeapp.generated.resources.email_prefs_not_implemented
 import cineapp.composeapp.generated.resources.favorites_description
 import cineapp.composeapp.generated.resources.favorites_title
 import cineapp.composeapp.generated.resources.general_settings
 import cineapp.composeapp.generated.resources.general_settings_desc
+import cineapp.composeapp.generated.resources.general_settings_not_implemented
 import cineapp.composeapp.generated.resources.logout_button
+import cineapp.composeapp.generated.resources.notifications_not_implemented
 import cineapp.composeapp.generated.resources.notifications_settings
 import cineapp.composeapp.generated.resources.notifications_settings_desc
 import cineapp.composeapp.generated.resources.profile_email_placeholder
@@ -84,7 +90,7 @@ fun AccountScreen(
             ErrorMessage(
                 message = state.error ?: stringResource(Res.string.unknown_error),
                 onRetry = { component.clearError() },
-                buttonText = "Go back",
+                buttonText = stringResource(Res.string.back_button),
                 isOverlay = true
             )
         } else {
@@ -136,11 +142,19 @@ fun AccountScreen(
                 modifier = Modifier.padding(vertical = 8.dp)
             )
 
+            val editProfileNotImplemented = stringResource(Res.string.edit_profile_not_implemented)
+            val emailPrefsNotImplemented = stringResource(Res.string.email_prefs_not_implemented)
+            val notificationsNotImplemented =
+                stringResource(Res.string.notifications_not_implemented)
+            val generalSettingsNotImplemented =
+                stringResource(Res.string.general_settings_not_implemented)
+            val aboutAppNotImplemented = stringResource(Res.string.about_app_not_implemented)
+
             AccountSettingItem(
                 icon = Icons.Default.Person,
                 title = stringResource(Res.string.edit_profile),
                 onclick = {
-                    component.setError("Edit profile functionality is not implemented yet.")
+                    component.setError(editProfileNotImplemented)
                 },
                 subtitle = stringResource(Res.string.edit_profile_desc)
             )
@@ -154,14 +168,14 @@ fun AccountScreen(
             AccountSettingItem(
                 icon = Icons.Default.Email,
                 title = stringResource(Res.string.email_preferences),
-                onclick = { component.setError("Email preferences functionality is not implemented yet.") },
+                onclick = { component.setError(emailPrefsNotImplemented) },
                 subtitle = stringResource(Res.string.email_preferences_desc)
             )
 
             AccountSettingItem(
                 icon = Icons.Default.Notifications,
                 title = stringResource(Res.string.notifications_settings),
-                onclick = { component.setError("Notifications settings functionality is not implemented yet.") },
+                onclick = { component.setError(notificationsNotImplemented) },
                 subtitle = stringResource(Res.string.notifications_settings_desc)
             )
 
@@ -178,14 +192,14 @@ fun AccountScreen(
             AccountSettingItem(
                 icon = Icons.Default.Settings,
                 title = stringResource(Res.string.general_settings),
-                onclick = { component.setError("General settings functionality is not implemented yet.") },
+                onclick = { component.setError(generalSettingsNotImplemented) },
                 subtitle = stringResource(Res.string.general_settings_desc)
             )
 
             AccountSettingItem(
                 icon = Icons.Default.Info,
                 title = stringResource(Res.string.about_app),
-                onclick = { component.setError("About app functionality is not implemented yet.") },
+                onclick = { component.setError(aboutAppNotImplemented) },
                 subtitle = stringResource(Res.string.app_version_placeholder)
             )
 

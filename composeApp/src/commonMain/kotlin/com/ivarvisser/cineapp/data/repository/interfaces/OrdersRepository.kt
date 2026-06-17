@@ -16,4 +16,5 @@ interface OrdersRepository {
         orderId: Int,
     ): Flow<Order?>
     suspend fun downloadOrderPdfAsync(orderId: Int): ResultOf<ByteArray>
+    fun observeMyOrders(delayMillis: Long? = 30_000): Flow<List<CreateOrderResponse>>
 }

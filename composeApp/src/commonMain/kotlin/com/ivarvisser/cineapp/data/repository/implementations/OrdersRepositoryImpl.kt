@@ -13,6 +13,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.isActive
+import kotlin.time.Duration.Companion.milliseconds
 
 class OrdersRepositoryImpl(
     private val ordersApi: OrdersApi
@@ -37,6 +38,17 @@ class OrdersRepositoryImpl(
     override suspend fun getMyOrders(): ResultOf<List<CreateOrderResponse>> {
         return ordersApi.getMyOrdersAsync()
     }
+
+    override fun observeMyOrders(delayMillis: Long?): Flow<List<CreateOrderResponse>> =
+        flow {
+            while (currentCoroutineContext().isActive) {
+                val result = getMyOrders()
+                if (result is ResultOf.Success) {
+                    emit(result.value)
+                }
+                delay(delayMillis?.milliseconds ?: 1_800_000.milliseconds)
+            }
+        }.distinctUntilChanged()
 
     override suspend fun observeStatus(
         orderId: Int,

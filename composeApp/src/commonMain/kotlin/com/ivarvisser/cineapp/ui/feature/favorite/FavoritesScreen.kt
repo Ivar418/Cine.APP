@@ -24,6 +24,7 @@ import cineapp.composeapp.generated.resources.error_generic
 import cineapp.composeapp.generated.resources.favorites_title
 import cineapp.composeapp.generated.resources.movies_back_button
 import cineapp.composeapp.generated.resources.movies_back_icon_desc
+import cineapp.composeapp.generated.resources.no_favorites
 import com.arkivanov.decompose.extensions.compose.subscribeAsState
 import com.ivarvisser.cineapp.ui.component.ErrorMessage
 import com.ivarvisser.cineapp.ui.component.MovieList
@@ -78,7 +79,7 @@ fun FavoritesScreen(
                     modifier = Modifier.fillMaxSize(),
                     contentAlignment = Alignment.Center
                 ) {
-                    Text("Je hebt nog geen favorieten toegevoegd.")
+                    Text(stringResource(Res.string.no_favorites))
                 }
             } else {
                 MovieList(

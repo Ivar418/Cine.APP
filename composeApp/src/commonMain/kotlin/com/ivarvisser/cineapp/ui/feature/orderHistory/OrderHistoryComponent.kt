@@ -1,14 +1,16 @@
-package com.ivarvisser.cineapp.ui.feature.OrderHistory
+package com.ivarvisser.cineapp.ui.feature.orderHistory
 
 import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.value.MutableValue
 import com.arkivanov.decompose.value.Value
 import com.arkivanov.decompose.value.update
 import com.arkivanov.essenty.lifecycle.coroutines.coroutineScope
+import com.arkivanov.essenty.lifecycle.doOnResume
 import com.ivarvisser.cineapp.data.repository.interfaces.MoviesRepository
 import com.ivarvisser.cineapp.data.repository.interfaces.OrdersRepository
 import com.ivarvisser.cineapp.data.repository.interfaces.ShowingsRepository
 import com.ivarvisser.cineapp.data.repository.interfaces.TicketsRepository
+import com.ivarvisser.cineapp.domain.Movie
 import com.ivarvisser.cineapp.getPlatform
 import com.ivarvisser.cineapp.utils.ResultOf
 import kotlinx.coroutines.launch
@@ -29,6 +31,9 @@ class OrderHistoryComponent(
 
     init {
         loadOrders()
+        doOnResume {
+            loadOrders()
+        }
     }
 
     fun loadOrders() {
@@ -59,7 +64,7 @@ class OrderHistoryComponent(
         }
     }
 
-    private fun resolveMovie(orderId: Int, allMovies: List<com.ivarvisser.cineapp.domain.Movie>) {
+    private fun resolveMovie(orderId: Int, allMovies: List<Movie>) {
         scope.launch {
             val orderItem =
                 _state.value.orders.find { it.order.orderId == orderId } ?: return@launch

@@ -1,4 +1,4 @@
-package com.ivarvisser.cineapp.ui.feature.OrderHistory
+package com.ivarvisser.cineapp.ui.feature.orderHistory
 
 import com.ivarvisser.cineapp.data.dto.orders.response.CreateOrderResponse
 import com.ivarvisser.cineapp.data.dto.orders.response.TicketResponse
