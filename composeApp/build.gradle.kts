@@ -47,7 +47,7 @@ kotlin {
             implementation(libs.androidx.activity.compose)
             implementation(libs.ktor.client.android)
             implementation(libs.androidx.core.ktx)
-
+            implementation(libs.androidx.work.runtime.ktx)
         }
         commonMain.dependencies {
             implementation(libs.kotlinx.coroutines.core)
@@ -85,7 +85,7 @@ kotlin {
             //Coil
             implementation(libs.bundles.coil)
             //Webvieuw MultiPlatofrm
-            implementation("com.russhwolf:multiplatform-settings-no-arg:1.3.0")
+            implementation(libs.multiplatform.settings.no.arg)
 
             //Notifications
             api("io.github.mirzemehdi:kmpnotifier-local:2.0.0")

@@ -5,32 +5,35 @@ import com.ivarvisser.cineapp.data.repository.interfaces.MoviesRepository
 import com.ivarvisser.cineapp.data.repository.interfaces.OrdersRepository
 import com.ivarvisser.cineapp.data.repository.interfaces.ShowingsRepository
 import com.ivarvisser.cineapp.utils.ResultOf
-import com.mmk.kmpnotifier.local.LocalNotifications
+import com.mmk.kmpnotifier.KMPNotifier
+import com.mmk.kmpnotifier.local.localNotifier
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toLocalDateTime
 import net.codinux.log.Log
 import kotlin.time.Clock
-import kotlin.time.Instant
+import kotlin.time.Duration.Companion.milliseconds
+import kotlin.time.Duration.Companion.minutes
+
 
 class NotificationService(
     private val ordersRepository: OrdersRepository,
     private val showingsRepository: ShowingsRepository,
     private val moviesRepository: MoviesRepository
 ) {
+
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Main)
 
     fun startMonitoring() {
-        // Test notification
-        sendLocalNotification(
-            title = "Notification service started",
-            body = "Monitoring your orders and tickets..."
-        )
-
         // Subscribe to orders
         scope.launch {
-            ordersRepository.observeMyOrders().collect { orders ->
+            ordersRepository.observeMyOrders(1_800_000).collect { orders ->
+                Log.debug(loggerName = "NotificationService") { "Received ${orders.size} orders" }
                 processOrders(orders)
             }
         }
@@ -38,6 +41,13 @@ class NotificationService(
         // Monitor GPS
         scope.launch {
             // TODO: Logic to observe GPS coordinates and trigger local notifications
+        }
+    }
+
+    suspend fun checkAndScheduleNotifications() {
+        val orders = ordersRepository.getMyOrders()
+        if (orders is ResultOf.Success) {
+            processOrders(orders.value)
         }
     }
 
@@ -56,25 +66,52 @@ class NotificationService(
 
                 // 1. Schedule notification for show start
                 sendLocalNotification(
-                    title = "Your show for ${movie?.title ?: "your movie"} is starting!",
-                    body = "Don't forget to check in for order: ${order.orderCode}",
-                    scheduledAt = showing.startsAt
+                    titleContent = "Your show for ${movie?.title ?: "your movie"} is starting!",
+                    bodyContent = "Don't forget to check in for order: ${order.orderCode}",
+                    scheduledAtEpochMs = showing.startsAt.toEpochMilliseconds() - 1_800_000L
                 )
             }
         }
     }
 
-    private fun sendLocalNotification(
-        title: String,
-        body: String,
-        scheduledAt: Instant? = null
-    ) {
-        val notifier = LocalNotifications.notifier
-        notifier.notify {
-            this.title = title
-            this.body = body
-            this.scheduledAt =
-                scheduledAt?.toEpochMilliseconds() ?: Clock.System.now().toEpochMilliseconds()
+    fun startTestNotification() {
+        scope.launch {
+            while (isActive) {
+                sendLocalNotification(
+                    titleContent = "Test 15 Notification",
+                    bodyContent = "Scheduled at ${
+                        Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
+                    }",
+                    scheduledAtEpochMs = Clock.System.now().plus(15.minutes).toEpochMilliseconds()
+                )
+                sendLocalNotification(
+                    titleContent = "Test 1M Notification",
+                    bodyContent = "Scheduled at ${
+                        Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
+                    }",
+                    scheduledAtEpochMs = Clock.System.now().plus(1.minutes).toEpochMilliseconds()
+                )
+                delay(15_000.milliseconds)
+            }
         }
     }
+
+    fun sendLocalNotification(
+        titleContent: String,
+        bodyContent: String,
+        scheduledAtEpochMs: Long? = null
+    ) {
+        KMPNotifier.localNotifier.notify {
+            this.title = titleContent
+            this.body = bodyContent
+            if (scheduledAtEpochMs != null && scheduledAtEpochMs > Clock.System.now()
+                    .toEpochMilliseconds()
+            ) {
+                this.scheduledAt = scheduledAtEpochMs
+            }
+        }
+
+
+    }
 }
+
