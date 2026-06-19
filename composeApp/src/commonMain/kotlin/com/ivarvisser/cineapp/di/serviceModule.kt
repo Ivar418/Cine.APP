@@ -8,7 +8,9 @@ val serviceModule = module {
         NotificationService(
             ordersRepository = get(),
             showingsRepository = get(),
-            moviesRepository = get()
+            moviesRepository = get(),
+            locationService = get(),
+            ticketsRepository = get()
         )
     }
 }
