@@ -11,11 +11,8 @@ import androidx.core.app.NotificationCompat
 import com.ivarvisser.cineapp.R
 import com.ivarvisser.cineapp.notification.NotificationService
 import com.mmk.kmpnotifier.KMPNotifier
-import kotlinx.datetime.TimeZone
-import kotlinx.datetime.toLocalDateTime
 import net.codinux.log.Log
 import org.koin.android.ext.android.inject
-import kotlin.time.Duration.Companion.minutes
 
 class NotificationBackgroundService : Service() {
 
@@ -57,18 +54,6 @@ class NotificationBackgroundService : Service() {
 
         // Start the common monitoring logic
         notificationService.startMonitoring()
-        notificationService.startTestNotification()
-        notificationService.sendLocalNotification(
-            titleContent = "BackgroundServiceScheduledTestTItle",
-            bodyContent = "schedule ran at ${
-                kotlin.time.Clock.System.now().toLocalDateTime(
-                    TimeZone.currentSystemDefault()
-                )
-            } by the background notificationservice",
-            scheduledAtEpochMs = kotlin.time.Clock.System.now()
-                .plus(1.minutes)
-                .toEpochMilliseconds()
-        )
         return START_STICKY
     }
 

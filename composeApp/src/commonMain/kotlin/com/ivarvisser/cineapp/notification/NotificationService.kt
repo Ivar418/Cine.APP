@@ -10,14 +10,11 @@ import com.mmk.kmpnotifier.local.localNotifier
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 import net.codinux.log.Log
 import kotlin.time.Clock
-import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.Duration.Companion.minutes
 
 
@@ -47,6 +44,7 @@ class NotificationService(
     suspend fun checkAndScheduleNotifications() {
         val orders = ordersRepository.getMyOrders()
         if (orders is ResultOf.Success) {
+            Log.debug(loggerName = "NotificationService") { "Checking ${orders.value.size} orders" }
             processOrders(orders.value)
         }
     }
@@ -65,38 +63,31 @@ class NotificationService(
                 val movie = allMovies.find { it.id == showing.movieId }
 
                 // 1. Schedule notification for show start
-                sendLocalNotification(
-                    titleContent = "Your show for ${movie?.title ?: "your movie"} is starting!",
-                    bodyContent = "Don't forget to check in for order: ${order.orderCode}",
-                    scheduledAtEpochMs = showing.startsAt.toEpochMilliseconds() - 1_800_000L
-                )
+
+                //Shows notification that the showing is about to start within half an hour
+                if (showing.startsAt.toLocalDateTime(TimeZone.currentSystemDefault()) <= Clock.System.now()
+                        .plus(30.minutes).toLocalDateTime(TimeZone.currentSystemDefault())
+                ) {
+                    Log.debug(loggerName = "NotificationService") { "Showing ${showing.id} is about to start" }
+                    sendLocalNotification(
+                        titleContent = "Your show for ${movie?.title ?: "your movie"} is starting!",
+                        bodyContent = "Don't forget to check in for order: ${order.orderCode}",
+                    )
+                } else {
+                    Log.debug(loggerName = "NotificationService") { "Showing ${showing.id} is not about to start" }
+                    sendLocalNotification(
+                        titleContent = "Your show for ${movie?.title ?: "your movie"} is starting!",
+                        bodyContent = "Don't forget to check in for order: ${order.orderCode}",
+                        scheduledAtEpochMs = showing.startsAt.toEpochMilliseconds() - 1_800_000L
+                    )
+                }
+
             }
         }
     }
 
-    fun startTestNotification() {
-        scope.launch {
-            while (isActive) {
-                sendLocalNotification(
-                    titleContent = "Test 15 Notification",
-                    bodyContent = "Scheduled at ${
-                        Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
-                    }",
-                    scheduledAtEpochMs = Clock.System.now().plus(15.minutes).toEpochMilliseconds()
-                )
-                sendLocalNotification(
-                    titleContent = "Test 1M Notification",
-                    bodyContent = "Scheduled at ${
-                        Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
-                    }",
-                    scheduledAtEpochMs = Clock.System.now().plus(1.minutes).toEpochMilliseconds()
-                )
-                delay(15_000.milliseconds)
-            }
-        }
-    }
 
-    fun sendLocalNotification(
+    private fun sendLocalNotification(
         titleContent: String,
         bodyContent: String,
         scheduledAtEpochMs: Long? = null
