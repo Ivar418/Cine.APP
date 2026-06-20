@@ -13,12 +13,8 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ExitToApp
 import androidx.compose.material.icons.filled.AccountCircle
-import androidx.compose.material.icons.filled.Email
-import androidx.compose.material.icons.filled.Favorite
-import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material.icons.filled.Person
-import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
@@ -33,34 +29,25 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import cineapp.composeapp.generated.resources.Res
-import cineapp.composeapp.generated.resources.about_app
-import cineapp.composeapp.generated.resources.about_app_not_implemented
 import cineapp.composeapp.generated.resources.account_settings_title
-import cineapp.composeapp.generated.resources.app_settings_title
-import cineapp.composeapp.generated.resources.app_version_placeholder
 import cineapp.composeapp.generated.resources.back_button
 import cineapp.composeapp.generated.resources.edit_profile
 import cineapp.composeapp.generated.resources.edit_profile_desc
 import cineapp.composeapp.generated.resources.edit_profile_not_implemented
-import cineapp.composeapp.generated.resources.email_preferences
-import cineapp.composeapp.generated.resources.email_preferences_desc
-import cineapp.composeapp.generated.resources.email_prefs_not_implemented
-import cineapp.composeapp.generated.resources.favorites_description
-import cineapp.composeapp.generated.resources.favorites_title
-import cineapp.composeapp.generated.resources.general_settings
-import cineapp.composeapp.generated.resources.general_settings_desc
-import cineapp.composeapp.generated.resources.general_settings_not_implemented
+import cineapp.composeapp.generated.resources.location_notifications
+import cineapp.composeapp.generated.resources.location_notifications_desc
 import cineapp.composeapp.generated.resources.logout_button
-import cineapp.composeapp.generated.resources.notifications_not_implemented
 import cineapp.composeapp.generated.resources.notifications_settings
-import cineapp.composeapp.generated.resources.notifications_settings_desc
 import cineapp.composeapp.generated.resources.profile_email_placeholder
 import cineapp.composeapp.generated.resources.profile_name_placeholder
 import cineapp.composeapp.generated.resources.profile_picture_desc
+import cineapp.composeapp.generated.resources.show_time_notifications
+import cineapp.composeapp.generated.resources.show_time_notifications_desc
 import cineapp.composeapp.generated.resources.unknown_error
 import coil3.compose.AsyncImage
 import com.arkivanov.decompose.extensions.compose.subscribeAsState
 import com.ivarvisser.cineapp.ui.component.AccountSettingItem
+import com.ivarvisser.cineapp.ui.component.AccountSwitchSettingItem
 import com.ivarvisser.cineapp.ui.component.ErrorMessage
 import org.jetbrains.compose.resources.stringResource
 
@@ -143,12 +130,6 @@ fun AccountScreen(
             )
 
             val editProfileNotImplemented = stringResource(Res.string.edit_profile_not_implemented)
-            val emailPrefsNotImplemented = stringResource(Res.string.email_prefs_not_implemented)
-            val notificationsNotImplemented =
-                stringResource(Res.string.notifications_not_implemented)
-            val generalSettingsNotImplemented =
-                stringResource(Res.string.general_settings_not_implemented)
-            val aboutAppNotImplemented = stringResource(Res.string.about_app_not_implemented)
 
             AccountSettingItem(
                 icon = Icons.Default.Person,
@@ -158,49 +139,31 @@ fun AccountScreen(
                 },
                 subtitle = stringResource(Res.string.edit_profile_desc)
             )
-            AccountSettingItem(
-                icon = Icons.Default.Favorite,
-                title = stringResource(Res.string.favorites_title),
-                onclick = { component.onEvent(AccountAction.OnFavorites) },
-                subtitle = stringResource(Res.string.favorites_description)
-            )
-
-            AccountSettingItem(
-                icon = Icons.Default.Email,
-                title = stringResource(Res.string.email_preferences),
-                onclick = { component.setError(emailPrefsNotImplemented) },
-                subtitle = stringResource(Res.string.email_preferences_desc)
-            )
-
-            AccountSettingItem(
-                icon = Icons.Default.Notifications,
-                title = stringResource(Res.string.notifications_settings),
-                onclick = { component.setError(notificationsNotImplemented) },
-                subtitle = stringResource(Res.string.notifications_settings_desc)
-            )
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            // App Settings Section
+            // Notifications Section
             Text(
-                text = stringResource(Res.string.app_settings_title),
+                text = stringResource(Res.string.notifications_settings),
                 style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.Bold,
                 modifier = Modifier.padding(vertical = 8.dp)
             )
 
-            AccountSettingItem(
-                icon = Icons.Default.Settings,
-                title = stringResource(Res.string.general_settings),
-                onclick = { component.setError(generalSettingsNotImplemented) },
-                subtitle = stringResource(Res.string.general_settings_desc)
+            AccountSwitchSettingItem(
+                icon = Icons.Default.Notifications,
+                title = stringResource(Res.string.location_notifications),
+                subtitle = stringResource(Res.string.location_notifications_desc),
+                checked = state.locationNotificationsEnabled,
+                onCheckedChange = { component.onEvent(AccountAction.OnToggleLocationNotifications(it)) }
             )
 
-            AccountSettingItem(
-                icon = Icons.Default.Info,
-                title = stringResource(Res.string.about_app),
-                onclick = { component.setError(aboutAppNotImplemented) },
-                subtitle = stringResource(Res.string.app_version_placeholder)
+            AccountSwitchSettingItem(
+                icon = Icons.Default.Notifications,
+                title = stringResource(Res.string.show_time_notifications),
+                subtitle = stringResource(Res.string.show_time_notifications_desc),
+                checked = state.showTimeNotificationsEnabled,
+                onCheckedChange = { component.onEvent(AccountAction.OnToggleShowTimeNotifications(it)) }
             )
 
             Spacer(modifier = Modifier.height(24.dp))

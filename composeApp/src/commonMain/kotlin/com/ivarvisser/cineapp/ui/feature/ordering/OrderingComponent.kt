@@ -19,12 +19,12 @@ import com.ivarvisser.cineapp.data.repository.interfaces.ReservationsRepository
 import com.ivarvisser.cineapp.data.repository.interfaces.ShowingsRepository
 import com.ivarvisser.cineapp.data.repository.interfaces.UsersRepository
 import com.ivarvisser.cineapp.domain.Order
-import com.ivarvisser.cineapp.domain.Seat
 import com.ivarvisser.cineapp.domain.SeatFactory.buildSeatGrid
 import com.ivarvisser.cineapp.domain.enums.OrderTypes
 import com.ivarvisser.cineapp.domain.enums.PaymentMethods
 import com.ivarvisser.cineapp.domain.enums.PaymentStatuses
 import com.ivarvisser.cineapp.domain.enums.SeatType
+import com.ivarvisser.cineapp.getPlatform
 import com.ivarvisser.cineapp.mapper.toOrder
 import com.ivarvisser.cineapp.ui.component.openPaymentUrl
 import com.ivarvisser.cineapp.utils.ResultOf
@@ -237,27 +237,6 @@ class OrderingComponent(
         }
     }
 
-    private fun downloadPdf(bytes: ByteArray, fileName: String) {
-        // TODO: Implement platform-specific PDF download (using JS interop on Web, or file system on Android)
-        Log.debug(loggerName = "OrderingComponent") { "Placeholder: Downloading PDF $fileName (${bytes.size} bytes)" }
-    }
-
-    private fun confirmPayment(orderId: Int) {
-        scope.launch {
-            // TODO: Call API confirmPaymentAsync(orderId)
-            Log.debug(loggerName = "OrderingComponent") { "Placeholder: Confirming payment for order $orderId" }
-        }
-    }
-
-    fun loadOccupiedSeats(allSeats: List<Seat>) {
-        scope.launch {
-            _state.value.seatSelection.allSeats.forEach { seat ->
-
-
-            }
-        }
-
-    }
 
     fun buildPaymentUrl(
         order: Order
@@ -336,7 +315,7 @@ class OrderingComponent(
         scope.launch {
             when (val pdf = ordersRepository.getReservationPdfAsync(order.orderId)) {
                 is ResultOf.Success -> {
-                    downloadPdf(pdf.value, "reservering-${order.orderCode}.pdf")
+                    getPlatform().openFile(pdf.value, "reservering-${order.orderCode}.pdf")
                 }
 
                 is ResultOf.Failure -> {

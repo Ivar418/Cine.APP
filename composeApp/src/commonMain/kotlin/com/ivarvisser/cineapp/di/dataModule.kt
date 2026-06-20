@@ -17,12 +17,14 @@ import com.ivarvisser.cineapp.data.remote.api.network.interfaces.ReservationsApi
 import com.ivarvisser.cineapp.data.remote.api.network.interfaces.ShowingsApi
 import com.ivarvisser.cineapp.data.remote.api.network.interfaces.TicketsApi
 import com.ivarvisser.cineapp.data.remote.api.network.interfaces.UsersApi
+import com.ivarvisser.cineapp.data.repository.implementations.AppSettingsRepositoryImpl
 import com.ivarvisser.cineapp.data.repository.implementations.MoviesRepositoryImpl
 import com.ivarvisser.cineapp.data.repository.implementations.OrdersRepositoryImpl
 import com.ivarvisser.cineapp.data.repository.implementations.ReservationsRepositoryImpl
 import com.ivarvisser.cineapp.data.repository.implementations.ShowingsRepositoryImpl
 import com.ivarvisser.cineapp.data.repository.implementations.TicketsRepositoryImpl
 import com.ivarvisser.cineapp.data.repository.implementations.UsersRepositoryImpl
+import com.ivarvisser.cineapp.data.repository.interfaces.AppSettingsRepository
 import com.ivarvisser.cineapp.data.repository.interfaces.MoviesRepository
 import com.ivarvisser.cineapp.data.repository.interfaces.OrdersRepository
 import com.ivarvisser.cineapp.data.repository.interfaces.ReservationsRepository
@@ -56,4 +58,5 @@ val dataModule = module {
     single<OrdersRepository> { OrdersRepositoryImpl(ordersApi = get()) }
     single<ReservationsRepository> { ReservationsRepositoryImpl(reservationsApi = get()) }
     single<TicketsRepository> { TicketsRepositoryImpl(ticketsApi = get()) }
+    single<AppSettingsRepository> { AppSettingsRepositoryImpl(settings = get()) }
 }

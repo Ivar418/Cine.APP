@@ -8,7 +8,8 @@ import kotlinx.datetime.Instant
 data class OrderHistoryState(
     val orders: List<OrderWithDetails> = emptyList(),
     val isLoading: Boolean = false,
-    val error: String? = null
+    val error: String? = null,
+    val isLoggedIn: Boolean = true
 )
 
 data class OrderWithDetails(

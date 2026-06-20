@@ -39,8 +39,7 @@ fun App(root: RootComponent) {
                                 TabBarItem.Home,
                                 TabBarItem.MoviesOverviewScreen,
                                 TabBarItem.OrderHistory,
-                                TabBarItem.Account,
-                                TabBarItem.Settings
+                                TabBarItem.Account
                             ), onSelect = { root.showTabItem(it) }, root = root
                         )
                     }
@@ -51,8 +50,7 @@ fun App(root: RootComponent) {
                                 TabBarItem.Home,
                                 TabBarItem.MoviesOverviewScreen,
                                 TabBarItem.OrderHistory,
-                                TabBarItem.Account,
-                                TabBarItem.Settings
+                                TabBarItem.Account
                             ), onSelect = { root.showTabItem(it) }, root = root
                         )
                     }
@@ -76,7 +74,6 @@ fun App(root: RootComponent) {
                                 is RootComponent.Child.OrderHistory -> OrderHistoryScreen(component = instance.componentContext)
                                 is RootComponent.Child.Account -> AccountScreen(component = instance.componentContext)
                                 is RootComponent.Child.Favorites -> FavoritesScreen(component = instance.componentContext)
-                                is RootComponent.Child.Settings -> NotImplemented(component = instance.componentContext)
                                 is RootComponent.Child.NotImplemented -> NotImplemented(component = instance.componentContext)
                                 is RootComponent.Child.ShowingDetailsScreen -> ShowingDetailScreen(
                                     component = instance.componentContext,
