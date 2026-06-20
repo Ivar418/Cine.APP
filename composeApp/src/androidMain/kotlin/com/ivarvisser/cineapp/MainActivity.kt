@@ -18,7 +18,6 @@ import com.ivarvisser.cineapp.services.NotificationBackgroundService
 import com.ivarvisser.cineapp.ui.feature.navigation.RootComponent
 import com.mmk.kmpnotifier.KMPNotifier
 import com.mmk.kmpnotifier.extensions.onCreateOrOnNewIntent
-import com.mmk.kmpnotifier.permission.permissionUtil
 
 class MainActivity : ComponentActivity() {
 
@@ -42,13 +41,21 @@ class MainActivity : ComponentActivity() {
         }
     }
 
+    private val backgroundLocationPermissionLauncher = registerForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) { isGranted ->
+        if (isGranted) {
+            // Restart service to ensure background location is active
+            val intent = Intent(this, NotificationBackgroundService::class.java)
+            ContextCompat.startForegroundService(this, intent)
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
-        val permissionUtil by permissionUtil()
         enableEdgeToEdge()
         super.onCreate(savedInstanceState)
-        permissionUtil.askNotificationPermission()
+        requestInitialPermissions()
         requestExactAlarmPermissionIfNeeded()
-        requestLocationPermissionsIfNeeded()
         KMPNotifier.onCreateOrOnNewIntent(intent)
 
 
@@ -70,11 +77,15 @@ class MainActivity : ComponentActivity() {
         KMPNotifier.onCreateOrOnNewIntent(intent)
     }
 
-    private fun requestLocationPermissionsIfNeeded() {
+    private fun requestInitialPermissions() {
         val permissions = mutableListOf(
             Manifest.permission.ACCESS_FINE_LOCATION,
             Manifest.permission.ACCESS_COARSE_LOCATION
         )
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            permissions.add(Manifest.permission.POST_NOTIFICATIONS)
+        }
 
         val needsRequest = permissions.any {
             ContextCompat.checkSelfPermission(this, it) != PackageManager.PERMISSION_GRANTED
@@ -92,11 +103,7 @@ class MainActivity : ComponentActivity() {
                     Manifest.permission.ACCESS_BACKGROUND_LOCATION
                 ) != PackageManager.PERMISSION_GRANTED
             ) {
-                // For simplicity, we just use a one-off launcher here if needed.
-                // Note: Better to handle this with its own registerForActivityResult if you need the result.
-                val backgroundLauncher =
-                    registerForActivityResult(ActivityResultContracts.RequestPermission()) {}
-                backgroundLauncher.launch(Manifest.permission.ACCESS_BACKGROUND_LOCATION)
+                backgroundLocationPermissionLauncher.launch(Manifest.permission.ACCESS_BACKGROUND_LOCATION)
             }
         }
     }

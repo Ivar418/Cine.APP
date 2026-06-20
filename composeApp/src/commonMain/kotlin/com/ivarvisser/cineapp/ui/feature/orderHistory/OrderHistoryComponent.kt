@@ -68,15 +68,47 @@ class OrderHistoryComponent(
         scope.launch {
             val orderItem =
                 _state.value.orders.find { it.order.orderId == orderId } ?: return@launch
-            val showingId = orderItem.order.tickets.firstOrNull()?.showingId ?: return@launch
+
+            // The API doesn't always fill the tickets in the order response, so we try to get them manually
+            // if they are missing to find the showingId and eventually the movie.
+            val tickets = if (orderItem.order.tickets.isEmpty()) {
+                val ticketsResult = ticketsRepository.getTicketsByOrderIdAsync(orderId)
+                if (ticketsResult is ResultOf.Success) {
+                    // Update tickets in state for this order so they are already loaded when expanded
+                    _state.update { current ->
+                        current.copy(orders = current.orders.map {
+                            if (it.order.orderId == orderId) it.copy(tickets = ticketsResult.value) else it
+                        })
+                    }
+                    ticketsResult.value.map { it.showingId }
+                } else {
+                    emptyList()
+                }
+            } else {
+                orderItem.order.tickets.map { it.showingId }
+            }
+
+            val showingId = tickets.firstOrNull() ?: return@launch
 
             val showingResult = showingsRepository.getShowingById(showingId)
             if (showingResult is ResultOf.Success) {
-                val movieId = showingResult.value.movieId
-                val movie = allMovies.find { it.id == movieId }
+                val showing = showingResult.value
+                val movieId = showing.movieId
+                var movie = allMovies.find { it.id == movieId }
+
+                if (movie == null) {
+                    val movieResult = moviesRepository.getMovieById(movieId)
+                    if (movieResult is ResultOf.Success) {
+                        movie = movieResult.value
+                    }
+                }
+
                 _state.update { current ->
                     current.copy(orders = current.orders.map {
-                        if (it.order.orderId == orderId) it.copy(movie = movie) else it
+                        if (it.order.orderId == orderId) it.copy(
+                            movie = movie,
+                            startsAt = showing.startsAt
+                        ) else it
                     })
                 }
             }

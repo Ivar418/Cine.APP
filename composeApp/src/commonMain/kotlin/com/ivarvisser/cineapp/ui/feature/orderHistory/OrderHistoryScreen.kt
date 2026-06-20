@@ -50,6 +50,8 @@ import com.arkivanov.decompose.extensions.compose.subscribeAsState
 import com.ivarvisser.cineapp.data.dto.orders.response.TicketResponse
 import com.ivarvisser.cineapp.domain.enums.OrderTypes
 import com.ivarvisser.cineapp.ui.component.ErrorMessage
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toLocalDateTime
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 
@@ -114,7 +116,7 @@ fun OrderItem(item: OrderWithDetails, component: OrderHistoryComponent) {
                 // Resolved Movie Poster
                 if (item.movie != null) {
                     AsyncImage(
-                        model = "https://image.tmdb.org/t/p/w92/" + item.movie.posterPath,
+                        model = "https://image.tmdb.org/t/p/w154/" + item.movie.posterPath,
                         contentDescription = item.movie.title,
                         modifier = Modifier.size(60.dp, 90.dp).clip(RoundedCornerShape(4.dp))
                     )
@@ -130,6 +132,19 @@ fun OrderItem(item: OrderWithDetails, component: OrderHistoryComponent) {
                         style = MaterialTheme.typography.titleMedium,
                         fontWeight = FontWeight.Bold
                     )
+
+                    item.startsAt?.let { startsAt ->
+                        val localDateTime =
+                            startsAt.toLocalDateTime(TimeZone.currentSystemDefault())
+                        Text(
+                            text = "${localDateTime.date} ${
+                                localDateTime.time.hour.toString().padStart(2, '0')
+                            }:${localDateTime.time.minute.toString().padStart(2, '0')}",
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                    }
+
                     Text(
                         text = "€${order.totalAmount}",
                         style = MaterialTheme.typography.bodyLarge,
