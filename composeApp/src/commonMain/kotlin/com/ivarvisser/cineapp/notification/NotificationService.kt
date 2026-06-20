@@ -1,6 +1,7 @@
 package com.ivarvisser.cineapp.notification
 
 import com.ivarvisser.cineapp.data.dto.orders.response.CreateOrderResponse
+import com.ivarvisser.cineapp.data.repository.interfaces.AppSettingsRepository
 import com.ivarvisser.cineapp.data.repository.interfaces.MoviesRepository
 import com.ivarvisser.cineapp.data.repository.interfaces.OrdersRepository
 import com.ivarvisser.cineapp.data.repository.interfaces.ShowingsRepository
@@ -22,7 +23,8 @@ class NotificationService(
     private val showingsRepository: ShowingsRepository,
     private val moviesRepository: MoviesRepository,
     private val locationService: LocationService,
-    private val ticketsRepository: TicketsRepository
+    private val ticketsRepository: TicketsRepository,
+    private val appSettingsRepository: AppSettingsRepository
 ) {
 
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Main)
@@ -35,11 +37,9 @@ class NotificationService(
         if (ordersJob == null || ordersJob?.isActive == false) {
             ordersJob = scope.launch {
                 ordersRepository.observeMyOrders(1_800_000).collect { orders ->
+                    if (!appSettingsRepository.showTimeNotificationsEnabled.value) return@collect
                     Log.debug(loggerName = "NotificationService") { "Received ${orders.size} orders" }
-                    sendLocalNotification(
-                        titleContent = "Just checked for new orders via the monitoring!",
-                        bodyContent = "Just checked for new orders via the monitoring",
-                    )
+
                     processOrders(orders)
                 }
             }
@@ -49,7 +49,9 @@ class NotificationService(
         if (locationJob == null || locationJob?.isActive == false) {
             locationJob = scope.launch {
                 locationService.observeLocation().collect { location ->
-                    checkLocationAndNotify(location.latitude, location.longitude)
+                    if (appSettingsRepository.locationNotificationsEnabled.value) {
+                        checkLocationAndNotify(location.latitude, location.longitude)
+                    }
                 }
             }
         }
@@ -87,10 +89,7 @@ class NotificationService(
     }
 
     suspend fun checkAndScheduleNotifications() {
-        sendLocalNotification(
-            titleContent = "Just checked for new orders via the worker!",
-            bodyContent = "Just checked for new orders via the worker!",
-        )
+        if (!appSettingsRepository.showTimeNotificationsEnabled.value) return
         val orders = ordersRepository.getMyOrders()
         Log.debug(loggerName = "NotificationService") { "Fetched ${if (orders is ResultOf.Success) orders.value.size else 0} orders for notification scheduling" }
         if (orders is ResultOf.Success) {
@@ -134,9 +133,12 @@ class NotificationService(
                             "Showing ${showing.id} starts within 30 minutes"
                         }
 
+                        val remainingMinutes = (showing.startsAt - now).inWholeMinutes
+                        val hallName = showing.auditorium?.name ?: "onbekende zaal"
+
                         sendLocalNotification(
-                            titleContent = "Your show for ${movie?.title ?: "your movie"} is starting!",
-                            bodyContent = "Don't forget to check in for order: ${order.orderCode}",
+                            titleContent = "Je voorstelling voor ${movie?.title ?: "je film"} begint bijna!",
+                            bodyContent = "Zaal: $hallName. De film start over $remainingMinutes minuten. (Order: ${order.orderCode})",
                             scheduledAtEpochMs = null
                         )
                     }
@@ -145,14 +147,15 @@ class NotificationService(
                     else -> {
                         val notificationTime =
                             showing.startsAt.toEpochMilliseconds() - 30.minutes.inWholeMilliseconds
+                        val hallName = showing.auditorium?.name ?: "onbekende zaal"
 
                         Log.debug(loggerName = "NotificationService") {
                             "Scheduling notification for showing ${showing.id}"
                         }
 
                         sendLocalNotification(
-                            titleContent = "Your show for ${movie?.title ?: "your movie"} is starting!",
-                            bodyContent = "Don't forget to check in for order: ${order.orderCode}",
+                            titleContent = "Je voorstelling voor ${movie?.title ?: "je film"} begint bijna!",
+                            bodyContent = "Zaal: $hallName. De film start over 30 minuten. (Order: ${order.orderCode})",
                             scheduledAtEpochMs = notificationTime
                         )
                     }

@@ -10,7 +10,8 @@ val serviceModule = module {
             showingsRepository = get(),
             moviesRepository = get(),
             locationService = get(),
-            ticketsRepository = get()
+            ticketsRepository = get(),
+            appSettingsRepository = get()
         )
     }
 }

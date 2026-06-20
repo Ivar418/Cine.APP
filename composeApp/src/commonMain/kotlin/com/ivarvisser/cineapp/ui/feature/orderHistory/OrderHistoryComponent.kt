@@ -10,6 +10,7 @@ import com.ivarvisser.cineapp.data.repository.interfaces.MoviesRepository
 import com.ivarvisser.cineapp.data.repository.interfaces.OrdersRepository
 import com.ivarvisser.cineapp.data.repository.interfaces.ShowingsRepository
 import com.ivarvisser.cineapp.data.repository.interfaces.TicketsRepository
+import com.ivarvisser.cineapp.data.repository.interfaces.UsersRepository
 import com.ivarvisser.cineapp.domain.Movie
 import com.ivarvisser.cineapp.getPlatform
 import com.ivarvisser.cineapp.utils.ResultOf
@@ -22,7 +23,9 @@ class OrderHistoryComponent(
     private val moviesRepository: MoviesRepository,
     private val showingsRepository: ShowingsRepository,
     private val ticketsRepository: TicketsRepository,
-    private val onGoBack: () -> Unit
+    private val usersRepository: UsersRepository,
+    private val onGoBack: () -> Unit,
+    private val onNavigateToLogin: () -> Unit
 ) : ComponentContext by componentContext {
 
     private val scope = coroutineScope()
@@ -30,9 +33,19 @@ class OrderHistoryComponent(
     val state: Value<OrderHistoryState> = _state
 
     init {
-        loadOrders()
+        checkLoginStatus()
         doOnResume {
-            loadOrders()
+            checkLoginStatus()
+        }
+    }
+
+    private fun checkLoginStatus() {
+        scope.launch {
+            val loggedIn = usersRepository.isLoggedIn()
+            _state.update { it.copy(isLoggedIn = loggedIn) }
+            if (loggedIn) {
+                loadOrders()
+            }
         }
     }
 
@@ -179,5 +192,9 @@ class OrderHistoryComponent(
 
     fun onBack() {
         onGoBack()
+    }
+
+    fun onLogin() {
+        onNavigateToLogin()
     }
 }

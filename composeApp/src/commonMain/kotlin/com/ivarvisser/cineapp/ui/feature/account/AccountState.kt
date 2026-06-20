@@ -8,6 +8,8 @@ data class AccountState(
     val user: User? = null,
     val favoriteMovies: List<Int> = emptyList(),
     val isRegistering: Boolean = false,
+    val locationNotificationsEnabled: Boolean = true,
+    val showTimeNotificationsEnabled: Boolean = true,
 ) {
     val hasError: Boolean get() = error != null
     val isLoggedIn: Boolean get() = user != null

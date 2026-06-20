@@ -41,6 +41,10 @@
     <string name="privacy_security_desc">Wachtwoord- en beveiligingsinstellingen</string>
     <string name="notifications_settings">Notificaties</string>
     <string name="notifications_settings_desc">Configureer app-notificaties</string>
+    <string name="location_notifications">Locatie Notificaties</string>
+    <string name="location_notifications_desc">Ontvang notificaties wanneer je in de buurt van de bioscoop bent</string>
+    <string name="show_time_notifications">Voorstelling Notificaties</string>
+    <string name="show_time_notifications_desc">Ontvang notificaties wanneer je voorstelling bijna begint</string>
     <string name="app_settings_title">App Instellingen</string>
     <string name="general_settings">Algemene Instellingen</string>
     <string name="general_settings_desc">App voorkeuren en configuraties</string>
@@ -100,6 +104,7 @@
 
     <!-- Ordering -->
     <string name="confirm_seats">Bevestig Stoelen</string>
+    <string name="login_to_view_orders">Log in om je bestellingen te bekijken.</string>
     <string name="login_to_continue">Log in om verder te gaan met je bestelling.</string>
     <string name="back_button">Terug</string>
     <string name="booking_overview">Boeking Overzicht</string>

@@ -38,6 +38,8 @@ import cineapp.composeapp.generated.resources.Res
 import cineapp.composeapp.generated.resources.arrow_back_24px
 import cineapp.composeapp.generated.resources.back_button
 import cineapp.composeapp.generated.resources.download_pdf_desc
+import cineapp.composeapp.generated.resources.login_button
+import cineapp.composeapp.generated.resources.login_to_view_orders
 import cineapp.composeapp.generated.resources.my_orders
 import cineapp.composeapp.generated.resources.no_orders
 import cineapp.composeapp.generated.resources.no_tickets_found
@@ -79,7 +81,20 @@ fun OrderHistoryScreen(component: OrderHistoryComponent) {
             )
         }
 
-        if (state.isLoading) {
+        if (!state.isLoggedIn) {
+            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                    Text(
+                        text = stringResource(Res.string.login_to_view_orders),
+                        style = MaterialTheme.typography.bodyLarge,
+                        modifier = Modifier.padding(16.dp)
+                    )
+                    Button(onClick = { component.onLogin() }) {
+                        Text(stringResource(Res.string.login_button))
+                    }
+                }
+            }
+        } else if (state.isLoading) {
             Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                 CircularProgressIndicator()
             }

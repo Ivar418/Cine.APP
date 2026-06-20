@@ -3,7 +3,6 @@ package com.ivarvisser.cineapp.ui.feature.navigation
 import cineapp.composeapp.generated.resources.Res
 import cineapp.composeapp.generated.resources.not_implemented_button
 import cineapp.composeapp.generated.resources.not_implemented_generic
-import cineapp.composeapp.generated.resources.not_implemented_settings
 import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.router.stack.StackNavigation
 import com.arkivanov.decompose.router.stack.bringToFront
@@ -56,7 +55,6 @@ class RootComponent(
             Configuration.MoviesOverviewScreen, is Configuration.MovieDetailsScreen, is Configuration.ShowingDetailsScreen, is Configuration.OrderingScreen -> TabBarItem.MoviesOverviewScreen // Both map to the same tab
             Configuration.OrderHistory -> TabBarItem.OrderHistory
             Configuration.Account, Configuration.Favorites -> TabBarItem.Account
-            Configuration.Settings -> TabBarItem.Settings
             else -> TabBarItem.Home
         }
     }
@@ -110,6 +108,7 @@ class RootComponent(
                     AccountComponent(
                         componentContext = context,
                         usersRepository = getKoin().get(),
+                        appSettingsRepository = getKoin().get(),
                         onGoBack = { navigation.pop() },
                         onNavigateToFavorites = { navigation.bringToFront(Configuration.Favorites) }
                     )
@@ -138,18 +137,9 @@ class RootComponent(
                         moviesRepository = getKoin().get(),
                         showingsRepository = getKoin().get(),
                         onGoBack = { navigation.pop() },
-                        ticketsRepository = getKoin().get()
-                    )
-                )
-            }
-
-            is Configuration.Settings -> {
-                Child.Settings(
-                    NotImplementedComponent(
-                        componentContext = context,
-                        onRetry = { navigation.pop() },
-                        textRes = Res.string.not_implemented_settings,
-                        buttonTextRes = Res.string.not_implemented_button
+                        ticketsRepository = getKoin().get(),
+                        usersRepository = getKoin().get(),
+                        onNavigateToLogin = { navigation.bringToFront(Configuration.Account) }
                     )
                 )
             }
@@ -214,7 +204,6 @@ class RootComponent(
             is TabBarItem.MoviesOverviewScreen -> navigation.bringToFront(Configuration.MoviesOverviewScreen)
             is TabBarItem.OrderHistory -> navigation.bringToFront(Configuration.OrderHistory)
             is TabBarItem.Account -> navigation.bringToFront(Configuration.Account)
-            is TabBarItem.Settings -> navigation.bringToFront(Configuration.Settings)
         }
     }
 
@@ -229,7 +218,6 @@ class RootComponent(
         data class OrderHistory(val componentContext: OrderHistoryComponent) : Child()
         data class Account(val componentContext: AccountComponent) : Child()
         data class Favorites(val componentContext: FavoritesComponent) : Child()
-        data class Settings(val componentContext: NotImplementedComponent) : Child()
         data class NotImplemented(val componentContext: NotImplementedComponent) : Child()
         data class MovieDetailsScreen(val componentContext: MovieDetailsComponent) : Child()
         data class ShowingDetailsScreen(val componentContext: ShowingDetailComponent) : Child()
@@ -244,9 +232,6 @@ class RootComponent(
 
         @Serializable
         data object MoviesOverviewScreen : Configuration()
-
-        @Serializable
-        data object Settings : Configuration()
 
         @Serializable
         data object Account : Configuration()

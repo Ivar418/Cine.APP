@@ -12,4 +12,6 @@ sealed interface AccountAction {
     data object OnChangeName : AccountAction
     data object OnChangePhoto : AccountAction
     data object OnFavorites : AccountAction
+    data class OnToggleLocationNotifications(val enabled: Boolean) : AccountAction
+    data class OnToggleShowTimeNotifications(val enabled: Boolean) : AccountAction
 }
