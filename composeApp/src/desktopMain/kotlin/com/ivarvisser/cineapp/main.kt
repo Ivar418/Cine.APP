@@ -14,6 +14,10 @@ import com.arkivanov.essenty.lifecycle.LifecycleRegistry
 import com.arkivanov.essenty.lifecycle.create
 import com.ivarvisser.cineapp.di.initKoin
 import com.ivarvisser.cineapp.ui.feature.navigation.RootComponent
+import com.mmk.kmpnotifier.KMPNotifier
+import com.mmk.kmpnotifier.extensions.composeDesktopResourcesPath
+import com.mmk.kmpnotifier.local.LocalNotifications
+import com.mmk.kmpnotifier.notification.configuration.NotificationPlatformConfiguration
 import com.multiplatform.webview.util.addTempDirectoryRemovalHook
 import dev.datlag.kcef.KCEF
 import kotlinx.coroutines.Dispatchers
@@ -25,6 +29,13 @@ import java.io.File
 import kotlin.math.max
 
 fun main() = application {
+    KMPNotifier.initialize(
+        NotificationPlatformConfiguration.Desktop(
+            showPushNotification = true,
+            notificationIconPath = composeDesktopResourcesPath() + File.separator + "logo.png"
+        ),
+        LocalNotifications,
+    )
     addTempDirectoryRemovalHook()
     initKoin {
         printLogger()

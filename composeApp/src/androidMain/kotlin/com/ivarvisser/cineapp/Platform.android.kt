@@ -7,9 +7,10 @@ import net.codinux.log.Log
 import net.codinux.log.android.AndroidContext
 import java.io.File
 
-class AndroidPlatform : Platform {
+class AndroidPlatform() : Platform {
     override val name: String = "Android ${Build.VERSION.SDK_INT}"
     override val isMobile: Boolean = true
+    override val isAndroid: Boolean = true
 
     override fun openFile(bytes: ByteArray, fileName: String) {
         val context = AndroidContext.applicationContext ?: return

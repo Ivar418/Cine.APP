@@ -1,4 +1,4 @@
-package com.ivarvisser.cineapp.ui.feature.OrderHistory
+package com.ivarvisser.cineapp.ui.feature.orderHistory
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.clickable
@@ -36,12 +36,24 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import cineapp.composeapp.generated.resources.Res
 import cineapp.composeapp.generated.resources.arrow_back_24px
+import cineapp.composeapp.generated.resources.back_button
+import cineapp.composeapp.generated.resources.download_pdf_desc
+import cineapp.composeapp.generated.resources.my_orders
+import cineapp.composeapp.generated.resources.no_orders
+import cineapp.composeapp.generated.resources.no_tickets_found
+import cineapp.composeapp.generated.resources.open_pdf_button
+import cineapp.composeapp.generated.resources.order_number_format
+import cineapp.composeapp.generated.resources.seat_ticket_format
+import cineapp.composeapp.generated.resources.status_label_format
 import coil3.compose.AsyncImage
 import com.arkivanov.decompose.extensions.compose.subscribeAsState
 import com.ivarvisser.cineapp.data.dto.orders.response.TicketResponse
 import com.ivarvisser.cineapp.domain.enums.OrderTypes
 import com.ivarvisser.cineapp.ui.component.ErrorMessage
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toLocalDateTime
 import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun OrderHistoryScreen(component: OrderHistoryComponent) {
@@ -55,13 +67,13 @@ fun OrderHistoryScreen(component: OrderHistoryComponent) {
             Button(onClick = { component.onBack() }) {
                 Icon(
                     painter = painterResource(Res.drawable.arrow_back_24px),
-                    contentDescription = "Back"
+                    contentDescription = stringResource(Res.string.back_button)
                 )
-                Text("Terug")
+                Text(stringResource(Res.string.back_button))
             }
             Spacer(modifier = Modifier.weight(1f))
             Text(
-                "Mijn Bestellingen",
+                stringResource(Res.string.my_orders),
                 style = MaterialTheme.typography.headlineSmall,
                 modifier = Modifier.padding(end = 16.dp)
             )
@@ -75,7 +87,7 @@ fun OrderHistoryScreen(component: OrderHistoryComponent) {
             ErrorMessage(message = state.error!!, onRetry = { component.loadOrders() })
         } else if (state.orders.isEmpty()) {
             Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                Text("Je hebt nog geen bestellingen.")
+                Text(stringResource(Res.string.no_orders))
             }
         } else {
             LazyColumn(modifier = Modifier.fillMaxSize().padding(horizontal = 16.dp)) {
@@ -104,7 +116,7 @@ fun OrderItem(item: OrderWithDetails, component: OrderHistoryComponent) {
                 // Resolved Movie Poster
                 if (item.movie != null) {
                     AsyncImage(
-                        model = "https://image.tmdb.org/t/p/w92/" + item.movie.posterPath,
+                        model = "https://image.tmdb.org/t/p/w154/" + item.movie.posterPath,
                         contentDescription = item.movie.title,
                         modifier = Modifier.size(60.dp, 90.dp).clip(RoundedCornerShape(4.dp))
                     )
@@ -113,17 +125,36 @@ fun OrderItem(item: OrderWithDetails, component: OrderHistoryComponent) {
 
                 Column(modifier = Modifier.weight(1f)) {
                     Text(
-                        text = item.movie?.title ?: "Bestelling #${order.orderCode}",
+                        text = item.movie?.title ?: stringResource(
+                            Res.string.order_number_format,
+                            order.orderCode
+                        ),
                         style = MaterialTheme.typography.titleMedium,
                         fontWeight = FontWeight.Bold
                     )
+
+                    item.startsAt?.let { startsAt ->
+                        val localDateTime =
+                            startsAt.toLocalDateTime(TimeZone.currentSystemDefault())
+                        Text(
+                            text = "${localDateTime.date} ${
+                                localDateTime.time.hour.toString().padStart(2, '0')
+                            }:${localDateTime.time.minute.toString().padStart(2, '0')}",
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                    }
+
                     Text(
                         text = "€${order.totalAmount}",
                         style = MaterialTheme.typography.bodyLarge,
                         color = MaterialTheme.colorScheme.primary
                     )
                     Text(
-                        text = "Status: ${order.paymentStatus}",
+                        text = stringResource(
+                            Res.string.status_label_format,
+                            order.paymentStatus.name
+                        ),
                         style = MaterialTheme.typography.bodySmall
                     )
                 }
@@ -133,7 +164,7 @@ fun OrderItem(item: OrderWithDetails, component: OrderHistoryComponent) {
                     IconButton(onClick = { component.downloadAndOpenOrderPdf(order.orderId) }) {
                         Icon(
                             imageVector = Icons.Default.PictureAsPdf,
-                            contentDescription = "Download PDF",
+                            contentDescription = stringResource(Res.string.download_pdf_desc),
                             tint = if (item.order.orderType == OrderTypes.Reservation) Color.Red else Color.Blue,
                             modifier = Modifier.size(24.dp)
                         )
@@ -153,7 +184,7 @@ fun OrderItem(item: OrderWithDetails, component: OrderHistoryComponent) {
                         }
                     } else if (item.tickets.isEmpty()) {
                         Text(
-                            text = "Geen tickets gevonden voor deze bestelling.",
+                            text = stringResource(Res.string.no_tickets_found),
                             style = MaterialTheme.typography.bodySmall,
                             modifier = Modifier.padding(vertical = 8.dp)
                         )
@@ -175,7 +206,7 @@ fun OrderItem(item: OrderWithDetails, component: OrderHistoryComponent) {
                     ) {
                         Icon(Icons.Default.PictureAsPdf, contentDescription = null)
                         Spacer(Modifier.width(8.dp))
-                        Text("Open Ticket (PDF)")
+                        Text(stringResource(Res.string.open_pdf_button))
                     }
                 }
             }
@@ -191,12 +222,16 @@ fun TicketItem(ticket: TicketResponse) {
     ) {
         Column(modifier = Modifier.weight(1f)) {
             Text(
-                text = "Stoel ${ticket.seatNumber} (${ticket.ticketType})",
+                text = stringResource(
+                    Res.string.seat_ticket_format,
+                    ticket.seatNumber,
+                    ticket.ticketType
+                ),
                 style = MaterialTheme.typography.bodyMedium,
                 fontWeight = FontWeight.SemiBold
             )
             Text(
-                text = "Status: ${ticket.status}",
+                text = stringResource(Res.string.status_label_format, ticket.status),
                 style = MaterialTheme.typography.bodySmall,
                 color = if (ticket.status == "Valid") Color(0xFF4CAF50) else MaterialTheme.colorScheme.error
             )

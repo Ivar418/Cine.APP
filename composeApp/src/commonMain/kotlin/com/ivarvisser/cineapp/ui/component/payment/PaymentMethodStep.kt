@@ -19,12 +19,14 @@ import androidx.compose.ui.unit.dp
 import cineapp.composeapp.generated.resources.Res
 import cineapp.composeapp.generated.resources.account_balance
 import cineapp.composeapp.generated.resources.card_giftcard
+import cineapp.composeapp.generated.resources.choose_payment_method
 import cineapp.composeapp.generated.resources.language
 import cineapp.composeapp.generated.resources.schedule
 import com.ivarvisser.cineapp.domain.enums.PaymentMethods
 import com.ivarvisser.cineapp.ui.feature.ordering.OrderingAction
 import com.ivarvisser.cineapp.ui.feature.ordering.OrderingUiState
 import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun PaymentMethodStep(
@@ -33,7 +35,10 @@ fun PaymentMethodStep(
     Column(
         modifier = Modifier.fillMaxSize()
     ) {
-        Text(text = "Choose Payment Method", style = MaterialTheme.typography.titleLarge)
+        Text(
+            text = stringResource(Res.string.choose_payment_method),
+            style = MaterialTheme.typography.titleLarge
+        )
         Spacer(modifier = Modifier.height(16.dp))
         Column(
             modifier = Modifier.fillMaxSize(),

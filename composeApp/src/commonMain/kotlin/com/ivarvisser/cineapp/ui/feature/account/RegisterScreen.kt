@@ -28,6 +28,24 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
+import cineapp.composeapp.generated.resources.Res
+import cineapp.composeapp.generated.resources.already_have_account
+import cineapp.composeapp.generated.resources.confirm_password
+import cineapp.composeapp.generated.resources.create_account_title
+import cineapp.composeapp.generated.resources.email
+import cineapp.composeapp.generated.resources.email_required
+import cineapp.composeapp.generated.resources.first_name
+import cineapp.composeapp.generated.resources.invalid_email
+import cineapp.composeapp.generated.resources.last_name
+import cineapp.composeapp.generated.resources.password
+import cineapp.composeapp.generated.resources.password_min_length
+import cineapp.composeapp.generated.resources.password_required
+import cineapp.composeapp.generated.resources.passwords_do_not_match
+import cineapp.composeapp.generated.resources.register_button
+import cineapp.composeapp.generated.resources.required_field
+import cineapp.composeapp.generated.resources.username
+import cineapp.composeapp.generated.resources.username_required
+import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun RegisterScreen(
@@ -52,6 +70,15 @@ fun RegisterScreen(
 
     val emailRegex = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[a-z]{2,}$".toRegex()
 
+    val usernameRequiredMsg = stringResource(Res.string.username_required)
+    val firstNameRequiredMsg = stringResource(Res.string.required_field)
+    val lastNameRequiredMsg = stringResource(Res.string.required_field)
+    val emailRequiredMsg = stringResource(Res.string.email_required)
+    val invalidEmailMsg = stringResource(Res.string.invalid_email)
+    val passwordRequiredMsg = stringResource(Res.string.password_required)
+    val passwordMinLengthMsg = stringResource(Res.string.password_min_length)
+    val passwordsDoNotMatchMsg = stringResource(Res.string.passwords_do_not_match)
+
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -61,7 +88,7 @@ fun RegisterScreen(
     ) {
 
         Text(
-            text = "Create Account",
+            text = stringResource(Res.string.create_account_title),
             style = MaterialTheme.typography.headlineMedium
         )
 
@@ -73,7 +100,7 @@ fun RegisterScreen(
                 username = it
                 usernameError = null
             },
-            label = { Text("Username") },
+            label = { Text(stringResource(Res.string.username)) },
             singleLine = true,
             isError = usernameError != null,
             supportingText = usernameError?.let { { Text(it) } },
@@ -89,7 +116,7 @@ fun RegisterScreen(
                     firstName = it
                     firstNameError = null
                 },
-                label = { Text("First Name") },
+                label = { Text(stringResource(Res.string.first_name)) },
                 singleLine = true,
                 isError = firstNameError != null,
                 supportingText = firstNameError?.let { { Text(it) } },
@@ -102,7 +129,7 @@ fun RegisterScreen(
                     lastName = it
                     lastNameError = null
                 },
-                label = { Text("Last Name") },
+                label = { Text(stringResource(Res.string.last_name)) },
                 singleLine = true,
                 isError = lastNameError != null,
                 supportingText = lastNameError?.let { { Text(it) } },
@@ -118,7 +145,7 @@ fun RegisterScreen(
                 email = it
                 emailError = null
             },
-            label = { Text("Email") },
+            label = { Text(stringResource(Res.string.email)) },
             singleLine = true,
             isError = emailError != null,
             supportingText = emailError?.let { { Text(it) } },
@@ -133,7 +160,7 @@ fun RegisterScreen(
                 password = it
                 passwordError = null
             },
-            label = { Text("Password") },
+            label = { Text(stringResource(Res.string.password)) },
             singleLine = true,
             visualTransformation = if (passwordVisible)
                 VisualTransformation.None
@@ -165,7 +192,7 @@ fun RegisterScreen(
                 confirmPassword = it
                 confirmPasswordError = null
             },
-            label = { Text("Confirm Password") },
+            label = { Text(stringResource(Res.string.confirm_password)) },
             singleLine = true,
             visualTransformation = if (confirmPasswordVisible)
                 VisualTransformation.None
@@ -193,21 +220,21 @@ fun RegisterScreen(
 
         Button(
             onClick = {
-                usernameError = if (username.isBlank()) "Username is required" else null
-                firstNameError = if (firstName.isBlank()) "Required" else null
-                lastNameError = if (lastName.isBlank()) "Required" else null
+                usernameError = if (username.isBlank()) usernameRequiredMsg else null
+                firstNameError = if (firstName.isBlank()) firstNameRequiredMsg else null
+                lastNameError = if (lastName.isBlank()) lastNameRequiredMsg else null
                 emailError = when {
-                    email.isBlank() -> "Email is required"
-                    !email.matches(emailRegex) -> "Invalid email format"
+                    email.isBlank() -> emailRequiredMsg
+                    !email.matches(emailRegex) -> invalidEmailMsg
                     else -> null
                 }
                 passwordError = when {
-                    password.isBlank() -> "Password is required"
-                    password.length < 6 -> "Minimum 6 characters"
+                    password.isBlank() -> passwordRequiredMsg
+                    password.length < 6 -> passwordMinLengthMsg
                     else -> null
                 }
                 confirmPasswordError = when {
-                    confirmPassword != password -> "Passwords do not match"
+                    confirmPassword != password -> passwordsDoNotMatchMsg
                     else -> null
                 }
 
@@ -219,7 +246,7 @@ fun RegisterScreen(
             },
             modifier = Modifier.fillMaxWidth()
         ) {
-            Text("Register")
+            Text(stringResource(Res.string.register_button))
         }
 
         Spacer(modifier = Modifier.height(8.dp))
@@ -227,7 +254,7 @@ fun RegisterScreen(
         TextButton(
             onClick = onBackClick
         ) {
-            Text("Already have an account? Login")
+            Text(stringResource(Res.string.already_have_account))
         }
     }
 }

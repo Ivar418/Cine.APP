@@ -7,9 +7,10 @@ import org.w3c.dom.url.URL
 import org.w3c.files.Blob
 import org.w3c.files.BlobPropertyBag
 
-class WasmPlatform: Platform {
+class WasmPlatform : Platform {
     override val name: String = "Web with Kotlin/Wasm"
     override val isMobile: Boolean = false
+    override val isAndroid: Boolean = false
 
     @OptIn(ExperimentalWasmJsInterop::class)
     override fun openFile(bytes: ByteArray, fileName: String) {

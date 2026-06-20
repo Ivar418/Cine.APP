@@ -15,12 +15,12 @@ import com.ivarvisser.cineapp.theming.CineAppTheme
 import com.ivarvisser.cineapp.ui.component.BottomTabBar
 import com.ivarvisser.cineapp.ui.component.navigation.TabBarItem
 import com.ivarvisser.cineapp.ui.component.navigation.TopBar
-import com.ivarvisser.cineapp.ui.feature.OrderHistory.OrderHistoryScreen
 import com.ivarvisser.cineapp.ui.feature.account.AccountScreen
 import com.ivarvisser.cineapp.ui.feature.favorite.FavoritesScreen
 import com.ivarvisser.cineapp.ui.feature.movie.MovieItemDetailsScreen
 import com.ivarvisser.cineapp.ui.feature.movie.MoviesOverviewScreen
 import com.ivarvisser.cineapp.ui.feature.navigation.RootComponent
+import com.ivarvisser.cineapp.ui.feature.orderHistory.OrderHistoryScreen
 import com.ivarvisser.cineapp.ui.feature.ordering.OrderingScreen
 import com.ivarvisser.cineapp.ui.feature.showing.ShowingDetailScreen
 import com.ivarvisser.cineapp.ui.home.HomeScreen
