@@ -1,7 +1,7 @@
 [versions]
 agp = "9.2.1"
 android-compileSdk = "37"
-android-minSdk = "26"
+android-minSdk = "32"
 android-targetSdk = "37"
 androidx-activity = "1.13.0"
 androidx-appcompat = "1.7.1"
@@ -32,6 +32,8 @@ turbine = "1.2.1"
 coil3 = "3.5.0"
 klf = "1.8.3"
 androidx-work = "2.11.2"
+compose-uiTest-junit4 = "1.11.3"
+compose-uiTest-manifest = "1.11.3"
 
 [libraries]
 androidx-work-runtime-ktx = { module = "androidx.work:work-runtime-ktx", version.ref = "androidx-work" }
@@ -63,8 +65,8 @@ compose-material3 = { module = "org.jetbrains.compose.material3:material3", vers
 compose-ui = { module = "org.jetbrains.compose.ui:ui", version.ref = "composeMultiplatform" }
 compose-components-resources = { module = "org.jetbrains.compose.components:components-resources", version.ref = "composeMultiplatform" }
 compose-uiToolingPreview = { module = "org.jetbrains.compose.ui:ui-tooling-preview", version.ref = "composeMultiplatform" }
-compose-uiTest-junit4 = { module = "androidx.compose.ui:ui-test-junit4", version.ref = "composeMultiplatform" }
-compose-uiTest-manifest = { module = "androidx.compose.ui:ui-test-manifest", version.ref = "composeMultiplatform" }
+compose-uiTest-junit4 = { module = "androidx.compose.ui:ui-test-junit4", version.ref = "compose-uiTest-junit4" }
+compose-uiTest-manifest = { module = "androidx.compose.ui:ui-test-manifest", version.ref = "compose-uiTest-manifest" }
 kotlinx-coroutinesSwing = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-swing", version.ref = "kotlinx-coroutines" }
 kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinx-coroutines" }
 kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "kotlinx-coroutines" }
@@ -87,6 +89,7 @@ decompose = { module = "com.arkivanov.decompose:decompose", version.ref = "decom
 decompose-extensions-compose = { module = "com.arkivanov.decompose:extensions-compose", version.ref = "decompose" }
 material-icons-extended = { module = "org.jetbrains.compose.material:material-icons-extended", version.ref = "materialIconsExtended" }
 multiplatform-settings-no-arg = { module = "com.russhwolf:multiplatform-settings-no-arg", version.ref = "multiplatformSettingsNoArg" }
+multiplatform-settings-test = { module = "com.russhwolf:multiplatform-settings-test", version.ref = "multiplatformSettingsNoArg" }
 navigation-compose = { module = "org.jetbrains.androidx.navigation:navigation-compose", version.ref = "navigationCompose" }
 essentyLifecycleCoroutines = { group = "com.arkivanov.essenty", name = "lifecycle-coroutines", version.ref = "essenty" }
 #
