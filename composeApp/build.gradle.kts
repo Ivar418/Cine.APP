@@ -92,8 +92,15 @@ kotlin {
 
         }
         commonTest.dependencies {
+            implementation(project.dependencies.platform(libs.koin.bom))
             implementation(libs.kotlin.test)
             implementation(libs.koin.test)
+            implementation(libs.kotlinx.coroutines.test)
+            implementation(libs.turbine)
+        }
+
+        val androidInstrumentedTest by sourceSets.getting {
+            dependsOn(commonTest.get())
         }
         sourceSets["desktopMain"].dependencies {
             implementation(libs.slf4j.simple)
@@ -173,6 +180,9 @@ extensions.configure<ApplicationExtension> {
             isMinifyEnabled = false
         }
     }
+    testOptions {
+        unitTests.isReturnDefaultValues = true
+    }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
@@ -181,6 +191,8 @@ extensions.configure<ApplicationExtension> {
 
 dependencies {
     debugImplementation(libs.compose.uiTooling)
+    androidTestImplementation(libs.compose.uiTest.junit4)
+    debugImplementation(libs.compose.uiTest.manifest)
 }
 
 compose.desktop {

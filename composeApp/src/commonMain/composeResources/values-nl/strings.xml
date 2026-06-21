@@ -35,6 +35,9 @@
     <string name="account_settings_title">Accountinstellingen</string>
     <string name="edit_profile">Profiel Bewerken</string>
     <string name="edit_profile_desc">Werk je persoonlijke informatie bij</string>
+    <string name="save_profile">Wijzigingen Opslaan</string>
+    <string name="update_profile_title">Profiel Bewerken</string>
+    <string name="password_optional_desc">Laat leeg om huidige wachtwoord te behouden</string>
     <string name="email_preferences">E-mailvoorkeuren</string>
     <string name="email_preferences_desc">Beheer notificatie-instellingen</string>
     <string name="privacy_security">Privacy &amp; Beveiliging</string>

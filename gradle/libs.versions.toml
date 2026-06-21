@@ -14,6 +14,7 @@ composeMultiplatform = "1.11.1"
 junit = "4.13.2"
 kotlin = "2.4.0"
 kotlinx-coroutines = "1.11.0"
+kotlinx-coroutines-test = "1.11.0"
 kotlinxDatetime = "0.8.0"
 material3 = "1.10.0-alpha05"
 ktor = "3.5.0"
@@ -27,6 +28,7 @@ navigationCompose = "2.9.2"
 slf4jSimple = "2.0.18"
 buildkonfig = "0.21.2"
 htl = "2.0.1"
+turbine = "1.2.1"
 coil3 = "3.5.0"
 klf = "1.8.3"
 androidx-work = "2.11.2"
@@ -61,9 +63,13 @@ compose-material3 = { module = "org.jetbrains.compose.material3:material3", vers
 compose-ui = { module = "org.jetbrains.compose.ui:ui", version.ref = "composeMultiplatform" }
 compose-components-resources = { module = "org.jetbrains.compose.components:components-resources", version.ref = "composeMultiplatform" }
 compose-uiToolingPreview = { module = "org.jetbrains.compose.ui:ui-tooling-preview", version.ref = "composeMultiplatform" }
+compose-uiTest-junit4 = { module = "androidx.compose.ui:ui-test-junit4", version.ref = "composeMultiplatform" }
+compose-uiTest-manifest = { module = "androidx.compose.ui:ui-test-manifest", version.ref = "composeMultiplatform" }
 kotlinx-coroutinesSwing = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-swing", version.ref = "kotlinx-coroutines" }
 kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinx-coroutines" }
 kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "kotlinx-coroutines" }
+kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlinx-coroutines-test" }
+turbine = { module = "app.cash.turbine:turbine", version.ref = "turbine" }
 
 # Koin
 koin-bom = { module = "io.insert-koin:koin-bom", version.ref = "koin-bom" }

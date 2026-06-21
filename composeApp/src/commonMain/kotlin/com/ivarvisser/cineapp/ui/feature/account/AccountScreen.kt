@@ -33,7 +33,6 @@ import cineapp.composeapp.generated.resources.account_settings_title
 import cineapp.composeapp.generated.resources.back_button
 import cineapp.composeapp.generated.resources.edit_profile
 import cineapp.composeapp.generated.resources.edit_profile_desc
-import cineapp.composeapp.generated.resources.edit_profile_not_implemented
 import cineapp.composeapp.generated.resources.location_notifications
 import cineapp.composeapp.generated.resources.location_notifications_desc
 import cineapp.composeapp.generated.resources.logout_button
@@ -129,13 +128,11 @@ fun AccountScreen(
                 modifier = Modifier.padding(vertical = 8.dp)
             )
 
-            val editProfileNotImplemented = stringResource(Res.string.edit_profile_not_implemented)
-
             AccountSettingItem(
                 icon = Icons.Default.Person,
                 title = stringResource(Res.string.edit_profile),
                 onclick = {
-                    component.setError(editProfileNotImplemented)
+                    component.navigateToEditProfile()
                 },
                 subtitle = stringResource(Res.string.edit_profile_desc)
             )

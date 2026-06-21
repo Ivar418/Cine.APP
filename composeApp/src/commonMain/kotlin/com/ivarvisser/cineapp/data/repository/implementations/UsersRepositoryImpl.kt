@@ -1,6 +1,7 @@
 package com.ivarvisser.cineapp.data.repository.implementations
 
 import com.ivarvisser.cineapp.data.dto.auth.response.AuthResponse
+import com.ivarvisser.cineapp.data.dto.users.request.UpdateUserRequest
 import com.ivarvisser.cineapp.data.dto.users.response.UserFavoriteMoviesListResponse
 import com.ivarvisser.cineapp.data.local.interfaces.UserStorage
 import com.ivarvisser.cineapp.data.remote.api.network.interfaces.UsersApi
@@ -67,4 +68,15 @@ class UsersRepositoryImpl(
         return usersApi.removeFavoriteMovie(movieId)
     }
 
+    override suspend fun updateProfile(request: UpdateUserRequest): ResultOf<User> {
+        return when (val result = usersApi.updateProfile(request)) {
+            is ResultOf.Success -> {
+                val user = result.value.toUser()
+                storage.saveUser(user)
+                ResultOf.Success(user)
+            }
+
+            is ResultOf.Failure -> ResultOf.Failure(result.message, result.throwable)
+        }
+    }
 }

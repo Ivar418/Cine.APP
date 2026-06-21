@@ -3,7 +3,7 @@ package com.ivarvisser.cineapp.ui.feature.orderHistory
 import com.ivarvisser.cineapp.data.dto.orders.response.CreateOrderResponse
 import com.ivarvisser.cineapp.data.dto.orders.response.TicketResponse
 import com.ivarvisser.cineapp.domain.Movie
-import kotlinx.datetime.Instant
+import kotlin.time.Instant
 
 data class OrderHistoryState(
     val orders: List<OrderWithDetails> = emptyList(),

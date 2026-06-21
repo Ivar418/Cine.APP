@@ -5,6 +5,7 @@ import com.arkivanov.decompose.value.MutableValue
 import com.arkivanov.decompose.value.Value
 import com.arkivanov.decompose.value.update
 import com.arkivanov.essenty.lifecycle.coroutines.coroutineScope
+import com.arkivanov.essenty.lifecycle.doOnResume
 import com.ivarvisser.cineapp.data.repository.interfaces.AppSettingsRepository
 import com.ivarvisser.cineapp.data.repository.interfaces.UsersRepository
 import com.ivarvisser.cineapp.mapper.toUser
@@ -18,7 +19,8 @@ class AccountComponent(
     private val usersRepository: UsersRepository,
     private val appSettingsRepository: AppSettingsRepository,
     private val onGoBack: () -> Unit,
-    private val onNavigateToFavorites: () -> Unit
+    private val onNavigateToFavorites: () -> Unit,
+    private val onNavigateToEditProfile: () -> Unit
 ) : ComponentContext by componentContext {
     private val scope = coroutineScope()
     private val _state = MutableValue(AccountState())
@@ -27,6 +29,9 @@ class AccountComponent(
     init {
         loadData()
         observeSettings()
+        doOnResume {
+            loadData()
+        }
     }
 
     private fun observeSettings() {
@@ -139,6 +144,10 @@ class AccountComponent(
 
     fun setRegistering(isRegistering: Boolean) {
         _state.update { current -> current.copy(isRegistering = isRegistering) }
+    }
+
+    fun navigateToEditProfile() {
+        onNavigateToEditProfile()
     }
 
     fun onEvent(event: AccountAction) {

@@ -1,6 +1,7 @@
 package com.ivarvisser.cineapp.data.remote.api.network.interfaces
 
 import com.ivarvisser.cineapp.data.dto.auth.response.AuthResponse
+import com.ivarvisser.cineapp.data.dto.users.request.UpdateUserRequest
 import com.ivarvisser.cineapp.data.dto.users.response.UserFavoriteMoviesListResponse
 import com.ivarvisser.cineapp.data.dto.users.response.UserResponse
 import com.ivarvisser.cineapp.utils.ResultOf
@@ -20,4 +21,5 @@ interface UsersApi {
     suspend fun addFavoriteMovie(movieId: Int): ResultOf<UserFavoriteMoviesListResponse>
     suspend fun removeFavoriteMovie(movieId: Int): ResultOf<UserFavoriteMoviesListResponse>
     suspend fun getProfile(): ResultOf<UserResponse>
+    suspend fun updateProfile(request: UpdateUserRequest): ResultOf<UserResponse>
 }

@@ -16,6 +16,7 @@ import com.ivarvisser.cineapp.getPlatform
 import com.ivarvisser.cineapp.notification.NotificationService
 import com.ivarvisser.cineapp.ui.component.navigation.TabBarItem
 import com.ivarvisser.cineapp.ui.feature.account.AccountComponent
+import com.ivarvisser.cineapp.ui.feature.account.EditProfileComponent
 import com.ivarvisser.cineapp.ui.feature.favorite.FavoritesComponent
 import com.ivarvisser.cineapp.ui.feature.movie.MovieDetailsComponent
 import com.ivarvisser.cineapp.ui.feature.movie.MoviesOverviewComponent
@@ -110,7 +111,19 @@ class RootComponent(
                         usersRepository = getKoin().get(),
                         appSettingsRepository = getKoin().get(),
                         onGoBack = { navigation.pop() },
-                        onNavigateToFavorites = { navigation.bringToFront(Configuration.Favorites) }
+                        onNavigateToFavorites = { navigation.bringToFront(Configuration.Favorites) },
+                        onNavigateToEditProfile = { navigation.bringToFront(Configuration.EditProfile) }
+                    )
+                )
+            }
+
+            is Configuration.EditProfile -> {
+                Child.EditProfile(
+                    EditProfileComponent(
+                        componentContext = context,
+                        usersRepository = getKoin().get(),
+                        onGoBack = { navigation.pop() },
+                        onProfileUpdated = { navigation.pop() }
                     )
                 )
             }
@@ -217,6 +230,7 @@ class RootComponent(
         data class MoviesOverviewScreen(val componentContext: MoviesOverviewComponent) : Child()
         data class OrderHistory(val componentContext: OrderHistoryComponent) : Child()
         data class Account(val componentContext: AccountComponent) : Child()
+        data class EditProfile(val componentContext: EditProfileComponent) : Child()
         data class Favorites(val componentContext: FavoritesComponent) : Child()
         data class NotImplemented(val componentContext: NotImplementedComponent) : Child()
         data class MovieDetailsScreen(val componentContext: MovieDetailsComponent) : Child()
@@ -235,6 +249,9 @@ class RootComponent(
 
         @Serializable
         data object Account : Configuration()
+
+        @Serializable
+        data object EditProfile : Configuration()
 
         @Serializable
         data object Favorites : Configuration()

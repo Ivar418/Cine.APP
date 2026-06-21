@@ -36,6 +36,9 @@
     <string name="account_settings_title">Account Settings</string>
     <string name="edit_profile">Edit Profile</string>
     <string name="edit_profile_desc">Update your personal information</string>
+    <string name="save_profile">Save Changes</string>
+    <string name="update_profile_title">Edit Profile</string>
+    <string name="password_optional_desc">Leave blank to keep current password</string>
     <string name="email_preferences">Email Preferences</string>
     <string name="email_preferences_desc">Manage notification settings</string>
     <string name="privacy_security">Privacy &amp; Security</string>

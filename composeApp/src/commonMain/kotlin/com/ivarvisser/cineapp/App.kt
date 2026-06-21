@@ -16,6 +16,7 @@ import com.ivarvisser.cineapp.ui.component.BottomTabBar
 import com.ivarvisser.cineapp.ui.component.navigation.TabBarItem
 import com.ivarvisser.cineapp.ui.component.navigation.TopBar
 import com.ivarvisser.cineapp.ui.feature.account.AccountScreen
+import com.ivarvisser.cineapp.ui.feature.account.EditProfileScreen
 import com.ivarvisser.cineapp.ui.feature.favorite.FavoritesScreen
 import com.ivarvisser.cineapp.ui.feature.movie.MovieItemDetailsScreen
 import com.ivarvisser.cineapp.ui.feature.movie.MoviesOverviewScreen
@@ -73,6 +74,7 @@ fun App(root: RootComponent) {
 
                                 is RootComponent.Child.OrderHistory -> OrderHistoryScreen(component = instance.componentContext)
                                 is RootComponent.Child.Account -> AccountScreen(component = instance.componentContext)
+                                is RootComponent.Child.EditProfile -> EditProfileScreen(component = instance.componentContext)
                                 is RootComponent.Child.Favorites -> FavoritesScreen(component = instance.componentContext)
                                 is RootComponent.Child.NotImplemented -> NotImplemented(component = instance.componentContext)
                                 is RootComponent.Child.ShowingDetailsScreen -> ShowingDetailScreen(
