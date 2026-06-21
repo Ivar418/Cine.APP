@@ -14,12 +14,22 @@ import com.arkivanov.essenty.lifecycle.create
 import com.arkivanov.essenty.lifecycle.resume
 import com.ivarvisser.cineapp.di.initKoin
 import com.ivarvisser.cineapp.ui.feature.navigation.RootComponent
+import com.mmk.kmpnotifier.KMPNotifier
+import com.mmk.kmpnotifier.local.LocalNotifications
+import com.mmk.kmpnotifier.notification.configuration.NotificationPlatformConfiguration
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.preloadFont
 
 @OptIn(ExperimentalComposeUiApi::class, ExperimentalResourceApi::class)
 fun main() {
     initKoin()
+    KMPNotifier.initialize(
+        NotificationPlatformConfiguration.Web(
+            askNotificationPermissionOnStart = true,
+            notificationIconPath = null
+        ),
+        LocalNotifications,
+    )
     val lifecycle = LifecycleRegistry().apply {
         resume() // move lifecycle to RESUMED state
     }

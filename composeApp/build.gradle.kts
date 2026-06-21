@@ -46,7 +46,8 @@ kotlin {
             implementation(libs.compose.uiToolingPreview)
             implementation(libs.androidx.activity.compose)
             implementation(libs.ktor.client.android)
-
+            implementation(libs.androidx.core.ktx)
+            implementation(libs.androidx.work.runtime.ktx)
         }
         commonMain.dependencies {
             implementation(libs.kotlinx.coroutines.core)
@@ -84,11 +85,24 @@ kotlin {
             //Coil
             implementation(libs.bundles.coil)
             //Webvieuw MultiPlatofrm
-            implementation("com.russhwolf:multiplatform-settings-no-arg:1.3.0")
+            implementation(libs.multiplatform.settings.no.arg)
+
+            //Notifications
+            api("io.github.mirzemehdi:kmpnotifier-local:2.0.0")
+
         }
         commonTest.dependencies {
+
+            implementation(project.dependencies.platform(libs.koin.bom))
             implementation(libs.kotlin.test)
             implementation(libs.koin.test)
+            implementation(libs.kotlinx.coroutines.test)
+            implementation(libs.turbine)
+            implementation(libs.multiplatform.settings.test)
+        }
+
+        val androidInstrumentedTest by sourceSets.getting {
+            dependsOn(commonTest.get())
         }
         sourceSets["desktopMain"].dependencies {
             implementation(libs.slf4j.simple)
@@ -168,6 +182,9 @@ extensions.configure<ApplicationExtension> {
             isMinifyEnabled = false
         }
     }
+    testOptions {
+        unitTests.isReturnDefaultValues = true
+    }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
@@ -176,6 +193,12 @@ extensions.configure<ApplicationExtension> {
 
 dependencies {
     debugImplementation(libs.compose.uiTooling)
+    androidTestImplementation(libs.compose.uiTest.junit4)
+    androidTestImplementation(libs.androidx.espresso.core)
+    androidTestImplementation("androidx.test:runner:1.7.0")
+    androidTestImplementation("androidx.test:rules:1.7.0")
+    androidTestImplementation("androidx.test:core:1.7.0")
+    debugImplementation(libs.compose.uiTest.manifest)
 }
 
 compose.desktop {

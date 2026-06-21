@@ -16,10 +16,12 @@ import com.ivarvisser.cineapp.ui.component.BottomTabBar
 import com.ivarvisser.cineapp.ui.component.navigation.TabBarItem
 import com.ivarvisser.cineapp.ui.component.navigation.TopBar
 import com.ivarvisser.cineapp.ui.feature.account.AccountScreen
+import com.ivarvisser.cineapp.ui.feature.account.EditProfileScreen
 import com.ivarvisser.cineapp.ui.feature.favorite.FavoritesScreen
 import com.ivarvisser.cineapp.ui.feature.movie.MovieItemDetailsScreen
 import com.ivarvisser.cineapp.ui.feature.movie.MoviesOverviewScreen
 import com.ivarvisser.cineapp.ui.feature.navigation.RootComponent
+import com.ivarvisser.cineapp.ui.feature.orderHistory.OrderHistoryScreen
 import com.ivarvisser.cineapp.ui.feature.ordering.OrderingScreen
 import com.ivarvisser.cineapp.ui.feature.showing.ShowingDetailScreen
 import com.ivarvisser.cineapp.ui.home.HomeScreen
@@ -38,8 +40,7 @@ fun App(root: RootComponent) {
                                 TabBarItem.Home,
                                 TabBarItem.MoviesOverviewScreen,
                                 TabBarItem.OrderHistory,
-                                TabBarItem.Account,
-                                TabBarItem.Settings
+                                TabBarItem.Account
                             ), onSelect = { root.showTabItem(it) }, root = root
                         )
                     }
@@ -50,8 +51,7 @@ fun App(root: RootComponent) {
                                 TabBarItem.Home,
                                 TabBarItem.MoviesOverviewScreen,
                                 TabBarItem.OrderHistory,
-                                TabBarItem.Account,
-                                TabBarItem.Settings
+                                TabBarItem.Account
                             ), onSelect = { root.showTabItem(it) }, root = root
                         )
                     }
@@ -72,10 +72,10 @@ fun App(root: RootComponent) {
                                     )
                                 }
 
-                                is RootComponent.Child.OrderHistory -> NotImplemented(component = instance.componentContext)
+                                is RootComponent.Child.OrderHistory -> OrderHistoryScreen(component = instance.componentContext)
                                 is RootComponent.Child.Account -> AccountScreen(component = instance.componentContext)
+                                is RootComponent.Child.EditProfile -> EditProfileScreen(component = instance.componentContext)
                                 is RootComponent.Child.Favorites -> FavoritesScreen(component = instance.componentContext)
-                                is RootComponent.Child.Settings -> NotImplemented(component = instance.componentContext)
                                 is RootComponent.Child.NotImplemented -> NotImplemented(component = instance.componentContext)
                                 is RootComponent.Child.ShowingDetailsScreen -> ShowingDetailScreen(
                                     component = instance.componentContext,

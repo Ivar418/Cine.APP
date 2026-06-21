@@ -1,0 +1,68 @@
+@startuml
+actor Gebruiker
+participant OrderingComponent
+participant OrdersRepository
+participant OrdersApi
+participant Backend
+participant "Externe Browser (Betaling)" as Browser
+
+Gebruiker -> OrderingComponent : Klik op "Bestellen"
+activate OrderingComponent
+
+OrderingComponent -> OrderingComponent : Valideer geselecteerde stoelen
+OrderingComponent -> OrderingComponent : Bepaal order type (Betaling of Reservering)
+
+OrderingComponent -> OrdersRepository : createOrder(request)
+activate OrdersRepository
+OrdersRepository -> OrdersApi : createOrderAsync(request)
+activate OrdersApi
+OrdersApi -> Backend : POST /api/orders
+Backend --> OrdersApi : CreateOrderResponse (orderId, status)
+deactivate OrdersApi
+OrdersRepository --> OrderingComponent : ResultOf.Success(order)
+deactivate OrdersRepository
+
+alt Betaling geselecteerd
+    OrderingComponent -> OrderingComponent : buildPaymentUrl(order)
+    OrderingComponent -> Browser : openPaymentUrl(url)
+    activate Browser
+    Note right of Browser: Gebruiker handelt betaling af\nin de browser
+else Reservering geselecteerd
+    OrderingComponent -> OrderingComponent : handleReservation(order)
+end
+
+OrderingComponent -> OrderingComponent : startOrderPolling(orderId)
+activate OrderingComponent #DarkSalmon
+
+loop Elke 5 seconden (tot status != Pending)
+    OrderingComponent -> OrdersRepository : observeStatus(orderId)
+    activate OrdersRepository
+    OrdersRepository -> OrdersApi : getOrderById(orderId)
+    activate OrdersApi
+    OrdersApi -> Backend : GET /api/orders/{id}
+    Backend --> OrdersApi : CreateOrderResponse
+    deactivate OrdersApi
+    OrdersRepository --> OrderingComponent : Flow<Order>
+    deactivate OrdersRepository
+
+    OrderingComponent -> OrderingComponent : Update UI status
+end
+
+deactivate OrderingComponent
+
+alt Betaling geslaagd
+    OrderingComponent -> Gebruiker : Toon "Bedankt voor je bestelling"
+    Gebruiker -> OrderingComponent : Klik op "Download Tickets"
+    OrderingComponent -> OrdersRepository : getTicketsPdfAsync(orderId)
+    activate OrdersRepository
+    OrdersRepository -> OrdersApi : getTicketsPdfAsync
+    OrdersApi -> Backend : GET /api/orders/{id}/tickets/pdf
+    Backend --> OrdersRepository : PDF Data
+    deactivate OrdersRepository
+    OrderingComponent -> Gebruiker : Download/Toon PDF
+else Betaling mislukt/geannuleerd
+    OrderingComponent -> Gebruiker : Toon foutmelding
+end
+
+deactivate OrderingComponent
+@enduml

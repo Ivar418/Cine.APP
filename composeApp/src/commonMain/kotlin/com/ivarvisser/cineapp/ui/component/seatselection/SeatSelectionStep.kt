@@ -28,8 +28,18 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import cineapp.composeapp.generated.resources.Res
+import cineapp.composeapp.generated.resources.available
+import cineapp.composeapp.generated.resources.cancel
+import cineapp.composeapp.generated.resources.normal_seats
+import cineapp.composeapp.generated.resources.occupied
+import cineapp.composeapp.generated.resources.search_seats
+import cineapp.composeapp.generated.resources.selected
+import cineapp.composeapp.generated.resources.wheelchair
+import cineapp.composeapp.generated.resources.wheelchair_seats
 import com.ivarvisser.cineapp.ui.feature.ordering.OrderingAction
 import com.ivarvisser.cineapp.ui.feature.ordering.OrderingUiState
+import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun SeatSelectionStep(
@@ -46,14 +56,14 @@ fun SeatSelectionStep(
                 }
                 Row(horizontalArrangement = Arrangement.spacedBy(24.dp)) {
                     SeatCounter(
-                        title = "Normal",
+                        title = stringResource(Res.string.normal_seats),
                         icon = Icons.Default.Chair,
                         count = state.seatSelection.normalCount,
                         onIncrease = { onAction(OrderingAction.IncreaseNormalSeats) },
                         onDecrease = { onAction(OrderingAction.DecreaseNormalSeats) }
                     )
                     SeatCounter(
-                        title = "Wheelchair",
+                        title = stringResource(Res.string.wheelchair_seats),
                         icon = Icons.AutoMirrored.Filled.Accessible,
                         count = state.seatSelection.wheelchairCount,
                         onIncrease = { onAction(OrderingAction.IncreaseWheelchairSeats) },
@@ -65,11 +75,11 @@ fun SeatSelectionStep(
                     Button(onClick = { onAction(OrderingAction.SearchSeats) }) {
                         Icon(Icons.Default.Search, contentDescription = null)
                         Spacer(modifier = Modifier.width(8.dp))
-                        Text("Search Seats")
+                        Text(stringResource(Res.string.search_seats))
                     }
                     if (state.pendingId != null) {
                         OutlinedButton(onClick = { onAction(OrderingAction.CancelPending) }) {
-                            Text("Cancel")
+                            Text(stringResource(Res.string.cancel))
                         }
                     }
                 }
@@ -101,9 +111,16 @@ fun SeatSelectionStep(
                                 "Wheelchair" -> AssistChipDefaults.assistChipColors(containerColor = legendItem.color)
                                 else -> AssistChipDefaults.assistChipColors()
                             }
+                            val label = when (legendItem.label) {
+                                "Available" -> stringResource(Res.string.available)
+                                "Occupied" -> stringResource(Res.string.occupied)
+                                "Selected" -> stringResource(Res.string.selected)
+                                "Wheelchair" -> stringResource(Res.string.wheelchair)
+                                else -> legendItem.label
+                            }
                             AssistChip(
                                 onClick = {},
-                                label = { Text(legendItem.label) },
+                                label = { Text(label) },
                                 colors = color
                             )
                         }

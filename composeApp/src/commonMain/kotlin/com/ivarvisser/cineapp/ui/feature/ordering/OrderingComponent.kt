@@ -18,10 +18,13 @@ import com.ivarvisser.cineapp.data.repository.interfaces.OrdersRepository
 import com.ivarvisser.cineapp.data.repository.interfaces.ReservationsRepository
 import com.ivarvisser.cineapp.data.repository.interfaces.ShowingsRepository
 import com.ivarvisser.cineapp.data.repository.interfaces.UsersRepository
-import com.ivarvisser.cineapp.domain.ENUM.SeatType
 import com.ivarvisser.cineapp.domain.Order
-import com.ivarvisser.cineapp.domain.Seat
 import com.ivarvisser.cineapp.domain.SeatFactory.buildSeatGrid
+import com.ivarvisser.cineapp.domain.enums.OrderTypes
+import com.ivarvisser.cineapp.domain.enums.PaymentMethods
+import com.ivarvisser.cineapp.domain.enums.PaymentStatuses
+import com.ivarvisser.cineapp.domain.enums.SeatType
+import com.ivarvisser.cineapp.getPlatform
 import com.ivarvisser.cineapp.mapper.toOrder
 import com.ivarvisser.cineapp.ui.component.openPaymentUrl
 import com.ivarvisser.cineapp.utils.ResultOf
@@ -45,6 +48,7 @@ class OrderingComponent(
     private val reservationsRepository: ReservationsRepository,
     private val usersRepository: UsersRepository,
     private val onGoBack: () -> Unit,
+    private val onLogin: () -> Unit
 ) : ComponentContext by componentContext {
 
     private val scope = coroutineScope()
@@ -233,27 +237,6 @@ class OrderingComponent(
         }
     }
 
-    private fun downloadPdf(bytes: ByteArray, fileName: String) {
-        // TODO: Implement platform-specific PDF download (using JS interop on Web, or file system on Android)
-        Log.debug(loggerName = "OrderingComponent") { "Placeholder: Downloading PDF $fileName (${bytes.size} bytes)" }
-    }
-
-    private fun confirmPayment(orderId: Int) {
-        scope.launch {
-            // TODO: Call API confirmPaymentAsync(orderId)
-            Log.debug(loggerName = "OrderingComponent") { "Placeholder: Confirming payment for order $orderId" }
-        }
-    }
-
-    fun loadOccupiedSeats(allSeats: List<Seat>) {
-        scope.launch {
-            _state.value.seatSelection.allSeats.forEach { seat ->
-
-
-            }
-        }
-
-    }
 
     fun buildPaymentUrl(
         order: Order
@@ -264,7 +247,7 @@ class OrderingComponent(
         val returnUrl = URLBuilder(NetworkConstants.Endpoints.WasmVersions.PAYMENT_RESULT).apply {
             parameters.append("orderId", order.orderId.toString())
             parameters.append("showingId", showingId.toString())
-            parameters.append("paymentMethod", order.paymentMethod)
+            parameters.append("paymentMethod", order.paymentMethod.displayName)
         }.buildString()
 
 
@@ -282,7 +265,7 @@ class OrderingComponent(
             parameters.append("merchant", "CineNet-B.V.")
             parameters.append("description", "Bestelling ${order.orderCode}")
             parameters.append("returnUrl", returnUrl)
-            parameters.append("ChosenPaymentType", order.paymentMethod)
+            parameters.append("ChosenPaymentType", order.paymentMethod.selector.toString())
             parameters.append("reservationId", reservationId!!)
         }.buildString()
     }
@@ -332,7 +315,7 @@ class OrderingComponent(
         scope.launch {
             when (val pdf = ordersRepository.getReservationPdfAsync(order.orderId)) {
                 is ResultOf.Success -> {
-                    downloadPdf(pdf.value, "reservering-${order.orderCode}.pdf")
+                    getPlatform().openFile(pdf.value, "reservering-${order.orderCode}.pdf")
                 }
 
                 is ResultOf.Failure -> {
@@ -347,13 +330,6 @@ class OrderingComponent(
         scope.launch {
             _state.update { it.copy(orderBusy = true) }
 
-            // Map payment method to API code to fix FK constraint failure
-            val apiPaymentMethod = when (_state.value.selectedPaymentMethod) {
-                "iDeal" -> "IDEAL"
-                "Credit Card Online" -> "CREDITCARD"
-                else -> "PIN"
-            }
-
             val ticketRequest = _state.value.seats.map { seat ->
                 TicketRequest(
                     showingId = showingId,
@@ -366,9 +342,12 @@ class OrderingComponent(
             }
 
             val orderType =
-                if (_state.value.selectedPaymentMethod == "Reserveren") "Reserveren" else "Payment"
+                if (_state.value.selectedPaymentMethod == PaymentMethods.Reservation) OrderTypes.Reservation else OrderTypes.Payment
             val request = CreateOrderRequest(
-                orderType = orderType, paymentMethod = apiPaymentMethod, tickets = ticketRequest
+                orderType = orderType,
+                paymentMethod = _state.value.selectedPaymentMethod,
+                tickets = ticketRequest,
+                userId = usersRepository.getUser()?.userId
             )
             Log.debug(loggerName = "OrderingComponent") { "Order request: $request" }
             val order = ordersRepository.createOrder(request)
@@ -385,7 +364,7 @@ class OrderingComponent(
                     )
                 }
                 startOrderPolling(order.value.orderId)
-                if (_state.value.selectedPaymentMethod == "Reserveren") {
+                if (_state.value.selectedPaymentMethod == PaymentMethods.Reservation) {
                     handleReservation(order.value.toOrder())
                 } else {
                     val url = buildPaymentUrl(order.value.toOrder())
@@ -412,7 +391,7 @@ class OrderingComponent(
                         it.copy(order = updatedOrder)
                     }
 
-                    if (updatedOrder?.paymentStatus != "Pending") {
+                    if (updatedOrder?.paymentStatus != PaymentStatuses.Pending) {
                         pollingJob?.cancel()
                     }
                 }
@@ -525,7 +504,10 @@ class OrderingComponent(
                 _state.update {
                     it.copy(
                         step = 4, paymentMethods = listOf(
-                            "iDeal", "Credit Card Online", "Reserveren", "Cadeaubon"
+                            PaymentMethods.iDEAL.displayName,
+                            PaymentMethods.CreditCardOnline.displayName,
+                            PaymentMethods.Reservation.displayName,
+                            PaymentMethods.Giftcard.displayName
                         )
                     )
                 }
@@ -594,6 +576,27 @@ class OrderingComponent(
 
                 updateReservationSeats(_state.value.seatSelection.suggestedSeatKeys)
                 Log.debug(loggerName = "OrderingComponent") { "Updated suggested seats: ${_state.value.seatSelection.suggestedSeatKeys}" }
+            }
+
+            is OrderingAction.Login -> {
+                onLogin()
+            }
+
+            is OrderingAction.PerformLogin -> {
+                scope.launch {
+                    _state.update { it.copy(isBusy = true) }
+                    val result = usersRepository.login(action.username, action.password)
+                    when (result) {
+                        is ResultOf.Success -> {
+                            _state.update { it.copy(isLoggedIn = true, isBusy = false) }
+                        }
+
+                        is ResultOf.Failure -> {
+                            setError(result.message ?: "Login mislukt")
+                            _state.update { it.copy(isBusy = false) }
+                        }
+                    }
+                }
             }
 
 

@@ -36,12 +36,19 @@
     <string name="account_settings_title">Account Settings</string>
     <string name="edit_profile">Edit Profile</string>
     <string name="edit_profile_desc">Update your personal information</string>
+    <string name="save_profile">Save Changes</string>
+    <string name="update_profile_title">Edit Profile</string>
+    <string name="password_optional_desc">Leave blank to keep current password</string>
     <string name="email_preferences">Email Preferences</string>
     <string name="email_preferences_desc">Manage notification settings</string>
     <string name="privacy_security">Privacy &amp; Security</string>
     <string name="privacy_security_desc">Password and security settings</string>
     <string name="notifications_settings">Notifications</string>
     <string name="notifications_settings_desc">Configure app notifications</string>
+    <string name="location_notifications">Location Notifications</string>
+    <string name="location_notifications_desc">Receive notifications when you are near the cinema</string>
+    <string name="show_time_notifications">Showtime Notifications</string>
+    <string name="show_time_notifications_desc">Receive notifications when your show is about to start</string>
     <string name="app_settings_title">App Settings</string>
     <string name="general_settings">General Settings</string>
     <string name="general_settings_desc">App preferences and configurations</string>
@@ -65,4 +72,114 @@
     <string name="not_implemented_button">Go back.</string>
     <string name="favorites_title">Favorites</string>
     <string name="favorites_description">All your favorite movies</string>
+
+    <!-- Movies Overview -->
+    <string name="select_date">Select a date</string>
+    <string name="clear_filter">Clear filter</string>
+    <string name="clear_filter_desc">Clear filter</string>
+    <string name="ok">OK</string>
+    <string name="cancel">Cancel</string>
+
+    <!-- Account / Auth -->
+    <string name="welcome_back">Welcome Back</string>
+    <string name="username">Username</string>
+    <string name="password">Password</string>
+    <string name="login_button">Login</string>
+    <string name="create_account">Create an account</string>
+    <string name="username_required">Username is required</string>
+    <string name="password_required">Password is required</string>
+    <string name="password_min_length">Password must be at least 6 characters</string>
+    <string name="create_account_title">Create Account</string>
+    <string name="first_name">First Name</string>
+    <string name="last_name">Last Name</string>
+    <string name="email">Email</string>
+    <string name="confirm_password">Confirm Password</string>
+    <string name="required_field">Required</string>
+    <string name="email_required">Email is required</string>
+    <string name="invalid_email">Invalid email format</string>
+    <string name="passwords_do_not_match">Passwords do not match</string>
+    <string name="register_button">Register</string>
+    <string name="already_have_account">Already have an account? Login</string>
+    <string name="edit_profile_not_implemented">Edit profile functionality is not implemented yet.</string>
+    <string name="email_prefs_not_implemented">Email preferences functionality is not implemented yet.</string>
+    <string name="notifications_not_implemented">Notifications settings functionality is not implemented yet.</string>
+    <string name="general_settings_not_implemented">General settings functionality is not implemented yet.</string>
+    <string name="about_app_not_implemented">About app functionality is not implemented yet.</string>
+
+    <!-- Ordering -->
+    <string name="confirm_seats">Confirm Seats</string>
+    <string name="login_to_view_orders">Please log in to view your orders.</string>
+    <string name="login_to_continue">Please log in to continue with your order.</string>
+    <string name="back_button">Back</string>
+    <string name="booking_overview">Booking Overview</string>
+    <string name="row_seat_format">Row %1$d Seat %2$d</string>
+    <string name="row_seat_ticket_format">Row %1$d Seat %2$d - %3$s</string>
+    <string name="row_seat_ticket_price_format">Row %1$d · Seat %2$d · %3$s · €%4$s</string>
+    <string name="total_label">Total</string>
+    <string name="confirm_button">Confirm</string>
+    <string name="choose_payment_method">Choose Payment Method</string>
+    <string name="confirm_order">Confirm Order</string>
+    <string name="payment_method_label">Payment Method: %1$s</string>
+    <string name="next_button">Next</string>
+    <string name="proceed_to_payment">Proceed To Payment</string>
+    <string name="confirm_reservation">Confirm Reservation</string>
+    <string name="normal_seats">Normal</string>
+    <string name="wheelchair_seats">Wheelchair</string>
+    <string name="search_seats">Search Seats</string>
+    <string name="available">Available</string>
+    <string name="occupied">Occupied</string>
+    <string name="selected">Selected</string>
+    <string name="wheelchair">Wheelchair</string>
+    <string name="ticket_type_select">Select</string>
+    <string name="ticket_adult">Adult</string>
+    <string name="ticket_student">Student</string>
+    <string name="ticket_child">Child</string>
+    <string name="ticket_senior">Senior</string>
+
+    <!-- Payment Status -->
+    <string name="loading_order">Loading order...</string>
+    <string name="payment_success_title">Payment successful!</string>
+    <string name="payment_success_subtitle">Your payment has been successfully received.</string>
+    <string name="payment_failed_title">Payment failed</string>
+    <string name="payment_failed_subtitle">An error occurred during payment.</string>
+    <string name="payment_cancelled_title">Payment cancelled</string>
+    <string name="payment_cancelled_subtitle">You have cancelled the payment.</string>
+    <string name="payment_expired_title">Payment expired</string>
+    <string name="payment_expired_subtitle">The payment period has expired. Please try again.</string>
+    <string name="payment_pending_title">Processing</string>
+    <string name="payment_pending_subtitle">Your payment is still being processed.</string>
+    <string name="status_success">Success</string>
+    <string name="status_failed">Failed</string>
+    <string name="status_cancelled">Cancelled</string>
+    <string name="status_expired">Expired</string>
+    <string name="status_pending">Processing</string>
+    <string name="checking_status">Checking status...</string>
+    <string name="reference_label">Reference</string>
+    <string name="amount_label">Amount</string>
+    <string name="order_id_label">Order ID</string>
+
+    <!-- Order History -->
+    <string name="my_orders">My Orders</string>
+    <string name="no_orders">You don\'t have any orders yet.</string>
+    <string name="order_number_format">Order #%1$s</string>
+    <string name="status_label_format">Status: %1$s</string>
+    <string name="no_tickets_found">No tickets found for this order.</string>
+    <string name="seat_ticket_format">Seat %1$s (%2$s)</string>
+    <string name="open_pdf_button">Open Ticket (PDF)</string>
+    <string name="download_pdf_desc">Download PDF</string>
+
+    <!-- Favorites -->
+    <string name="no_favorites">You haven\'t added any favorites yet.</string>
+
+    <!-- SafeApiCall / Errors -->
+    <string name="error_timeout">The connection timed out. The server might be down.</string>
+    <string name="error_unauthorized">Session expired. Please log in again.</string>
+    <string name="error_forbidden">You don\'t have permission to view this.</string>
+    <string name="error_not_found">The requested resource was not found.</string>
+    <string name="error_too_many_requests">Too many requests. Please slow down.</string>
+    <string name="error_bad_request">Something went wrong with the request (%1$d).</string>
+    <string name="error_server">Server is currently having issues. Please try again later.</string>
+    <string name="error_network">Network error: %1$d</string>
+    <string name="error_io">Network error. Please check your internet connection.</string>
+    <string name="error_retry_failure">Unexpected retry failure</string>
 </resources>

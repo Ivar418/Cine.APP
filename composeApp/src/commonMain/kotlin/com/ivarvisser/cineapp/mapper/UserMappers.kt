@@ -1,6 +1,6 @@
 package com.ivarvisser.cineapp.mapper
 
-import com.ivarvisser.cineapp.data.dto.UserResponse
+import com.ivarvisser.cineapp.data.dto.users.response.UserResponse
 import com.ivarvisser.cineapp.domain.User
 
 fun User.toUserResponse(): UserResponse = UserResponse(

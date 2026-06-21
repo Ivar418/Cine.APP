@@ -26,6 +26,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
+import cineapp.composeapp.generated.resources.Res
+import cineapp.composeapp.generated.resources.create_account
+import cineapp.composeapp.generated.resources.login_button
+import cineapp.composeapp.generated.resources.password
+import cineapp.composeapp.generated.resources.password_min_length
+import cineapp.composeapp.generated.resources.password_required
+import cineapp.composeapp.generated.resources.username
+import cineapp.composeapp.generated.resources.username_required
+import cineapp.composeapp.generated.resources.welcome_back
+import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun LoginScreen(
@@ -39,6 +49,10 @@ fun LoginScreen(
     var usernameError by remember { mutableStateOf<String?>(null) }
     var passwordError by remember { mutableStateOf<String?>(null) }
 
+    val usernameRequiredMsg = stringResource(Res.string.username_required)
+    val passwordRequiredMsg = stringResource(Res.string.password_required)
+    val passwordMinLengthMsg = stringResource(Res.string.password_min_length)
+
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -48,7 +62,7 @@ fun LoginScreen(
     ) {
 
         Text(
-            text = "Welcome Back",
+            text = stringResource(Res.string.welcome_back),
             style = MaterialTheme.typography.headlineMedium
         )
 
@@ -60,7 +74,7 @@ fun LoginScreen(
                 username = it
                 usernameError = null
             },
-            label = { Text("Username") },
+            label = { Text(stringResource(Res.string.username)) },
             singleLine = true,
             isError = usernameError != null,
             supportingText = usernameError?.let { { Text(it) } },
@@ -75,7 +89,7 @@ fun LoginScreen(
                 password = it
                 passwordError = null
             },
-            label = { Text("Password") },
+            label = { Text(stringResource(Res.string.password)) },
             singleLine = true,
             visualTransformation = if (passwordVisible)
                 VisualTransformation.None
@@ -103,10 +117,10 @@ fun LoginScreen(
 
         Button(
             onClick = {
-                usernameError = if (username.isBlank()) "Username is required" else null
+                usernameError = if (username.isBlank()) usernameRequiredMsg else null
                 passwordError = when {
-                    password.isBlank() -> "Password is required"
-                    password.length < 6 -> "Password must be at least 6 characters"
+                    password.isBlank() -> passwordRequiredMsg
+                    password.length < 6 -> passwordMinLengthMsg
                     else -> null
                 }
 
@@ -116,7 +130,7 @@ fun LoginScreen(
             },
             modifier = Modifier.fillMaxWidth()
         ) {
-            Text("Login")
+            Text(stringResource(Res.string.login_button))
         }
 
         Spacer(modifier = Modifier.height(8.dp))
@@ -124,7 +138,7 @@ fun LoginScreen(
         TextButton(
             onClick = onRegisterClick
         ) {
-            Text("Create an account")
+            Text(stringResource(Res.string.create_account))
         }
     }
 }

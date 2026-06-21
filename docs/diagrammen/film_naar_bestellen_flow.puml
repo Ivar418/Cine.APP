@@ -1,0 +1,25 @@
+@startuml
+participant HomeComponent as Home
+participant RootComponent as Root
+participant MovieDetailsComponent as MovieDet
+participant ShowingDetailComponent as ShowDet
+participant OrderingComponent as Ordering
+
+Home -> Root : onNavigateToOverview()
+activate Root
+Root -> Root : navigation.bringToFront(MoviesOverview)
+
+Note over Root : Gebruiker selecteert een film
+
+Root -> Root : navigation.bringToFront(MovieDetails(movie))
+Root -> MovieDet : Initialize with movie data
+
+MovieDet -> Root : onNavigateToOrder(showingId, movieId)
+Root -> Root : navigation.bringToFront(ShowingDetails(showingId, movieId))
+Root -> ShowDet : Load showing details
+
+ShowDet -> Root : onNavigateToOrder()
+Root -> Root : navigation.bringToFront(Ordering(showingId, movieId))
+Root -> Ordering : Initialize reservation process
+deactivate Root
+@enduml

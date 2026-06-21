@@ -1,5 +1,8 @@
 package com.ivarvisser.cineapp.ui.feature.navigation
 
+import cineapp.composeapp.generated.resources.Res
+import cineapp.composeapp.generated.resources.not_implemented_button
+import cineapp.composeapp.generated.resources.not_implemented_generic
 import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.router.stack.StackNavigation
 import com.arkivanov.decompose.router.stack.bringToFront
@@ -9,11 +12,15 @@ import com.arkivanov.decompose.value.Value
 import com.arkivanov.decompose.value.operator.map
 import com.ivarvisser.cineapp.NotImplementedComponent
 import com.ivarvisser.cineapp.domain.Movie
+import com.ivarvisser.cineapp.getPlatform
+import com.ivarvisser.cineapp.notification.NotificationService
 import com.ivarvisser.cineapp.ui.component.navigation.TabBarItem
 import com.ivarvisser.cineapp.ui.feature.account.AccountComponent
+import com.ivarvisser.cineapp.ui.feature.account.EditProfileComponent
 import com.ivarvisser.cineapp.ui.feature.favorite.FavoritesComponent
 import com.ivarvisser.cineapp.ui.feature.movie.MovieDetailsComponent
 import com.ivarvisser.cineapp.ui.feature.movie.MoviesOverviewComponent
+import com.ivarvisser.cineapp.ui.feature.orderHistory.OrderHistoryComponent
 import com.ivarvisser.cineapp.ui.feature.ordering.OrderingComponent
 import com.ivarvisser.cineapp.ui.feature.showing.ShowingDetailComponent
 import com.ivarvisser.cineapp.ui.home.DefaultHomeComponent
@@ -23,8 +30,10 @@ import org.koin.core.component.KoinComponent
 
 class RootComponent(
     componentContext: ComponentContext,
-) : ComponentContext by componentContext, KoinComponent {
+
+    ) : ComponentContext by componentContext, KoinComponent {
     private val navigation = StackNavigation<Configuration>()
+    private val notificationService: NotificationService = getKoin().get()
     val childStack = childStack(
         source = navigation,
         serializer = Configuration.serializer(),
@@ -32,6 +41,12 @@ class RootComponent(
         handleBackButton = true,
         childFactory = ::createChild
     )
+
+    init {
+        if (!getPlatform().isAndroid) {
+            notificationService.startMonitoring()
+        }
+    }
 
     // Map the active configuration to the corresponding TabBarItem
     //Data class needs a "is" and the objects do not.
@@ -41,7 +56,6 @@ class RootComponent(
             Configuration.MoviesOverviewScreen, is Configuration.MovieDetailsScreen, is Configuration.ShowingDetailsScreen, is Configuration.OrderingScreen -> TabBarItem.MoviesOverviewScreen // Both map to the same tab
             Configuration.OrderHistory -> TabBarItem.OrderHistory
             Configuration.Account, Configuration.Favorites -> TabBarItem.Account
-            Configuration.Settings -> TabBarItem.Settings
             else -> TabBarItem.Home
         }
     }
@@ -95,8 +109,21 @@ class RootComponent(
                     AccountComponent(
                         componentContext = context,
                         usersRepository = getKoin().get(),
+                        appSettingsRepository = getKoin().get(),
                         onGoBack = { navigation.pop() },
-                        onNavigateToFavorites = { navigation.bringToFront(Configuration.Favorites) }
+                        onNavigateToFavorites = { navigation.bringToFront(Configuration.Favorites) },
+                        onNavigateToEditProfile = { navigation.bringToFront(Configuration.EditProfile) }
+                    )
+                )
+            }
+
+            is Configuration.EditProfile -> {
+                Child.EditProfile(
+                    EditProfileComponent(
+                        componentContext = context,
+                        usersRepository = getKoin().get(),
+                        onGoBack = { navigation.pop() },
+                        onProfileUpdated = { navigation.pop() }
                     )
                 )
             }
@@ -117,20 +144,15 @@ class RootComponent(
 
             is Configuration.OrderHistory -> {
                 Child.OrderHistory(
-                    NotImplementedComponent(
+                    OrderHistoryComponent(
                         componentContext = context,
-                        onRetry = { navigation.pop() },
-                        textContent = "Order History is not implemented yet."
-                    )
-                )
-            }
-
-            is Configuration.Settings -> {
-                Child.Settings(
-                    NotImplementedComponent(
-                        componentContext = context,
-                        onRetry = { navigation.pop() },
-                        textContent = "Settings is not implemented yet. Press to go back."
+                        ordersRepository = getKoin().get(),
+                        moviesRepository = getKoin().get(),
+                        showingsRepository = getKoin().get(),
+                        onGoBack = { navigation.pop() },
+                        ticketsRepository = getKoin().get(),
+                        usersRepository = getKoin().get(),
+                        onNavigateToLogin = { navigation.bringToFront(Configuration.Account) }
                     )
                 )
             }
@@ -168,6 +190,9 @@ class RootComponent(
                         ordersRepository = getKoin().get(),
                         reservationsRepository = getKoin().get(),
                         usersRepository = getKoin().get(),
+                        onLogin = {
+                            navigation.bringToFront(Configuration.Account)
+                        }
                     )
                 )
             }
@@ -177,7 +202,8 @@ class RootComponent(
                     NotImplementedComponent(
                         componentContext = context,
                         onRetry = { navigation.pop() },
-                        textContent = "Not implemented yet. Press to go back."
+                        textRes = Res.string.not_implemented_generic,
+                        buttonTextRes = Res.string.not_implemented_button
                     )
                 )
             }
@@ -191,7 +217,6 @@ class RootComponent(
             is TabBarItem.MoviesOverviewScreen -> navigation.bringToFront(Configuration.MoviesOverviewScreen)
             is TabBarItem.OrderHistory -> navigation.bringToFront(Configuration.OrderHistory)
             is TabBarItem.Account -> navigation.bringToFront(Configuration.Account)
-            is TabBarItem.Settings -> navigation.bringToFront(Configuration.Settings)
         }
     }
 
@@ -203,10 +228,10 @@ class RootComponent(
     sealed class Child {
         data class Home(val componentContext: DefaultHomeComponent) : Child()
         data class MoviesOverviewScreen(val componentContext: MoviesOverviewComponent) : Child()
-        data class OrderHistory(val componentContext: NotImplementedComponent) : Child()
+        data class OrderHistory(val componentContext: OrderHistoryComponent) : Child()
         data class Account(val componentContext: AccountComponent) : Child()
+        data class EditProfile(val componentContext: EditProfileComponent) : Child()
         data class Favorites(val componentContext: FavoritesComponent) : Child()
-        data class Settings(val componentContext: NotImplementedComponent) : Child()
         data class NotImplemented(val componentContext: NotImplementedComponent) : Child()
         data class MovieDetailsScreen(val componentContext: MovieDetailsComponent) : Child()
         data class ShowingDetailsScreen(val componentContext: ShowingDetailComponent) : Child()
@@ -223,10 +248,10 @@ class RootComponent(
         data object MoviesOverviewScreen : Configuration()
 
         @Serializable
-        data object Settings : Configuration()
+        data object Account : Configuration()
 
         @Serializable
-        data object Account : Configuration()
+        data object EditProfile : Configuration()
 
         @Serializable
         data object Favorites : Configuration()

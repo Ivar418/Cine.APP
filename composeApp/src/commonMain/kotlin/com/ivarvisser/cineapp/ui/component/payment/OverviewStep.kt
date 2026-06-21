@@ -14,8 +14,15 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import cineapp.composeapp.generated.resources.Res
+import cineapp.composeapp.generated.resources.back_button
+import cineapp.composeapp.generated.resources.booking_overview
+import cineapp.composeapp.generated.resources.confirm_button
+import cineapp.composeapp.generated.resources.row_seat_ticket_format
+import cineapp.composeapp.generated.resources.total_label
 import com.ivarvisser.cineapp.ui.feature.ordering.OrderingAction
 import com.ivarvisser.cineapp.ui.feature.ordering.OrderingUiState
+import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun OverviewStep(
@@ -25,21 +32,34 @@ fun OverviewStep(
     Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
         Card {
             Column(modifier = Modifier.padding(16.dp)) {
-                Text(text = "Booking Overview", style = MaterialTheme.typography.titleLarge)
+                Text(
+                    text = stringResource(Res.string.booking_overview),
+                    style = MaterialTheme.typography.titleLarge
+                )
                 Spacer(modifier = Modifier.height(8.dp))
                 Text(state.summary.movieTitle)
                 Text(state.summary.startsAt)
             }
         }
         state.seats.forEach {
-            Text("Row ${it.row} Seat ${it.seatNumber} - ${it.ticketType}")
+            Text(
+                stringResource(
+                    Res.string.row_seat_ticket_format,
+                    it.row,
+                    it.seatNumber,
+                    it.ticketType ?: ""
+                )
+            )
         }
         Card {
             Row(
                 modifier = Modifier.fillMaxWidth().padding(16.dp),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                Text("Total", style = MaterialTheme.typography.titleLarge)
+                Text(
+                    stringResource(Res.string.total_label),
+                    style = MaterialTheme.typography.titleLarge
+                )
                 Text("€${state.summary.totalPrice}", style = MaterialTheme.typography.titleLarge)
             }
         }
@@ -47,10 +67,10 @@ fun OverviewStep(
 
             Button(
                 onClick = { onAction(OrderingAction.OnBack) },
-            ) { Text("Back") }
+            ) { Text(stringResource(Res.string.back_button)) }
             Button(
                 onClick = { onAction(OrderingAction.GoToPaymentMethods) },
-            ) { Text("Confirm") }
+            ) { Text(stringResource(Res.string.confirm_button)) }
         }
     }
 

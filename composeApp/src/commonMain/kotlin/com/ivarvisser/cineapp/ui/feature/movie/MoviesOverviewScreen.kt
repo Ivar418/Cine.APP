@@ -34,9 +34,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import cineapp.composeapp.generated.resources.Res
 import cineapp.composeapp.generated.resources.arrow_back_24px
+import cineapp.composeapp.generated.resources.cancel
+import cineapp.composeapp.generated.resources.clear_filter
+import cineapp.composeapp.generated.resources.clear_filter_desc
 import cineapp.composeapp.generated.resources.error_generic
 import cineapp.composeapp.generated.resources.movies_back_button
 import cineapp.composeapp.generated.resources.movies_back_icon_desc
+import cineapp.composeapp.generated.resources.ok
+import cineapp.composeapp.generated.resources.select_date
 import com.arkivanov.decompose.extensions.compose.subscribeAsState
 import com.ivarvisser.cineapp.ui.component.ErrorMessage
 import com.ivarvisser.cineapp.ui.component.MovieList
@@ -66,9 +71,10 @@ fun MoviesOverviewScreen(
         }
     )
 
-    val selectedDateText = remember(state.selectedInstant) {
+    val selectDatePlaceholder = stringResource(Res.string.select_date)
+    val selectedDateText = remember(state.selectedInstant, selectDatePlaceholder) {
         state.selectedInstant?.toLocalDateTime(TimeZone.currentSystemDefault())?.date?.toString()
-            ?: "Kies een datum"
+            ?: selectDatePlaceholder
     }
 
     Column {
@@ -92,9 +98,12 @@ fun MoviesOverviewScreen(
                     horizontalArrangement = Arrangement.Center,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Text("Filter wissen")
+                    Text(stringResource(Res.string.clear_filter))
 
-                    Icon(Icons.Default.Clear, contentDescription = "Wis filter")
+                    Icon(
+                        Icons.Default.Clear,
+                        contentDescription = stringResource(Res.string.clear_filter_desc)
+                    )
 
                 }
             }
@@ -124,12 +133,12 @@ fun MoviesOverviewScreen(
                         },
                         enabled = datePickerState.selectedDateMillis != null
                     ) {
-                        Text("OK")
+                        Text(stringResource(Res.string.ok))
                     }
                 },
                 dismissButton = {
                     TextButton(onClick = { showDatePicker = false }) {
-                        Text("Annuleren")
+                        Text(stringResource(Res.string.cancel))
                     }
                 }
             ) {

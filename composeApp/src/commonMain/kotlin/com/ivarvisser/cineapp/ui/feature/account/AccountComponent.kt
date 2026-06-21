@@ -5,16 +5,22 @@ import com.arkivanov.decompose.value.MutableValue
 import com.arkivanov.decompose.value.Value
 import com.arkivanov.decompose.value.update
 import com.arkivanov.essenty.lifecycle.coroutines.coroutineScope
+import com.arkivanov.essenty.lifecycle.doOnResume
+import com.ivarvisser.cineapp.data.repository.interfaces.AppSettingsRepository
 import com.ivarvisser.cineapp.data.repository.interfaces.UsersRepository
 import com.ivarvisser.cineapp.mapper.toUser
 import com.ivarvisser.cineapp.utils.ResultOf
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
 class AccountComponent(
     componentContext: ComponentContext,
     private val usersRepository: UsersRepository,
+    private val appSettingsRepository: AppSettingsRepository,
     private val onGoBack: () -> Unit,
-    private val onNavigateToFavorites: () -> Unit
+    private val onNavigateToFavorites: () -> Unit,
+    private val onNavigateToEditProfile: () -> Unit
 ) : ComponentContext by componentContext {
     private val scope = coroutineScope()
     private val _state = MutableValue(AccountState())
@@ -22,36 +28,47 @@ class AccountComponent(
 
     init {
         loadData()
-    }
-
-    fun loadData() {
-        isLoggedIn()?.let { if (!it) return }
-        getUser()
-        scope.launch {
-            _state.update { current -> current.copy(isLoading = false) }
+        observeSettings()
+        doOnResume {
+            loadData()
         }
     }
 
-    fun getUser() {
+    private fun observeSettings() {
+        appSettingsRepository.locationNotificationsEnabled
+            .onEach { enabled ->
+                _state.update { it.copy(locationNotificationsEnabled = enabled) }
+            }.launchIn(scope)
+
+        appSettingsRepository.showTimeNotificationsEnabled
+            .onEach { enabled ->
+                _state.update { it.copy(showTimeNotificationsEnabled = enabled) }
+            }.launchIn(scope)
+    }
+
+    fun loadData() {
         scope.launch {
+            _state.update { current -> current.copy(isLoading = true) }
+            val loggedIn = usersRepository.isLoggedIn()
+            if (!loggedIn) {
+                _state.update { current -> current.copy(user = null, isLoading = false) }
+                return@launch
+            }
             usersRepository.getUser()?.let {
-                _state.update { current -> current.copy(user = it) }
+                _state.update { current -> current.copy(user = it, isLoading = false) }
+            } ?: run {
+                _state.update { current -> current.copy(isLoading = false) }
             }
         }
     }
 
-    fun isLoggedIn(): Boolean? {
-        var result: Boolean? = null
+    fun isLoggedIn() {
         scope.launch {
             val loggedIn = usersRepository.isLoggedIn()
             if (!loggedIn) {
                 _state.update { current -> current.copy(user = null) }
-                usersRepository.logout(userId = _state.value.user?.userId ?: return@launch)
-                result = false
             }
-            result = true
         }
-        return result
     }
 
     fun login(userName: String, password: String) {
@@ -129,6 +146,10 @@ class AccountComponent(
         _state.update { current -> current.copy(isRegistering = isRegistering) }
     }
 
+    fun navigateToEditProfile() {
+        onNavigateToEditProfile()
+    }
+
     fun onEvent(event: AccountAction) {
         when (event) {
             is AccountAction.OnBack -> {
@@ -136,35 +157,20 @@ class AccountComponent(
 
             }
 
-            is AccountAction.OnLogin -> {
-            }
-
-            is AccountAction.OnLogout -> {
-            }
-
-            is AccountAction.OnRegister -> {
-            }
-
-            is AccountAction.OnForgotPassword -> {
-            }
-
-            is AccountAction.OnChangePassword -> {
-            }
-
-            is AccountAction.OnChangeEmail -> {
-            }
-
-            is AccountAction.OnChangeUsername -> {
-            }
-
-            is AccountAction.OnChangeName -> {
-            }
-
-            is AccountAction.OnChangePhoto -> {
-            }
-
             is AccountAction.OnFavorites -> {
                 onNavigateToFavorites()
+            }
+
+            is AccountAction.OnToggleLocationNotifications -> {
+                scope.launch {
+                    appSettingsRepository.setLocationNotificationsEnabled(event.enabled)
+                }
+            }
+
+            is AccountAction.OnToggleShowTimeNotifications -> {
+                scope.launch {
+                    appSettingsRepository.setShowTimeNotificationsEnabled(event.enabled)
+                }
             }
 
 

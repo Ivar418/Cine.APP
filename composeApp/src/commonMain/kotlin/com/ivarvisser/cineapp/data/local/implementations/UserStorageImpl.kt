@@ -12,12 +12,10 @@ class UserStorageImpl(
     private val tokenStorage: TokenStorage
 ) : UserStorage {
 
-    companion object {
-        private const val TAG = "UserStorageImpl"
-    }
+
 
     override fun saveUser(user: User) {
-        Log.debug(loggerName = TAG) { "Saving user: ${user.userName}" }
+        Log.debug(loggerName = "UserStorageImpl") { "Saving user: ${user.userName}" }
         settings.putString(
             "user",
             Json.Default.encodeToString(user)
@@ -30,13 +28,13 @@ class UserStorageImpl(
     }
 
     override fun clear() {
-        Log.debug(loggerName = TAG) { "Clearing user and tokens" }
+        Log.debug(loggerName = "UserStorageImpl") { "Clearing user and tokens" }
         settings.remove("user")
         tokenStorage.clearTokens()
     }
 
     override fun saveAccessToken(accessToken: String) {
-        Log.debug(loggerName = TAG) { "Saving access token (delegating to TokenStorage)" }
+        Log.debug(loggerName = "UserStorageImpl") { "Saving access token (delegating to TokenStorage)" }
         tokenStorage.saveTokens(accessToken, tokenStorage.getRefreshToken() ?: "")
     }
 
@@ -45,7 +43,7 @@ class UserStorageImpl(
     }
 
     override fun saveRefreshToken(refreshToken: String) {
-        Log.debug(loggerName = TAG) { "Saving refresh token (delegating to TokenStorage)" }
+        Log.debug(loggerName = "UserStorageImpl") { "Saving refresh token (delegating to TokenStorage)" }
         tokenStorage.saveTokens(tokenStorage.getAccessToken() ?: "", refreshToken)
     }
 

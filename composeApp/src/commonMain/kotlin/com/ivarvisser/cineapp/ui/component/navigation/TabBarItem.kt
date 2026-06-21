@@ -5,7 +5,6 @@ import androidx.compose.material.icons.filled.AccountBox
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Movie
 import androidx.compose.material.icons.filled.Receipt
-import androidx.compose.material.icons.filled.Settings
 import androidx.compose.ui.graphics.vector.ImageVector
 
 sealed class TabBarItem(
@@ -31,10 +30,4 @@ sealed class TabBarItem(
         image = Icons.Default.AccountBox,
         title = "Account"
     )
-
-    data object Settings : TabBarItem(
-        image = Icons.Default.Settings,
-        title = "Settings"
-    )
-
 }

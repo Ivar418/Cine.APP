@@ -1,7 +1,7 @@
 [versions]
 agp = "9.2.1"
 android-compileSdk = "37"
-android-minSdk = "33"
+android-minSdk = "32"
 android-targetSdk = "37"
 androidx-activity = "1.13.0"
 androidx-appcompat = "1.7.1"
@@ -14,22 +14,29 @@ composeMultiplatform = "1.11.1"
 junit = "4.13.2"
 kotlin = "2.4.0"
 kotlinx-coroutines = "1.11.0"
+kotlinx-coroutines-test = "1.11.0"
 kotlinxDatetime = "0.8.0"
 material3 = "1.10.0-alpha05"
 ktor = "3.5.0"
-koin-bom = "4.2.1"
+koin-bom = "4.2.2"
 kotlinxSerializationJson = "1.11.0"
 decompose = "3.5.0"
 essenty = "2.5.0"
 materialIconsExtended = "1.7.3"
+multiplatformSettingsNoArg = "1.3.0"
 navigationCompose = "2.9.2"
 slf4jSimple = "2.0.18"
 buildkonfig = "0.21.2"
 htl = "2.0.1"
-coil3 = "3.4.0"
+turbine = "1.2.1"
+coil3 = "3.5.0"
 klf = "1.8.3"
+androidx-work = "2.11.2"
+compose-uiTest-junit4 = "1.11.3"
+compose-uiTest-manifest = "1.11.3"
 
 [libraries]
+androidx-work-runtime-ktx = { module = "androidx.work:work-runtime-ktx", version.ref = "androidx-work" }
 kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinxDatetime" }
 ktor-client-android = { module = "io.ktor:ktor-client-android", version.ref = "ktor" }
 ktor-client-auth = { module = "io.ktor:ktor-client-auth", version.ref = "ktor" }
@@ -58,9 +65,13 @@ compose-material3 = { module = "org.jetbrains.compose.material3:material3", vers
 compose-ui = { module = "org.jetbrains.compose.ui:ui", version.ref = "composeMultiplatform" }
 compose-components-resources = { module = "org.jetbrains.compose.components:components-resources", version.ref = "composeMultiplatform" }
 compose-uiToolingPreview = { module = "org.jetbrains.compose.ui:ui-tooling-preview", version.ref = "composeMultiplatform" }
+compose-uiTest-junit4 = { module = "androidx.compose.ui:ui-test-junit4", version.ref = "compose-uiTest-junit4" }
+compose-uiTest-manifest = { module = "androidx.compose.ui:ui-test-manifest", version.ref = "compose-uiTest-manifest" }
 kotlinx-coroutinesSwing = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-swing", version.ref = "kotlinx-coroutines" }
 kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinx-coroutines" }
 kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "kotlinx-coroutines" }
+kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlinx-coroutines-test" }
+turbine = { module = "app.cash.turbine:turbine", version.ref = "turbine" }
 
 # Koin
 koin-bom = { module = "io.insert-koin:koin-bom", version.ref = "koin-bom" }
@@ -77,6 +88,8 @@ kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serializa
 decompose = { module = "com.arkivanov.decompose:decompose", version.ref = "decompose" }
 decompose-extensions-compose = { module = "com.arkivanov.decompose:extensions-compose", version.ref = "decompose" }
 material-icons-extended = { module = "org.jetbrains.compose.material:material-icons-extended", version.ref = "materialIconsExtended" }
+multiplatform-settings-no-arg = { module = "com.russhwolf:multiplatform-settings-no-arg", version.ref = "multiplatformSettingsNoArg" }
+multiplatform-settings-test = { module = "com.russhwolf:multiplatform-settings-test", version.ref = "multiplatformSettingsNoArg" }
 navigation-compose = { module = "org.jetbrains.androidx.navigation:navigation-compose", version.ref = "navigationCompose" }
 essentyLifecycleCoroutines = { group = "com.arkivanov.essenty", name = "lifecycle-coroutines", version.ref = "essenty" }
 #

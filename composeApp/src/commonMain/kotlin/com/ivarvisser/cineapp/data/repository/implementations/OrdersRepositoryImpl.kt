@@ -1,7 +1,7 @@
 package com.ivarvisser.cineapp.data.repository.implementations
 
-import com.ivarvisser.cineapp.data.dto.CreateOrderRequest
-import com.ivarvisser.cineapp.data.dto.CreateOrderResponse
+import com.ivarvisser.cineapp.data.dto.orders.request.CreateOrderRequest
+import com.ivarvisser.cineapp.data.dto.orders.response.CreateOrderResponse
 import com.ivarvisser.cineapp.data.remote.api.network.interfaces.OrdersApi
 import com.ivarvisser.cineapp.data.repository.interfaces.OrdersRepository
 import com.ivarvisser.cineapp.domain.Order
@@ -13,10 +13,12 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.isActive
+import kotlin.time.Duration.Companion.milliseconds
 
 class OrdersRepositoryImpl(
     private val ordersApi: OrdersApi
 ) : OrdersRepository {
+
     override suspend fun createOrder(order: CreateOrderRequest): ResultOf<CreateOrderResponse> {
         return ordersApi.createOrderAsync(order)
     }
@@ -25,9 +27,28 @@ class OrdersRepositoryImpl(
         return ordersApi.getReservationPdfAsync(orderId)
     }
 
+    override suspend fun getTicketsPdfAsync(orderId: Int): ResultOf<ByteArray> {
+        return ordersApi.getTicketsPdfAsync(orderId)
+    }
+
     override suspend fun getOrderById(orderId: Int): ResultOf<CreateOrderResponse> {
         return ordersApi.getOrderById(orderId)
     }
+
+    override suspend fun getMyOrders(): ResultOf<List<CreateOrderResponse>> {
+        return ordersApi.getMyOrdersAsync()
+    }
+
+    override fun observeMyOrders(delayMillis: Long?): Flow<List<CreateOrderResponse>> =
+        flow {
+            while (currentCoroutineContext().isActive) {
+                val result = getMyOrders()
+                if (result is ResultOf.Success) {
+                    emit(result.value)
+                }
+                delay(delayMillis?.milliseconds ?: 1_800_000.milliseconds)
+            }
+        }.distinctUntilChanged()
 
     override suspend fun observeStatus(
         orderId: Int,
@@ -57,4 +78,8 @@ class OrdersRepositoryImpl(
             delay(intervalMs)
         }
     }.distinctUntilChanged()
+
+    override suspend fun downloadOrderPdfAsync(orderId: Int): ResultOf<ByteArray> {
+        return ordersApi.downloadOrderTicketPdfAsync(orderId)
+    }
 }
