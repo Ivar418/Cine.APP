@@ -92,11 +92,13 @@ kotlin {
 
         }
         commonTest.dependencies {
+
             implementation(project.dependencies.platform(libs.koin.bom))
             implementation(libs.kotlin.test)
             implementation(libs.koin.test)
             implementation(libs.kotlinx.coroutines.test)
             implementation(libs.turbine)
+            implementation(libs.multiplatform.settings.test)
         }
 
         val androidInstrumentedTest by sourceSets.getting {
@@ -192,6 +194,10 @@ extensions.configure<ApplicationExtension> {
 dependencies {
     debugImplementation(libs.compose.uiTooling)
     androidTestImplementation(libs.compose.uiTest.junit4)
+    androidTestImplementation(libs.androidx.espresso.core)
+    androidTestImplementation("androidx.test:runner:1.7.0")
+    androidTestImplementation("androidx.test:rules:1.7.0")
+    androidTestImplementation("androidx.test:core:1.7.0")
     debugImplementation(libs.compose.uiTest.manifest)
 }
 

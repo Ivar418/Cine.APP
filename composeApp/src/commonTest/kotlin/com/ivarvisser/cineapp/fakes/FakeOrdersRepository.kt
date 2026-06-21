@@ -18,6 +18,7 @@ class FakeOrdersRepository : OrdersRepository {
         }
 
     var error: String? = null
+    var getMyOrdersCallCount = 0
 
     override suspend fun createOrder(order: CreateOrderRequest): ResultOf<CreateOrderResponse> {
         return error?.let { ResultOf.Failure(it, null) }
@@ -39,6 +40,7 @@ class FakeOrdersRepository : OrdersRepository {
     }
 
     override suspend fun getMyOrders(): ResultOf<List<CreateOrderResponse>> {
+        getMyOrdersCallCount++
         return error?.let { ResultOf.Failure(it, null) } ?: ResultOf.Success(_orders.value)
     }
 
