@@ -100,23 +100,3 @@ jobs:
         with:
           name: wasm-app
           path: composeApp/build/dist/wasmJs/productionExecutable/
-
-  # build-ios:
-  #   name: Build iOS
-  #   runs-on: macos-latest
-  #   needs: test
-  #   steps:
-  #     - name: Checkout
-  #       uses: actions/checkout@v4
-  #
-  #     - name: Gradle setup
-  #       uses: ./.github/actions/gradle-setup
-  #
-  #     - name: Build iOS simulator app
-  #       run: |
-  #         xcodebuild build \
-  #           -project iosApp/iosApp.xcodeproj \
-  #           -scheme iosApp \
-  #           -sdk iphonesimulator \
-  #           -configuration Debug \
-  #           -derivedDataPath ./build-ios
