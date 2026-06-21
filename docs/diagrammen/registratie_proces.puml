@@ -1,0 +1,29 @@
+@startuml
+participant "AccountScreen (UI)" as UI
+participant AccountComponent as AC
+participant UsersRepository as UR
+participant UserMapper as Mapper
+
+UI -> AC : register(username, firstName, ..., password)
+activate AC
+AC -> AC : setLoading(true)
+AC -> UR : register(username, firstName, ..., password)
+activate UR
+
+alt Registratie Succesvol
+    UR --> AC : ResultOf.Success(apiUser)
+    AC -> Mapper : toUser(apiUser)
+    activate Mapper
+    Mapper --> AC : User
+    deactivate Mapper
+    AC -> AC : updateState(user, isRegistering = false)
+else Registratie Mislukt
+    UR --> AC : ResultOf.Failure(message)
+    AC -> AC : setError(message)
+end
+deactivate UR
+
+AC -> AC : setLoading(false)
+AC -> UI : State Update (UI reflecteert nieuwe status)
+deactivate AC
+@enduml

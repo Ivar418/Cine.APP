@@ -1,0 +1,21 @@
+@startuml
+participant "NavigationBar (UI)" as UI
+participant RootComponent as RC
+participant StackNavigation as Nav
+participant ChildStack as CS
+
+UI -> RC : showTabItem(TabBarItem.Account)
+activate RC
+RC -> Nav : bringToFront(Configuration.Account)
+activate Nav
+Nav -> CS : Update stack state
+CS -> RC : createChild(Configuration.Account)
+deactivate Nav
+
+Note over RC : Koin injecteert dependencies\nvoor AccountComponent
+
+RC -> RC : Child.Account(AccountComponent)
+RC --> UI : ActiveTab update (via activeTab Value)
+UI -> UI : Selecteer Account Tab icon
+deactivate RC
+@enduml

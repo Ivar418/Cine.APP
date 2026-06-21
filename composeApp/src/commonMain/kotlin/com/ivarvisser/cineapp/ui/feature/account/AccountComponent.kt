@@ -157,33 +157,6 @@ class AccountComponent(
 
             }
 
-            is AccountAction.OnLogin -> {
-            }
-
-            is AccountAction.OnLogout -> {
-            }
-
-            is AccountAction.OnRegister -> {
-            }
-
-            is AccountAction.OnForgotPassword -> {
-            }
-
-            is AccountAction.OnChangePassword -> {
-            }
-
-            is AccountAction.OnChangeEmail -> {
-            }
-
-            is AccountAction.OnChangeUsername -> {
-            }
-
-            is AccountAction.OnChangeName -> {
-            }
-
-            is AccountAction.OnChangePhoto -> {
-            }
-
             is AccountAction.OnFavorites -> {
                 onNavigateToFavorites()
             }

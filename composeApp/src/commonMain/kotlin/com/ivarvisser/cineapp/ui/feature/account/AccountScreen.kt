@@ -13,6 +13,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ExitToApp
 import androidx.compose.material.icons.filled.AccountCircle
+import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.Button
@@ -33,6 +34,8 @@ import cineapp.composeapp.generated.resources.account_settings_title
 import cineapp.composeapp.generated.resources.back_button
 import cineapp.composeapp.generated.resources.edit_profile
 import cineapp.composeapp.generated.resources.edit_profile_desc
+import cineapp.composeapp.generated.resources.favorites_description
+import cineapp.composeapp.generated.resources.favorites_title
 import cineapp.composeapp.generated.resources.location_notifications
 import cineapp.composeapp.generated.resources.location_notifications_desc
 import cineapp.composeapp.generated.resources.logout_button
@@ -136,7 +139,12 @@ fun AccountScreen(
                 },
                 subtitle = stringResource(Res.string.edit_profile_desc)
             )
-
+            AccountSettingItem(
+                icon = Icons.Default.Favorite,
+                title = stringResource(Res.string.favorites_title),
+                onclick = { component.onEvent(AccountAction.OnFavorites) },
+                subtitle = stringResource(Res.string.favorites_description)
+            )
             Spacer(modifier = Modifier.height(16.dp))
 
             // Notifications Section
